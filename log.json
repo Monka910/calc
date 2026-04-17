@@ -1,1 +1,30 @@
-[]
+[
+  {
+    "id": 1776436994557,
+    "date": "2026-04-17T14:43:14.557Z",
+    "seller": null,
+    "items": {
+      "partsBreakdown": {
+        "eye": 123,
+        "gland": 322,
+        "scale": 12,
+        "saliva": 656,
+        "esul": 66
+      },
+      "partsTotal": 1179,
+      "partsSold": 1176,
+      "partsRemainder": 3,
+      "white": 1,
+      "black": 12,
+      "gold": 134
+    },
+    "earnings": {
+      "parts": 294,
+      "white": 3,
+      "black": 72,
+      "gold": 1072
+    },
+    "bankFee": 147,
+    "total": 1441
+  }
+]
