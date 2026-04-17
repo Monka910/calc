@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Скупка — Калькулятор</title>
 <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Caveat:wght@400;700&family=Marck+Script&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -828,9 +829,237 @@
     .total-value { font-size: 40px; }
     .total-value .unit { font-size: 28px; }
   }
+
+  .lock-overlay {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10, 37, 64, 0.92) 0%, rgba(18, 90, 122, 0.92) 100%);
+    backdrop-filter: blur(6px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .lock-box {
+    max-width: 440px;
+    width: 100%;
+    background: linear-gradient(135deg, #e8d3a0 0%, #d9c48a 100%);
+    padding: 45px 40px;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7), inset 0 0 80px rgba(101,67,33,0.2);
+    text-align: center;
+    position: relative;
+    border: 2px solid #8b6f47;
+  }
+
+  .lock-title {
+    font-family: 'IM Fell English SC', serif;
+    font-size: 28px;
+    color: #3d2817;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+  }
+
+  .lock-sub {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    color: #7a5c3a;
+    margin-bottom: 30px;
+    line-height: 1.3;
+  }
+
+  .lock-box input[type="password"] {
+    width: 100%;
+    padding: 14px 20px;
+    font-family: 'Caveat', cursive;
+    font-size: 24px;
+    background: rgba(255, 252, 240, 0.9);
+    border: 2px solid rgba(101, 67, 33, 0.5);
+    border-radius: 6px;
+    color: #3d2817;
+    text-align: center;
+    font-weight: 700;
+    outline: none;
+    margin-bottom: 20px;
+    letter-spacing: 4px;
+  }
+
+  .lock-box input[type="password"]:focus {
+    border-color: #8b5e34;
+    background: rgba(255, 252, 240, 1);
+    box-shadow: 0 0 0 3px rgba(139, 94, 52, 0.2);
+  }
+
+  .lock-error {
+    color: #a3281c;
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    min-height: 28px;
+    margin-bottom: 10px;
+  }
+
+  .lock-hint {
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    color: #8a6f4d;
+    font-style: italic;
+    margin-top: 15px;
+    line-height: 1.4;
+  }
+
+  .sync-badge {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: rgba(10, 37, 64, 0.7);
+    border: 1px solid rgba(100, 200, 210, 0.4);
+    border-radius: 20px;
+    color: #c5e8ee;
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+  }
+
+  .sync-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #5acfa0;
+    box-shadow: 0 0 8px rgba(90, 207, 160, 0.8);
+  }
+
+  .sync-badge.syncing .sync-dot {
+    background: #ffc864;
+    box-shadow: 0 0 8px rgba(255, 200, 100, 0.8);
+    animation: pulse 1s ease-in-out infinite;
+  }
+
+  .sync-badge.error .sync-dot {
+    background: #e24b4a;
+    box-shadow: 0 0 8px rgba(226, 75, 74, 0.8);
+  }
+
+  .sync-badge.offline .sync-dot {
+    background: #888;
+    box-shadow: none;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  .logout-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 500;
+    padding: 8px 16px;
+    background: rgba(100, 30, 30, 0.7);
+    border: 1px solid rgba(220, 130, 120, 0.4);
+    border-radius: 20px;
+    color: #f4d8d0;
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: all 0.2s;
+  }
+
+  .logout-btn:hover {
+    background: rgba(140, 50, 45, 0.85);
+    color: #ffebe5;
+  }
+
+  button.btn.excel {
+    background:
+      linear-gradient(180deg,
+        rgba(100, 200, 120, 0.2) 0%,
+        rgba(30, 110, 60, 0.3) 50%,
+        rgba(15, 60, 35, 0.4) 100%),
+      linear-gradient(135deg, #2a6a3a 0%, #1a4a28 50%, #0f2e18 100%);
+    color: #d8f0dc;
+    box-shadow:
+      0 0 0 1px rgba(130, 220, 150, 0.4),
+      0 0 20px rgba(80, 200, 120, 0.2),
+      0 6px 16px rgba(0, 20, 10, 0.6),
+      inset 0 1px 0 rgba(180, 240, 200, 0.4),
+      inset 0 -1px 0 rgba(0, 20, 0, 0.6),
+      inset 0 0 30px rgba(130, 220, 150, 0.1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8), 0 0 8px rgba(160, 240, 180, 0.5);
+  }
+
+  button.btn.excel:hover {
+    color: #f0fff3;
+    box-shadow:
+      0 0 0 1px rgba(150, 240, 170, 0.6),
+      0 0 30px rgba(100, 230, 140, 0.4),
+      0 10px 24px rgba(0, 20, 10, 0.7),
+      inset 0 1px 0 rgba(200, 250, 210, 0.5),
+      inset 0 -1px 0 rgba(0, 20, 0, 0.6),
+      inset 0 0 40px rgba(160, 240, 180, 0.18);
+  }
+
+  .bank-info {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: #7a5c3a;
+    font-style: italic;
+    text-align: right;
+    margin-top: 6px;
+    padding-right: 4px;
+  }
+
+  .bank-info strong {
+    color: #5a3f1f;
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  .history-bank {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: #7a5c3a;
+    font-style: italic;
+    margin-top: 4px;
+  }
+
+  .history-bank strong {
+    color: #5a3f1f;
+    font-weight: 700;
+    font-style: normal;
+  }
 </style>
 </head>
 <body>
+
+<div class="lock-overlay" id="lock-overlay">
+  <div class="lock-box">
+    <div class="lock-title">Банк Острова</div>
+    <div class="lock-sub">Только для админов</div>
+    <form id="lock-form" autocomplete="off">
+      <input type="password" id="lock-input" placeholder="Введите пароль..." autofocus>
+      <div class="lock-error" id="lock-error"></div>
+      <button type="submit" class="btn" style="width:100%">Войти</button>
+    </form>
+    <div class="lock-hint">Пароль знают только администраторы банка</div>
+  </div>
+</div>
+
+<div class="sync-badge offline" id="sync-badge" style="display:none">
+  <span class="sync-dot"></span>
+  <span id="sync-text">Не подключено</span>
+</div>
+
+<button class="logout-btn" id="logout-btn" style="display:none">Выйти</button>
 
 <canvas id="ocean-canvas"></canvas>
 
@@ -969,6 +1198,10 @@
         <div class="stat-value"><span id="stat-total">0</span> <span class="unit-small">гильз</span></div>
       </div>
       <div class="stat-card">
+        <span class="stat-label">В банк</span>
+        <div class="stat-value"><span id="stat-bank">0</span> <span class="unit-small">гильз</span></div>
+      </div>
+      <div class="stat-card">
         <span class="stat-label">Средняя продажа</span>
         <div class="stat-value"><span id="stat-avg">0</span> <span class="unit-small">гильз</span></div>
       </div>
@@ -983,6 +1216,7 @@
     </div>
 
     <div class="actions">
+      <button class="btn excel" id="export-btn">❖ Выгрузить отчёт ❖</button>
       <button class="btn danger" id="clear-history-btn">❖ Очистить журнал ❖</button>
     </div>
   </div>
@@ -1120,11 +1354,112 @@
 </script>
 
 <script>
+  // ═══════════════════════════════════════════════════════════════
+  //  КОНФИГУРАЦИЯ — ТУТ НАСТРАИВАЕШЬ СИСТЕМУ
+  // ═══════════════════════════════════════════════════════════════
+
+  const CONFIG = {
+    // --- GitHub синхронизация ---
+    github: {
+      owner:  'Monka910',   // твой GitHub username
+      repo:   'calc',        // название репозитория
+      branch: 'main',        // ветка
+      path:   'log.json'     // файл журнала в репозитории
+    },
+
+    // --- Пароль админа (хеш SHA-256) ---
+    // ВАЖНО: сюда подставишь свой хеш (инструкция ниже)
+    passwordHash: 'e47d3eff8cb2669c60095acd32e7002e39913c0aa08c4528e5df0df33ad41ada',
+    // ↑ это хеш слова "password" для примера. ЗАМЕНИ!
+
+    // --- GitHub Personal Access Token ---
+    // Админ вводит его один раз — сохраняется в его браузере
+    // Без токена нельзя писать, можно только читать общий журнал
+    tokenKey: 'github-token',
+
+    // --- Банковская комиссия с каждой единицы ---
+    bank: {
+      white: 1,  // 1 гильза в банк с каждой белой жемчужины
+      black: 1,  // 1 гильза в банк с каждой чёрной
+      gold:  1,  // 1 гильза в банк с каждой золотой
+      parts: 0   // пока без комиссии на части пустотелых
+    }
+  };
+
+  // ═══════════════════════════════════════════════════════════════
+  //  АВТОРИЗАЦИЯ
+  // ═══════════════════════════════════════════════════════════════
+
+  async function sha256(text) {
+    const buf = new TextEncoder().encode(text);
+    const hash = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(hash))
+      .map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  const AUTH_KEY = 'calc-authed-v1';
+
+  function isAuthed() {
+    return sessionStorage.getItem(AUTH_KEY) === '1'
+        || localStorage.getItem(AUTH_KEY) === '1';
+  }
+
+  function setAuthed(remember) {
+    sessionStorage.setItem(AUTH_KEY, '1');
+    if (remember) localStorage.setItem(AUTH_KEY, '1');
+  }
+
+  function logout() {
+    sessionStorage.removeItem(AUTH_KEY);
+    localStorage.removeItem(AUTH_KEY);
+    localStorage.removeItem(CONFIG.tokenKey);
+    location.reload();
+  }
+
+  document.getElementById('logout-btn').addEventListener('click', () => {
+    if (confirm('Выйти из системы?')) logout();
+  });
+
+  // Форма входа
+  document.getElementById('lock-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = document.getElementById('lock-input');
+    const err = document.getElementById('lock-error');
+    err.textContent = '';
+
+    const pwd = input.value;
+    if (!pwd) return;
+
+    const hash = await sha256(pwd);
+    if (hash === CONFIG.passwordHash) {
+      setAuthed(true); // запоминаем на этом браузере
+      document.getElementById('lock-overlay').style.display = 'none';
+      document.getElementById('logout-btn').style.display = 'block';
+      document.getElementById('sync-badge').style.display = 'flex';
+      initApp();
+    } else {
+      err.textContent = 'Неверный пароль';
+      input.value = '';
+      input.focus();
+    }
+  });
+
+  // При загрузке — проверяем авторизацию
+  if (isAuthed()) {
+    document.getElementById('lock-overlay').style.display = 'none';
+    document.getElementById('logout-btn').style.display = 'block';
+    document.getElementById('sync-badge').style.display = 'flex';
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  //  КОНСТАНТЫ И DOM
+  // ═══════════════════════════════════════════════════════════════
+
   const RATES = {
-    parts: { per: 4, get: 1 },        // 4 части = 1 гильза
-    white: { per: 1, get: 3 },        // 1 жем = 3 гильзы
-    black: { per: 1, get: 6 },        // 1 жем = 6 гильз
-    gold:  { per: 1, get: 8 }         // 1 жем = 8 гильз
+    parts: { per: 4, get: 1 },
+    white: { per: 1, get: 3 },
+    black: { per: 1, get: 6 },
+    gold:  { per: 1, get: 8 }
   };
 
   const $ = (id) => document.getElementById(id);
@@ -1214,39 +1549,179 @@
   partInputs.forEach(el => el.addEventListener('input', updateAll));
   Object.values(inputs).forEach(el => el.addEventListener('input', updateAll));
 
-  const STORAGE_AVAILABLE = typeof window !== 'undefined' && window.storage && typeof window.storage.get === 'function';
-  const DB_KEY = 'shopping-history';
+  // ═══════════════════════════════════════════════════════════════
+  //  БАНК-КОМИССИЯ
+  // ═══════════════════════════════════════════════════════════════
+  //  С каждой проданной единицы в банк уходит фиксированная гильза
+  //  Эта сумма НЕ показывается продавцу (он видит только свою зарплату)
+  //  НО сохраняется в журнале для отчётности админов
+
+  function calcBankFee(items) {
+    // items = { parts: N, white: N, black: N, gold: N }
+    return (items.parts || 0) * CONFIG.bank.parts
+         + (items.white || 0) * CONFIG.bank.white
+         + (items.black || 0) * CONFIG.bank.black
+         + (items.gold  || 0) * CONFIG.bank.gold;
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  //  БД — GITHUB SYNC
+  // ═══════════════════════════════════════════════════════════════
 
   let history = [];
+  let fileSha = null; // нужен для обновления файла в GitHub
+
+  function setSyncStatus(status, text) {
+    const badge = $('sync-badge');
+    const textEl = $('sync-text');
+    badge.classList.remove('syncing', 'error', 'offline');
+    if (status) badge.classList.add(status);
+    textEl.textContent = text;
+  }
+
+  function getToken() {
+    return localStorage.getItem(CONFIG.tokenKey) || '';
+  }
+
+  function setToken(t) {
+    if (t) localStorage.setItem(CONFIG.tokenKey, t);
+    else localStorage.removeItem(CONFIG.tokenKey);
+  }
+
+  async function promptForToken() {
+    const current = getToken();
+    const msg = current
+      ? 'GitHub Token (оставь пустым чтобы не менять):'
+      : 'Введи GitHub Personal Access Token.\n\nКак получить:\n1. github.com → Settings → Developer settings\n2. Personal access tokens → Tokens (classic) → Generate new\n3. Выбери scope: repo\n4. Скопируй и вставь сюда\n\nТокен сохранится только в твоём браузере.';
+    const t = prompt(msg, '');
+    if (t === null) return null;
+    if (t.trim()) setToken(t.trim());
+    return getToken();
+  }
 
   async function loadHistory() {
-    if (!STORAGE_AVAILABLE) {
-      try {
-        const raw = localStorage.getItem(DB_KEY);
-        if (raw) history = JSON.parse(raw);
-      } catch(e) { history = []; }
-      return;
-    }
+    setSyncStatus('syncing', 'Загружаю...');
+    const url = `https://api.github.com/repos/${CONFIG.github.owner}/${CONFIG.github.repo}/contents/${CONFIG.github.path}?ref=${CONFIG.github.branch}`;
+
     try {
-      const res = await window.storage.get(DB_KEY);
-      if (res && res.value) {
-        history = JSON.parse(res.value);
+      const token = getToken();
+      const headers = { 'Accept': 'application/vnd.github.v3+json' };
+      if (token) headers['Authorization'] = `token ${token}`;
+
+      const res = await fetch(url, { headers, cache: 'no-store' });
+
+      if (res.status === 404) {
+        // Файла ещё нет — нормально, создадим при первой записи
+        history = [];
+        fileSha = null;
+        setSyncStatus('', 'Пустой журнал');
+        return;
       }
-    } catch(e) {
-      history = [];
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+
+      const data = await res.json();
+      fileSha = data.sha;
+
+      // Декодируем base64 → JSON
+      const content = decodeBase64UTF8(data.content.replace(/\s/g, ''));
+      try {
+        history = JSON.parse(content);
+        if (!Array.isArray(history)) history = [];
+      } catch (e) {
+        history = [];
+      }
+
+      setSyncStatus('', `Синхронизировано (${history.length})`);
+    } catch (e) {
+      console.error('Ошибка загрузки:', e);
+      setSyncStatus('error', 'Ошибка загрузки');
+      // Резервно пробуем localStorage
+      try {
+        const raw = localStorage.getItem('shopping-history-backup');
+        if (raw) history = JSON.parse(raw);
+      } catch(_) {}
     }
   }
 
   async function saveHistory() {
-    if (!STORAGE_AVAILABLE) {
-      try { localStorage.setItem(DB_KEY, JSON.stringify(history)); } catch(e) {}
-      return;
-    }
+    // Бэкап в localStorage на всякий случай
     try {
-      await window.storage.set(DB_KEY, JSON.stringify(history));
-    } catch(e) {
-      console.error('Ошибка сохранения:', e);
+      localStorage.setItem('shopping-history-backup', JSON.stringify(history));
+    } catch(_) {}
+
+    let token = getToken();
+    if (!token) {
+      token = await promptForToken();
+      if (!token) {
+        setSyncStatus('error', 'Нужен токен');
+        showToast('Без токена нельзя записывать. Данные сохранены только локально.', true);
+        return false;
+      }
     }
+
+    setSyncStatus('syncing', 'Сохраняю...');
+    const url = `https://api.github.com/repos/${CONFIG.github.owner}/${CONFIG.github.repo}/contents/${CONFIG.github.path}`;
+    const content = encodeBase64UTF8(JSON.stringify(history, null, 2));
+
+    const body = {
+      message: `Журнал обновлён (${new Date().toISOString()})`,
+      content,
+      branch: CONFIG.github.branch
+    };
+    if (fileSha) body.sha = fileSha;
+
+    try {
+      const res = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (res.status === 409 || res.status === 422) {
+        // Конфликт — кто-то уже обновил. Перезагружаем и пробуем снова
+        setSyncStatus('syncing', 'Конфликт, обновляю...');
+        await loadHistory();
+        showToast('Кто-то уже обновил журнал. Обнови страницу и попробуй снова.', true);
+        return false;
+      }
+
+      if (res.status === 401) {
+        setToken('');
+        setSyncStatus('error', 'Токен недействителен');
+        showToast('GitHub Token невалидный. Введи новый.', true);
+        return false;
+      }
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.message || `HTTP ${res.status}`);
+      }
+
+      const data = await res.json();
+      fileSha = data.content.sha;
+      setSyncStatus('', `Синхронизировано (${history.length})`);
+      return true;
+    } catch (e) {
+      console.error('Ошибка сохранения:', e);
+      setSyncStatus('error', 'Ошибка записи');
+      showToast(`Ошибка: ${e.message}`, true);
+      return false;
+    }
+  }
+
+  // base64 с поддержкой UTF-8 (для русских символов)
+  function encodeBase64UTF8(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+  function decodeBase64UTF8(str) {
+    return decodeURIComponent(escape(atob(str)));
   }
 
   $('save-btn').addEventListener('click', async () => {
@@ -1257,6 +1732,14 @@
     }
 
     const sellerName = ($('seller-name').value || '').trim();
+
+    // Считаем комиссию банка
+    const bankFee = calcBankFee({
+      parts: state.p.sold,
+      white: state.w.sold,
+      black: state.b.sold,
+      gold:  state.g.sold
+    });
 
     const entry = {
       id: Date.now(),
@@ -1277,19 +1760,27 @@
         black: state.b.earn,
         gold:  state.g.earn
       },
+      bankFee: bankFee, // гильз в банк с этой продажи
       total: state.total
     };
 
     history.unshift(entry);
-    await saveHistory();
+    const ok = await saveHistory();
     renderHistory();
 
-    partInputs.forEach(el => el.value = '');
-    Object.values(inputs).forEach(el => el.value = '');
-    updateAll();
+    if (ok) {
+      partInputs.forEach(el => el.value = '');
+      Object.values(inputs).forEach(el => el.value = '');
+      updateAll();
 
-    const sellerTxt = sellerName ? ` от ${sellerName}` : '';
-    showToast(`Продажа на ${state.total} гильз${sellerTxt} записана!`);
+      const sellerTxt = sellerName ? ` от ${sellerName}` : '';
+      const bankTxt = bankFee > 0 ? ` (+${bankFee} в банк)` : '';
+      showToast(`Продажа на ${state.total} гильз${sellerTxt}${bankTxt} записана!`);
+    } else {
+      // Откатываем если не сохранилось
+      history.shift();
+      renderHistory();
+    }
   });
 
   $('clear-btn').addEventListener('click', () => {
@@ -1301,11 +1792,93 @@
 
   $('clear-history-btn').addEventListener('click', async () => {
     if (history.length === 0) return;
-    if (!confirm('Точно стереть весь журнал продаж? Действие необратимо.')) return;
+    if (!confirm(`Точно стереть ВСЕ ${history.length} записей из общего журнала?\n\nЭто необратимо и затронет всех админов!`)) return;
+    const backup = history.slice();
     history = [];
-    await saveHistory();
+    const ok = await saveHistory();
+    if (!ok) {
+      history = backup;
+      showToast('Не удалось очистить', true);
+    } else {
+      showToast('Журнал очищен');
+    }
     renderHistory();
-    showToast('Журнал очищен');
+  });
+
+  // ═══════════════════════════════════════════════════════════════
+  //  ЭКСПОРТ В EXCEL
+  // ═══════════════════════════════════════════════════════════════
+
+  $('export-btn').addEventListener('click', () => {
+    if (history.length === 0) {
+      showToast('Нет данных для выгрузки', true);
+      return;
+    }
+
+    // Сортируем от старых к новым для отчёта
+    const sorted = history.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    const rows = sorted.map(e => {
+      // Что продано — читаемая строка
+      const bits = [];
+      const pb = e.items.partsBreakdown;
+      if (pb && typeof pb === 'object') {
+        Object.entries(pb).forEach(([k, v]) => {
+          if (v > 0) bits.push(`${PART_NAMES[k] || k}: ${v}`);
+        });
+      } else if (e.items.parts > 0) {
+        bits.push(`Части: ${e.items.parts}`);
+      }
+      if (e.items.white > 0) bits.push(`Белая жемчужина: ${e.items.white}`);
+      if (e.items.black > 0) bits.push(`Чёрная жемчужина: ${e.items.black}`);
+      if (e.items.gold  > 0) bits.push(`Золотая жемчужина: ${e.items.gold}`);
+
+      const d = new Date(e.date);
+      const pad = n => String(n).padStart(2, '0');
+      const dateStr = `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+
+      return {
+        'Дата': dateStr,
+        'Продавец': e.seller || '—',
+        'Что продано': bits.join(', ') || '—',
+        'Выплачено продавцу': e.total,
+        'В банк': e.bankFee || 0
+      };
+    });
+
+    // Добавляем итоговую строку
+    const totalPaid = rows.reduce((s, r) => s + r['Выплачено продавцу'], 0);
+    const totalBank = rows.reduce((s, r) => s + r['В банк'], 0);
+    rows.push({});
+    rows.push({
+      'Дата': 'ИТОГО',
+      'Продавец': '',
+      'Что продано': `Записей: ${sorted.length}`,
+      'Выплачено продавцу': totalPaid,
+      'В банк': totalBank
+    });
+
+    // Строим Excel через SheetJS
+    const ws = XLSX.utils.json_to_sheet(rows);
+
+    // Ширины колонок
+    ws['!cols'] = [
+      { wch: 18 },  // Дата
+      { wch: 20 },  // Продавец
+      { wch: 50 },  // Что продано
+      { wch: 20 },  // Выплачено
+      { wch: 12 }   // В банк
+    ];
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Отчёт Банка Острова');
+
+    // Имя файла с датой
+    const now = new Date();
+    const fname = `Отчёт_Банка_Острова_${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}.xlsx`;
+
+    XLSX.writeFile(wb, fname);
+    showToast('Отчёт выгружен!');
   });
 
   function formatDate(iso) {
@@ -1358,6 +1931,7 @@
 
     const count = filtered.length;
     const total = filtered.reduce((s, e) => s + e.total, 0);
+    const bankTotal = filtered.reduce((s, e) => s + (e.bankFee || 0), 0);
     const avg = count ? Math.round(total / count) : 0;
     const best = filtered.reduce((m, e) => Math.max(m, e.total), 0);
 
@@ -1365,6 +1939,7 @@
     $('stat-total').textContent = total;
     $('stat-avg').textContent = avg;
     $('stat-best').textContent = best;
+    if ($('stat-bank')) $('stat-bank').textContent = bankTotal;
 
     const info = $('filter-info');
     if (currentFilter === '__all__') {
@@ -1406,13 +1981,20 @@
         ? `<span class="history-seller" data-edit-seller="${e.id}" title="Нажми чтобы изменить имя">${e.seller}</span>`
         : `<span class="history-seller-anon" data-edit-seller="${e.id}" title="Нажми чтобы добавить имя">+ имя</span>`;
 
+      const bankHtml = (e.bankFee && e.bankFee > 0)
+        ? `<div class="history-bank">в банк: <strong>${e.bankFee} гильз</strong></div>`
+        : '';
+
       return `
         <div class="history-item">
           <div class="history-date">
             ${sellerHtml}
             <span class="history-date-time">${formatDate(e.date)}</span>
           </div>
-          <div class="history-items">${itemsStr}</div>
+          <div class="history-items">
+            ${itemsStr}
+            ${bankHtml}
+          </div>
           <div class="history-total">${e.total} гильз</div>
           <button class="history-delete" data-id="${e.id}" title="Удалить">✕</button>
         </div>
@@ -1422,8 +2004,11 @@
     container.querySelectorAll('.history-delete').forEach(btn => {
       btn.addEventListener('click', async (ev) => {
         const id = parseInt(ev.target.dataset.id);
+        if (!confirm('Удалить эту запись из общего журнала?')) return;
+        const backup = history.slice();
         history = history.filter(e => e.id !== id);
-        await saveHistory();
+        const ok = await saveHistory();
+        if (!ok) history = backup;
         renderHistory();
       });
     });
@@ -1435,9 +2020,11 @@
         if (!entry) return;
         const current = entry.seller || '';
         const next = prompt('Имя продавца:', current);
-        if (next === null) return; // отмена
+        if (next === null) return;
+        const oldValue = entry.seller;
         entry.seller = next.trim() || null;
-        await saveHistory();
+        const ok = await saveHistory();
+        if (!ok) entry.seller = oldValue;
         renderHistory();
       });
     });
@@ -1460,11 +2047,16 @@
     toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
   }
 
-  (async () => {
+  async function initApp() {
     await loadHistory();
     updateAll();
     renderHistory();
-  })();
+  }
+
+  // Если уже залогинен при загрузке страницы — стартуем сразу
+  if (isAuthed()) {
+    initApp();
+  }
 </script>
 
 </body>
