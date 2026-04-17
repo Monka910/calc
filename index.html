@@ -1392,10 +1392,10 @@
 
   const CONFIG = {
     github: {
-      owner:  'Monka910',   // твой GitHub username
-      repo:   'calc',        // название репозитория
-      branch: 'main',        // ветка
-      path:   'log.json'     // файл журнала в репозитории
+      owner:  'Monka910',   
+      repo:   'calc',        
+      branch: 'main',        
+      path:   'log.json'     
     },
 
     passwordHash: 'e47d3eff8cb2669c60095acd32e7002e39913c0aa08c4528e5df0df33ad41ada',
@@ -1502,9 +1502,7 @@
     const authBtn = document.getElementById('auth-btn');
     authBtn.textContent = 'Выйти';
     authBtn.classList.add('authed');
-    // Показываем бейдж синхронизации
     document.getElementById('sync-badge').style.display = 'flex';
-    // Загружаем журнал
     initAdminApp();
   }
 
@@ -1775,7 +1773,6 @@
 
     const sellerName = ($('seller-name').value || '').trim();
 
-    // Считаем комиссию банка
     const bankFee = calcBankFee({
       parts: state.p.sold,
       white: state.w.sold,
@@ -1896,7 +1893,6 @@
 
     const ws = XLSX.utils.json_to_sheet(rows);
 
-    // Ширины колонок
     ws['!cols'] = [
       { wch: 18 },  // Дата
       { wch: 20 },  // Продавец
