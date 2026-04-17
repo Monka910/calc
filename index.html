@@ -61,10 +61,8 @@
 
   .parchment {
     position: relative;
-    /* Тёплый кремово-бежевый цвет старой бумаги */
     background-color: #e8d3a0;
     background-image:
-      /* Неравномерность цвета — жёлто-коричневые разводы */
       radial-gradient(ellipse 60% 40% at 20% 25%, rgba(237, 218, 170, 0.8) 0%, transparent 60%),
       radial-gradient(ellipse 50% 45% at 80% 75%, rgba(200, 170, 115, 0.5) 0%, transparent 60%),
       radial-gradient(ellipse 40% 30% at 60% 40%, rgba(245, 225, 180, 0.6) 0%, transparent 50%);
@@ -74,7 +72,6 @@
       0 15px 50px rgba(0,0,0,0.7),
       0 4px 12px rgba(0,0,0,0.4);
     border-radius: 4px;
-    /* Рваные края */
     clip-path: polygon(
       2% 1%, 8% 0%, 15% 2%, 22% 0%, 30% 1%, 38% 0%, 46% 2%, 54% 0%, 62% 1%, 70% 0%, 78% 2%, 86% 0%, 94% 1%, 100% 3%,
       99% 10%, 100% 18%, 98% 26%, 100% 34%, 99% 42%, 100% 50%, 98% 58%, 100% 66%, 99% 74%, 100% 82%, 98% 90%, 100% 98%,
@@ -100,14 +97,12 @@
     position: absolute;
     inset: 0;
     background-image:
-      /* Большие органические пятна через низкочастотный noise */
       url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='700' height='700'><filter id='blobs'><feTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='3' seed='9'/><feColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.28 0 0 0 0 0.1 0 0 0 1.5 -0.6'/></filter><rect width='100%25' height='100%25' filter='url(%23blobs)'/></svg>"),
       /* Локальные тёмные пятна */
       radial-gradient(ellipse 22% 16% at 12% 15%, rgba(90, 55, 20, 0.3) 0%, transparent 100%),
       radial-gradient(ellipse 18% 14% at 88% 20%, rgba(75, 45, 15, 0.35) 0%, transparent 100%),
       radial-gradient(ellipse 20% 15% at 78% 85%, rgba(85, 50, 18, 0.32) 0%, transparent 100%),
       radial-gradient(ellipse 25% 18% at 8% 88%, rgba(80, 48, 16, 0.34) 0%, transparent 100%),
-      /* Виньетка */
       radial-gradient(ellipse 85% 65% at 50% 50%, transparent 35%, rgba(70, 40, 15, 0.45) 100%);
     background-size: 700px 700px, auto, auto, auto, auto, auto;
     pointer-events: none;
@@ -957,26 +952,66 @@
     50% { opacity: 0.5; transform: scale(1.3); }
   }
 
-  .logout-btn {
+  .auth-btn {
     position: fixed;
     top: 15px;
     left: 15px;
     z-index: 500;
-    padding: 8px 16px;
-    background: rgba(100, 30, 30, 0.7);
-    border: 1px solid rgba(220, 130, 120, 0.4);
+    padding: 10px 22px;
+    background: rgba(10, 37, 64, 0.75);
+    border: 1px solid rgba(100, 200, 210, 0.5);
     border-radius: 20px;
-    color: #f4d8d0;
-    font-family: 'Caveat', cursive;
-    font-size: 16px;
+    color: #c5e8ee;
+    font-family: 'IM Fell English SC', serif;
+    font-size: 15px;
+    letter-spacing: 2px;
     cursor: pointer;
     backdrop-filter: blur(6px);
     transition: all 0.2s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
   }
 
-  .logout-btn:hover {
+  .auth-btn:hover {
+    background: rgba(20, 60, 90, 0.9);
+    color: #e6faf5;
+    box-shadow: 0 0 15px rgba(100, 200, 210, 0.3), 0 2px 10px rgba(0,0,0,0.4);
+  }
+
+  .auth-btn.authed {
+    background: rgba(100, 30, 30, 0.7);
+    border-color: rgba(220, 130, 120, 0.5);
+    color: #f4d8d0;
+  }
+
+  .auth-btn.authed:hover {
     background: rgba(140, 50, 45, 0.85);
     color: #ffebe5;
+  }
+
+  .lock-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid rgba(101, 67, 33, 0.4);
+    color: #7a5c3a;
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .lock-close:hover {
+    background: rgba(163, 40, 28, 0.15);
+    border-color: #a3281c;
+    color: #a3281c;
   }
 
   button.btn.excel {
@@ -1041,16 +1076,17 @@
 </head>
 <body>
 
-<div class="lock-overlay" id="lock-overlay">
+<div class="lock-overlay" id="lock-overlay" style="display:none">
   <div class="lock-box">
+    <button type="button" class="lock-close" id="lock-close" title="Закрыть">✕</button>
     <div class="lock-title">Банк Острова</div>
-    <div class="lock-sub">Только для админов</div>
+    <div class="lock-sub">Вход для админов</div>
     <form id="lock-form" autocomplete="off">
-      <input type="password" id="lock-input" placeholder="Введите пароль..." autofocus>
+      <input type="password" id="lock-input" placeholder="Введите пароль..." autocomplete="off">
       <div class="lock-error" id="lock-error"></div>
       <button type="submit" class="btn" style="width:100%">Войти</button>
     </form>
-    <div class="lock-hint">Пароль знают только администраторы банка</div>
+    <div class="lock-hint">Без входа доступен только калькулятор</div>
   </div>
 </div>
 
@@ -1059,7 +1095,7 @@
   <span id="sync-text">Не подключено</span>
 </div>
 
-<button class="logout-btn" id="logout-btn" style="display:none">Выйти</button>
+<button class="auth-btn" id="auth-btn">Войти</button>
 
 <canvas id="ocean-canvas"></canvas>
 
@@ -1071,8 +1107,7 @@
       <div class="sub-header">~ Банк Острова ~</div>
     </div>
 
-    <!-- Поле продавца -->
-    <div class="seller-field">
+    <div class="seller-field admin-only" id="seller-field" style="display:none">
       <span class="seller-label">Продаёт:<span class="optional">(необязательно)</span></span>
       <input type="text" id="seller-name" placeholder="Введите имя..." maxlength="40" autocomplete="off">
     </div>
@@ -1170,12 +1205,12 @@
     </div>
 
     <div class="actions">
-      <button class="btn success" id="save-btn">❖ Записать продажу ❖</button>
+      <button class="btn success admin-only" id="save-btn" style="display:none">❖ Записать продажу ❖</button>
       <button class="btn" id="clear-btn">Очистить поля</button>
     </div>
   </div>
 
-  <div class="parchment">
+  <div class="parchment admin-only" id="journal-block" style="display:none">
     <div class="main-header">
       <div class="title-tag">Журнал продаж</div>
     </div>
@@ -1354,12 +1389,8 @@
 </script>
 
 <script>
-  // ═══════════════════════════════════════════════════════════════
-  //  КОНФИГУРАЦИЯ — ТУТ НАСТРАИВАЕШЬ СИСТЕМУ
-  // ═══════════════════════════════════════════════════════════════
 
   const CONFIG = {
-    // --- GitHub синхронизация ---
     github: {
       owner:  'Monka910',   // твой GitHub username
       repo:   'calc',        // название репозитория
@@ -1367,17 +1398,11 @@
       path:   'log.json'     // файл журнала в репозитории
     },
 
-    // --- Пароль админа (хеш SHA-256) ---
-    // ВАЖНО: сюда подставишь свой хеш (инструкция ниже)
     passwordHash: 'e47d3eff8cb2669c60095acd32e7002e39913c0aa08c4528e5df0df33ad41ada',
-    // ↑ это хеш слова "password" для примера. ЗАМЕНИ!
 
-    // --- GitHub Personal Access Token ---
-    // Админ вводит его один раз — сохраняется в его браузере
-    // Без токена нельзя писать, можно только читать общий журнал
     tokenKey: 'github-token',
 
-    // --- Банковская комиссия с каждой единицы ---
+
     bank: {
       white: 1,  // 1 гильза в банк с каждой белой жемчужины
       black: 1,  // 1 гильза в банк с каждой чёрной
@@ -1386,9 +1411,6 @@
     }
   };
 
-  // ═══════════════════════════════════════════════════════════════
-  //  АВТОРИЗАЦИЯ
-  // ═══════════════════════════════════════════════════════════════
 
   async function sha256(text) {
     const buf = new TextEncoder().encode(text);
@@ -1416,11 +1438,41 @@
     location.reload();
   }
 
-  document.getElementById('logout-btn').addEventListener('click', () => {
-    if (confirm('Выйти из системы?')) logout();
+  document.getElementById('auth-btn').addEventListener('click', () => {
+    if (isAuthed()) {
+      if (confirm('Выйти из админ-режима?')) logout();
+    } else {
+      openLoginModal();
+    }
   });
 
-  // Форма входа
+  document.getElementById('lock-close').addEventListener('click', closeLoginModal);
+
+  document.getElementById('lock-overlay').addEventListener('click', (e) => {
+    if (e.target.id === 'lock-overlay') closeLoginModal();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.getElementById('lock-overlay').style.display === 'flex') {
+      closeLoginModal();
+    }
+  });
+
+  function openLoginModal() {
+    const overlay = document.getElementById('lock-overlay');
+    overlay.style.display = 'flex';
+    const input = document.getElementById('lock-input');
+    input.value = '';
+    document.getElementById('lock-error').textContent = '';
+    setTimeout(() => input.focus(), 50);
+  }
+
+  function closeLoginModal() {
+    document.getElementById('lock-overlay').style.display = 'none';
+    document.getElementById('lock-input').value = '';
+    document.getElementById('lock-error').textContent = '';
+  }
+
   document.getElementById('lock-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const input = document.getElementById('lock-input');
@@ -1432,11 +1484,9 @@
 
     const hash = await sha256(pwd);
     if (hash === CONFIG.passwordHash) {
-      setAuthed(true); // запоминаем на этом браузере
-      document.getElementById('lock-overlay').style.display = 'none';
-      document.getElementById('logout-btn').style.display = 'block';
-      document.getElementById('sync-badge').style.display = 'flex';
-      initApp();
+      setAuthed(true);
+      closeLoginModal();
+      enterAdminMode();
     } else {
       err.textContent = 'Неверный пароль';
       input.value = '';
@@ -1444,16 +1494,24 @@
     }
   });
 
-  // При загрузке — проверяем авторизацию
-  if (isAuthed()) {
-    document.getElementById('lock-overlay').style.display = 'none';
-    document.getElementById('logout-btn').style.display = 'block';
+  function enterAdminMode() {
+    document.querySelectorAll('.admin-only').forEach(el => {
+      el.style.display = '';
+    });
+
+    const authBtn = document.getElementById('auth-btn');
+    authBtn.textContent = 'Выйти';
+    authBtn.classList.add('authed');
+    // Показываем бейдж синхронизации
     document.getElementById('sync-badge').style.display = 'flex';
+    // Загружаем журнал
+    initAdminApp();
   }
 
-  // ═══════════════════════════════════════════════════════════════
-  //  КОНСТАНТЫ И DOM
-  // ═══════════════════════════════════════════════════════════════
+  if (isAuthed()) {
+    enterAdminMode();
+  }
+
 
   const RATES = {
     parts: { per: 4, get: 1 },
@@ -1549,24 +1607,14 @@
   partInputs.forEach(el => el.addEventListener('input', updateAll));
   Object.values(inputs).forEach(el => el.addEventListener('input', updateAll));
 
-  // ═══════════════════════════════════════════════════════════════
-  //  БАНК-КОМИССИЯ
-  // ═══════════════════════════════════════════════════════════════
-  //  С каждой проданной единицы в банк уходит фиксированная гильза
-  //  Эта сумма НЕ показывается продавцу (он видит только свою зарплату)
-  //  НО сохраняется в журнале для отчётности админов
 
   function calcBankFee(items) {
-    // items = { parts: N, white: N, black: N, gold: N }
     return (items.parts || 0) * CONFIG.bank.parts
          + (items.white || 0) * CONFIG.bank.white
          + (items.black || 0) * CONFIG.bank.black
          + (items.gold  || 0) * CONFIG.bank.gold;
   }
 
-  // ═══════════════════════════════════════════════════════════════
-  //  БД — GITHUB SYNC
-  // ═══════════════════════════════════════════════════════════════
 
   let history = [];
   let fileSha = null; // нужен для обновления файла в GitHub
@@ -1611,7 +1659,6 @@
       const res = await fetch(url, { headers, cache: 'no-store' });
 
       if (res.status === 404) {
-        // Файла ещё нет — нормально, создадим при первой записи
         history = [];
         fileSha = null;
         setSyncStatus('', 'Пустой журнал');
@@ -1625,7 +1672,6 @@
       const data = await res.json();
       fileSha = data.sha;
 
-      // Декодируем base64 → JSON
       const content = decodeBase64UTF8(data.content.replace(/\s/g, ''));
       try {
         history = JSON.parse(content);
@@ -1638,7 +1684,6 @@
     } catch (e) {
       console.error('Ошибка загрузки:', e);
       setSyncStatus('error', 'Ошибка загрузки');
-      // Резервно пробуем localStorage
       try {
         const raw = localStorage.getItem('shopping-history-backup');
         if (raw) history = JSON.parse(raw);
@@ -1647,7 +1692,6 @@
   }
 
   async function saveHistory() {
-    // Бэкап в localStorage на всякий случай
     try {
       localStorage.setItem('shopping-history-backup', JSON.stringify(history));
     } catch(_) {}
@@ -1685,7 +1729,6 @@
       });
 
       if (res.status === 409 || res.status === 422) {
-        // Конфликт — кто-то уже обновил. Перезагружаем и пробуем снова
         setSyncStatus('syncing', 'Конфликт, обновляю...');
         await loadHistory();
         showToast('Кто-то уже обновил журнал. Обнови страницу и попробуй снова.', true);
@@ -1716,7 +1759,6 @@
     }
   }
 
-  // base64 с поддержкой UTF-8 (для русских символов)
   function encodeBase64UTF8(str) {
     return btoa(unescape(encodeURIComponent(str)));
   }
@@ -1760,7 +1802,7 @@
         black: state.b.earn,
         gold:  state.g.earn
       },
-      bankFee: bankFee, // гильз в банк с этой продажи
+      bankFee: bankFee, 
       total: state.total
     };
 
@@ -1805,9 +1847,6 @@
     renderHistory();
   });
 
-  // ═══════════════════════════════════════════════════════════════
-  //  ЭКСПОРТ В EXCEL
-  // ═══════════════════════════════════════════════════════════════
 
   $('export-btn').addEventListener('click', () => {
     if (history.length === 0) {
@@ -1815,11 +1854,9 @@
       return;
     }
 
-    // Сортируем от старых к новым для отчёта
     const sorted = history.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
 
     const rows = sorted.map(e => {
-      // Что продано — читаемая строка
       const bits = [];
       const pb = e.items.partsBreakdown;
       if (pb && typeof pb === 'object') {
@@ -1846,7 +1883,6 @@
       };
     });
 
-    // Добавляем итоговую строку
     const totalPaid = rows.reduce((s, r) => s + r['Выплачено продавцу'], 0);
     const totalBank = rows.reduce((s, r) => s + r['В банк'], 0);
     rows.push({});
@@ -1858,7 +1894,6 @@
       'В банк': totalBank
     });
 
-    // Строим Excel через SheetJS
     const ws = XLSX.utils.json_to_sheet(rows);
 
     // Ширины колонок
@@ -1873,7 +1908,6 @@
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Отчёт Банка Острова');
 
-    // Имя файла с датой
     const now = new Date();
     const fname = `Отчёт_Банка_Острова_${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}.xlsx`;
 
@@ -2047,16 +2081,13 @@
     toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
   }
 
-  async function initApp() {
+  async function initAdminApp() {
     await loadHistory();
     updateAll();
     renderHistory();
   }
 
-  // Если уже залогинен при загрузке страницы — стартуем сразу
-  if (isAuthed()) {
-    initApp();
-  }
+  updateAll();
 </script>
 
 </body>
