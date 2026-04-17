@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1776434178421,
+    "date": "2026-04-17T13:56:18.421Z",
+    "seller": "кИМ",
+    "items": {
+      "partsBreakdown": {
+        "eye": 222,
+        "gland": 12,
+        "scale": 3,
+        "saliva": 34,
+        "esul": 5
+      },
+      "partsTotal": 276,
+      "partsSold": 276,
+      "partsRemainder": 0,
+      "white": 12,
+      "black": 4,
+      "gold": 66
+    },
+    "earnings": {
+      "parts": 69,
+      "white": 36,
+      "black": 24,
+      "gold": 528
+    },
+    "bankFee": 82,
+    "total": 657
+  }
+]
