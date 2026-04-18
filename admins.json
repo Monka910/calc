@@ -16,5 +16,11 @@
     "name": "Al",
     "role": "chief",
     "passwordHash": "bc30cf08b5d9fd782f9e07593ac6c751efa17d74d063c9a4b8cd8de10898abe9"
+  },
+  {
+    "login": "mrgrondo",
+    "name": "mrgrondo",
+    "role": "chief",
+    "passwordHash": "6e9f42d9681dff607bce6596af9e2ee9024b6eea800a3c3b0b2ad092ba14639d"
   }
 ]
