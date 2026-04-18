@@ -1,0 +1,14 @@
+[
+  {
+    "login": "Monka",
+    "name": "Monka",
+    "role": "chief",
+    "passwordHash": "e47d3eff8cb2669c60095acd32e7002e39913c0aa08c4528e5df0df33ad41ada"
+  },
+  {
+    "login": "pepo",
+    "name": "pepo",
+    "role": "chief",
+    "passwordHash": "e374e48fb68170ddd1b99f633f61a3cc9dc905ad48cfe8f8b918669a2b6149a2"
+  }
+]
