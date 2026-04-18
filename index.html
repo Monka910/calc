@@ -3,32 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Банк Острова · Скупка</title>
+<title>Банк Острова / Скупка</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fragment+Mono&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root {
-    --bg: #fafaf7;
-    --bg-soft: #f4f3ee;
-    --surface: #ffffff;
-    --ink: #181615;
-    --ink-60: #6b6460;
-    --ink-40: #a8a29b;
-    --ink-20: #e5e2dc;
-    --ink-10: #efede8;
-    --accent: #b84a1f;
-    --accent-soft: #f4e6df;
-    --success: #2e5d3e;
-    --success-soft: #e5ede7;
-    --danger: #9e2828;
-    --danger-soft: #f1dede;
-    --radius-sm: 6px;
-    --radius: 10px;
-    --radius-lg: 16px;
-    --f-serif: 'Instrument Serif', serif;
-    --f-sans: 'Instrument Sans', system-ui, -apple-system, sans-serif;
+    --bg: #ffffff;
+    --bg-soft: #f5f5f5;
+    --ink: #000000;
+    --ink-80: #1a1a1a;
+    --ink-60: #666666;
+    --ink-40: #999999;
+    --ink-20: #d4d4d4;
+    --ink-10: #ebebeb;
+    --ink-05: #f5f5f5;
+    --danger: #b71c1c;
+    --radius-sm: 4px;
+    --radius: 8px;
+    --radius-lg: 14px;
+    --f-mono: 'JetBrains Mono', 'Fragment Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    --f-display: 'Fragment Mono', 'JetBrains Mono', ui-monospace, monospace;
+    --grid: 32px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,460 +34,1006 @@
   body {
     background: var(--bg);
     color: var(--ink);
-    font-family: var(--f-sans);
-    font-size: 15px;
-    line-height: 1.5;
+    font-family: var(--f-mono);
+    font-size: 14px;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.005em;
+    overflow-x: hidden;
   }
 
-  body::before {
-    content: '';
+  /* ================ ANIMATED GRID BACKGROUND ================ */
+  .bg-grid {
+    position: fixed;
+    inset: -2px;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: var(--grid) var(--grid);
+    animation: gridPan 40s linear infinite;
+    mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0.5) 80%, rgba(0,0,0,0.2) 100%);
+    -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0.5) 80%, rgba(0,0,0,0.2) 100%);
+  }
+
+  @keyframes gridPan {
+    0%   { background-position: 0 0; }
+    100% { background-position: var(--grid) var(--grid); }
+  }
+
+  .bg-rays {
     position: fixed;
     inset: 0;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0.08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-    pointer-events: none;
     z-index: 0;
-    opacity: 0.55;
+    pointer-events: none;
+    overflow: hidden;
   }
 
+  .ray {
+    position: absolute;
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.08), transparent);
+    height: 1px;
+    width: 100%;
+    animation: rayMove 14s linear infinite;
+  }
+  .ray:nth-child(1) { top: 18%; animation-duration: 22s; }
+  .ray:nth-child(2) { top: 47%; animation-duration: 30s; animation-direction: reverse; }
+  .ray:nth-child(3) { top: 73%; animation-duration: 18s; animation-delay: -4s; }
+
+  @keyframes rayMove {
+    0%   { transform: translateX(-120%); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateX(120%); opacity: 0; }
+  }
+
+  .bg-noise {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  /* ================ TOPBAR ================ */
   .topbar {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(250, 250, 247, 0.85);
-    backdrop-filter: saturate(180%) blur(14px);
-    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
     border-bottom: 1px solid var(--ink-10);
   }
 
   .topbar-inner {
-    max-width: 1080px; margin: 0 auto;
+    max-width: 1080px;
+    margin: 0 auto;
     padding: 14px 28px;
-    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
   }
 
-  .brand { display: flex; align-items: baseline; gap: 10px; color: var(--ink); }
-  .brand-logo {
-    font-family: var(--f-serif); font-size: 26px; line-height: 1; letter-spacing: -0.01em;
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
   }
-  .brand-logo em { font-style: italic; color: var(--accent); }
-  .brand-sub { font-size: 12px; color: var(--ink-60); letter-spacing: 0.04em; text-transform: uppercase; }
+  .brand-mark {
+    width: 26px; height: 26px;
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    position: relative;
+  }
+  .brand-mark::after {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    background: var(--ink);
+    border-radius: 50%;
+    animation: pulseDot 3s ease-in-out infinite;
+  }
+  @keyframes pulseDot {
+    0%,100% { transform: scale(1); opacity: 1; }
+    50%     { transform: scale(0.6); opacity: 0.7; }
+  }
+  .brand-text {
+    font-family: var(--f-display);
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .brand-text .sep { color: var(--ink-40); margin: 0 6px; }
 
-  .topbar-actions { display: flex; align-items: center; gap: 10px; }
+  .topbar-actions { display: flex; align-items: center; gap: 8px; }
+
+  .nav-tabs {
+    display: none;
+    gap: 0;
+    margin-right: 8px;
+    padding: 2px;
+    background: var(--ink-05);
+    border-radius: 999px;
+  }
+  .nav-tabs.visible { display: inline-flex; }
+
+  .nav-tab {
+    padding: 6px 14px;
+    font-family: var(--f-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-60);
+    background: transparent;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+  .nav-tab:hover { color: var(--ink); }
+  .nav-tab.active {
+    background: var(--ink);
+    color: var(--bg);
+  }
 
   .sync-badge {
     display: none;
-    align-items: center; gap: 8px;
-    padding: 6px 12px;
-    background: var(--ink-10);
-    border-radius: 20px;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 11px;
+    background: var(--ink-05);
+    border: 1px solid var(--ink-10);
+    border-radius: 999px;
     color: var(--ink-60);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
+    letter-spacing: 0.02em;
   }
-  .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: #4a8e5a; }
-  .sync-badge.syncing .sync-dot { background: #d4a12d; animation: pulse 1.2s ease-in-out infinite; }
+  .sync-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--ink);
+  }
+  .sync-badge.syncing .sync-dot { background: var(--ink-40); animation: pulse 1.2s ease-in-out infinite; }
   .sync-badge.error .sync-dot { background: var(--danger); }
-  @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .4; transform: scale(1.4); } }
+  @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .3; transform: scale(1.5); } }
 
   .auth-btn {
-    padding: 8px 18px;
-    font-family: var(--f-sans); font-size: 13px; font-weight: 500;
+    padding: 7px 16px;
+    font-family: var(--f-mono);
+    font-size: 12px;
+    font-weight: 500;
     color: var(--ink);
     background: transparent;
-    border: 1px solid var(--ink-20);
+    border: 1px solid var(--ink);
     border-radius: 999px;
     cursor: pointer;
-    transition: all 0.15s;
-    display: inline-flex; align-items: center; gap: 8px;
+    transition: all 0.18s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
   }
-  .auth-btn:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-  .auth-btn.authed { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-  .auth-btn.authed:hover { background: var(--ink-60); border-color: var(--ink-60); }
+  .auth-btn:hover { background: var(--ink); color: var(--bg); }
+  .auth-btn.authed { background: var(--ink); color: var(--bg); }
+  .auth-btn.authed:hover { background: var(--ink-80); }
 
   .role-pill {
-    font-size: 10px; padding: 2px 7px;
-    background: rgba(255,255,255,0.18);
+    font-size: 9px;
+    padding: 2px 6px;
+    background: rgba(255,255,255,0.2);
     border-radius: 999px;
-    letter-spacing: 0.03em; text-transform: uppercase; font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 500;
   }
 
+  /* ================ WRAPPER ================ */
   .wrapper {
-    max-width: 1080px; margin: 0 auto;
-    padding: 36px 28px 60px;
-    position: relative; z-index: 1;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 48px 28px 80px;
+    position: relative;
+    z-index: 2;
   }
 
-  .hero { margin-bottom: 36px; }
+  /* ================ HERO ================ */
+  .hero { margin-bottom: 42px; }
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-60);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .hero-meta::before {
+    content: '';
+    width: 32px; height: 1px; background: var(--ink);
+    display: inline-block;
+  }
   .hero-title {
-    font-family: var(--f-serif); font-weight: 400;
-    font-size: clamp(42px, 7vw, 72px);
+    font-family: var(--f-display);
+    font-weight: 400;
+    font-size: clamp(44px, 7vw, 76px);
     line-height: 0.98;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.03em;
     color: var(--ink);
   }
-  .hero-title em { font-style: italic; color: var(--accent); }
-  .hero-sub { margin-top: 12px; color: var(--ink-60); font-size: 15px; max-width: 520px; }
+  .hero-title .dim { color: var(--ink-40); }
+  .hero-sub {
+    margin-top: 14px;
+    color: var(--ink-60);
+    font-size: 14px;
+    max-width: 520px;
+    line-height: 1.6;
+  }
 
+  /* ================ CARD ================ */
   .card {
-    background: var(--surface);
+    background: var(--bg);
     border: 1px solid var(--ink-10);
     border-radius: var(--radius-lg);
     padding: 28px;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
+    position: relative;
   }
 
   .card-header {
-    display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
-    margin-bottom: 22px; padding-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 22px;
+    padding-bottom: 16px;
     border-bottom: 1px solid var(--ink-10);
   }
 
   .card-title {
-    font-family: var(--f-serif); font-size: 26px; font-weight: 400;
-    letter-spacing: -0.01em; color: var(--ink);
-  }
-  .card-rate { font-size: 13px; color: var(--ink-60); font-variant-numeric: tabular-nums; }
-  .card-rate strong { color: var(--ink); font-weight: 500; }
-
-  .buyer-info {
-    display: flex; align-items: center; gap: 10px;
-    padding: 12px 16px;
-    background: var(--success-soft);
-    border: 1px solid #cadcc9;
-    border-radius: var(--radius);
-    font-size: 13px; color: var(--success);
-    margin-bottom: 16px;
-  }
-  .buyer-info strong { font-weight: 600; }
-  .buyer-info::before {
-    content: ''; display: inline-block; width: 8px; height: 8px;
-    border-radius: 50%; background: var(--success); flex-shrink: 0;
+    font-family: var(--f-display);
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--ink);
   }
 
-  .seller-field {
-    display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
-  }
-  .seller-field label {
-    font-size: 12px; font-weight: 500; color: var(--ink-60);
-    text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap;
-  }
-
-  input#seller-name, input[type="number"], .lock-box input[type="text"], .lock-box input[type="password"] {
-    padding: 10px 14px;
-    font-family: var(--f-sans); font-size: 14px;
-    background: var(--bg-soft);
-    border: 1px solid var(--ink-20);
-    border-radius: var(--radius-sm);
-    color: var(--ink); outline: none;
-    transition: all 0.15s;
-  }
-  input#seller-name { flex: 1; }
-
-  input:focus { border-color: var(--ink) !important; background: var(--surface) !important; }
-
-  input[type="number"] {
-    width: 100%;
-    font-size: 15px; font-weight: 500;
+  .card-meta {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-60);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     font-variant-numeric: tabular-nums;
   }
-  input[type="number"]::-webkit-inner-spin-button { opacity: 0.25; }
+  .card-meta strong { color: var(--ink); font-weight: 600; }
 
+  /* ================ BUYER INFO ================ */
+  .buyer-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--ink-05);
+    border: 1px solid var(--ink-10);
+    border-radius: var(--radius);
+    font-size: 12px;
+    color: var(--ink-60);
+    margin-bottom: 18px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+  .buyer-info strong { color: var(--ink); font-weight: 600; }
+  .buyer-info::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--ink);
+    flex-shrink: 0;
+  }
+
+  /* ================ SELLER FIELD ================ */
+  .seller-field {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .seller-field label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-60);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  input[type="text"], input[type="number"], input[type="password"] {
+    padding: 10px 14px;
+    font-family: var(--f-mono);
+    font-size: 14px;
+    background: var(--bg);
+    border: 1px solid var(--ink-20);
+    border-radius: var(--radius-sm);
+    color: var(--ink);
+    outline: none;
+    transition: all 0.15s;
+    font-variant-numeric: tabular-nums;
+  }
+  input#seller-name { flex: 1; }
+  input[type="number"] { width: 100%; font-weight: 500; }
+  input[type="number"]::-webkit-inner-spin-button { opacity: 0.25; }
+  input:focus { border-color: var(--ink); box-shadow: 0 0 0 3px var(--ink-05); }
+
+  select {
+    padding: 8px 32px 8px 12px;
+    font-family: var(--f-mono);
+    font-size: 12px;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--ink-20);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+  }
+  select:focus { border-color: var(--ink); }
+
+  /* ================ ITEMS GRID ================ */
   .items-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 14px; margin-bottom: 20px;
+    gap: 14px;
+    margin-bottom: 22px;
   }
-  .item-cell { display: flex; flex-direction: column; gap: 6px; }
-  .item-cell label { font-size: 12px; font-weight: 500; color: var(--ink-60); }
+  .item-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .item-cell label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-60);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
 
+  /* ================ GROUP SUMMARY ================ */
   .group-summary {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
-    padding: 18px 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    padding-top: 20px;
     border-top: 1px solid var(--ink-10);
   }
-  .summary-block { padding: 0 18px; position: relative; }
+  .summary-block {
+    padding: 0 20px;
+    position: relative;
+  }
   .summary-block + .summary-block::before {
-    content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
-    width: 1px; background: var(--ink-10);
+    content: '';
+    position: absolute;
+    left: 0; top: 4px; bottom: 4px;
+    width: 1px;
+    background: var(--ink-10);
   }
   .summary-block:first-child { padding-left: 0; }
   .summary-block:last-child { padding-right: 0; }
-
   .summary-block .label {
-    display: block; font-size: 11px; color: var(--ink-60);
-    text-transform: uppercase; letter-spacing: 0.08em;
-    font-weight: 500; margin-bottom: 6px;
+    display: block;
+    font-size: 10px;
+    color: var(--ink-60);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    margin-bottom: 8px;
   }
   .summary-block .value {
-    font-family: var(--f-serif); font-size: 28px; font-weight: 400;
-    line-height: 1; color: var(--ink);
-    letter-spacing: -0.01em; font-variant-numeric: tabular-nums;
+    font-family: var(--f-display);
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
   }
-  .summary-block .value.gold { color: var(--accent); }
-  .summary-block .value.remain { color: var(--ink-40); }
+  .summary-block .value.dim { color: var(--ink-40); }
   .summary-block .value .unit-xs {
-    font-family: var(--f-sans); font-size: 13px;
-    color: var(--ink-60); margin-left: 4px; font-weight: 400;
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-40);
+    margin-left: 4px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
   }
 
-  .rows-container { display: flex; flex-direction: column; gap: 12px; }
+  /* ================ PEARL ROWS ================ */
+  .rows-container { display: flex; flex-direction: column; gap: 10px; }
 
   .item-row {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 120px 1fr;
-    gap: 20px; align-items: center;
+    grid-template-columns: 1.6fr 1fr 110px 1fr;
+    gap: 18px;
+    align-items: center;
     padding: 16px 20px;
-    background: var(--bg-soft);
+    background: var(--ink-05);
     border: 1px solid var(--ink-10);
     border-radius: var(--radius);
     transition: all 0.15s;
   }
-  .item-row:hover { border-color: var(--ink-20); background: var(--surface); }
+  .item-row:hover {
+    border-color: var(--ink);
+    background: var(--bg);
+  }
 
   .item-name {
-    font-family: var(--f-serif); font-size: 22px; font-weight: 400;
-    letter-spacing: -0.01em; color: var(--ink);
+    font-family: var(--f-display);
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--ink);
   }
-  .item-rate { font-size: 13px; color: var(--ink-60); }
-  .item-rate strong { color: var(--ink); font-weight: 500; }
+  .item-rate {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-60);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .item-rate strong { color: var(--ink); font-weight: 600; }
 
   .result { text-align: right; }
   .result .label {
-    display: block; font-size: 11px; color: var(--ink-60);
-    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px;
+    display: block;
+    font-size: 10px;
+    color: var(--ink-60);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 2px;
   }
   .result strong {
-    font-family: var(--f-serif); font-size: 22px; font-weight: 400;
-    color: var(--accent); font-variant-numeric: tabular-nums;
+    font-family: var(--f-display);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
   }
 
+  /* ================ TOTAL CARD ================ */
   .total-card {
     margin-top: 28px;
-    padding: 24px 28px;
-    background: var(--ink); color: var(--bg);
+    padding: 28px 32px;
+    background: var(--ink);
+    color: var(--bg);
     border-radius: var(--radius-lg);
-    display: flex; justify-content: space-between; align-items: baseline; gap: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .total-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
   }
   .total-label {
-    font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;
-    color: rgba(250,250,247,0.6);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.55);
+    position: relative;
   }
   .total-value {
-    font-family: var(--f-serif); font-size: 52px; font-weight: 400;
-    line-height: 1; letter-spacing: -0.02em;
+    font-family: var(--f-display);
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.03em;
     font-variant-numeric: tabular-nums;
+    position: relative;
   }
-  .total-value em { font-style: italic; color: #ffb486; }
   .total-value .unit {
-    font-family: var(--f-sans); font-size: 18px;
-    color: rgba(250,250,247,0.55);
-    margin-left: 6px; font-weight: 400; letter-spacing: 0;
+    font-family: var(--f-mono);
+    font-size: 16px;
+    color: rgba(255,255,255,0.55);
+    margin-left: 8px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
 
-  .actions { display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; }
-
+  /* ================ BUTTONS ================ */
+  .actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
   button.btn {
     padding: 10px 22px;
-    font-family: var(--f-sans); font-size: 14px; font-weight: 500;
+    font-family: var(--f-mono);
+    font-size: 12px;
+    font-weight: 500;
     color: var(--ink);
-    background: var(--surface);
+    background: var(--bg);
     border: 1px solid var(--ink-20);
     border-radius: 999px;
     cursor: pointer;
     transition: all 0.15s;
-    display: inline-flex; align-items: center; gap: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
   button.btn:hover { border-color: var(--ink); }
-  button.btn.success { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-  button.btn.success:hover { background: var(--accent); border-color: var(--accent); }
-  button.btn.danger { color: var(--danger); border-color: var(--danger-soft); }
+  button.btn.primary {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+  button.btn.primary:hover { background: var(--ink-80); }
+  button.btn.ghost { border-color: var(--ink-20); color: var(--ink-60); }
+  button.btn.ghost:hover { border-color: var(--ink); color: var(--ink); }
+  button.btn.danger { color: var(--danger); border-color: var(--ink-20); }
   button.btn.danger:hover { background: var(--danger); color: var(--bg); border-color: var(--danger); }
-  button.btn.excel { color: var(--success); border-color: var(--success-soft); }
-  button.btn.excel:hover { background: var(--success); color: var(--bg); border-color: var(--success); }
+  button.btn[disabled] { opacity: 0.4; cursor: not-allowed; }
 
+  /* ================ FILTERS ================ */
   .filter-bar {
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 22px; flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
   }
   .filter-group { display: inline-flex; align-items: center; gap: 8px; }
   .filter-bar label {
-    font-size: 12px; color: var(--ink-60);
-    text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500;
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-60);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
   }
-  .filter-bar select {
-    padding: 7px 30px 7px 12px;
-    font-family: var(--f-sans); font-size: 13px;
-    color: var(--ink);
-    background: var(--bg-soft);
-    border: 1px solid var(--ink-20);
-    border-radius: var(--radius-sm);
-    cursor: pointer; outline: none;
-    appearance: none; -webkit-appearance: none;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6460' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
-    background-repeat: no-repeat; background-position: right 10px center;
+  .filter-info {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-40);
+    margin-left: auto;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
   }
-  .filter-bar select:focus { border-color: var(--ink); }
-  .filter-info { font-size: 12px; color: var(--ink-40); margin-left: auto; font-variant-numeric: tabular-nums; }
 
+  /* ================ STATS ================ */
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 0;
-    margin-bottom: 24px;
-    background: var(--bg-soft);
+    margin-bottom: 22px;
+    background: var(--bg);
     border: 1px solid var(--ink-10);
     border-radius: var(--radius);
     overflow: hidden;
   }
-  .stat-card { padding: 16px 18px; border-right: 1px solid var(--ink-10); }
+  .stat-card {
+    padding: 16px 18px;
+    border-right: 1px solid var(--ink-10);
+    position: relative;
+  }
   .stat-card:last-child { border-right: none; }
   .stat-label {
-    font-size: 11px; color: var(--ink-60);
-    text-transform: uppercase; letter-spacing: 0.06em;
-    font-weight: 500; display: block; margin-bottom: 8px;
+    font-family: var(--f-mono);
+    font-size: 10px;
+    color: var(--ink-60);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 8px;
   }
   .stat-value {
-    font-family: var(--f-serif); font-size: 30px; font-weight: 400;
-    line-height: 1; color: var(--ink);
-    letter-spacing: -0.01em; font-variant-numeric: tabular-nums;
+    font-family: var(--f-display);
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
   }
   .stat-value .unit-small {
-    font-family: var(--f-sans); font-size: 13px;
-    color: var(--ink-60); margin-left: 4px; font-weight: 400;
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-40);
+    margin-left: 4px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+  }
+  @media (max-width: 640px) {
+    .stat-card:nth-child(n+3) { border-top: 1px solid var(--ink-10); }
+    .stat-card:nth-child(2n) { border-right: none; }
   }
 
+  /* ================ HISTORY ================ */
   .history-container {
-    max-height: 520px; overflow-y: auto;
-    padding: 2px; margin: 0 -2px;
+    max-height: 560px;
+    overflow-y: auto;
+    padding: 2px;
+    margin: 0 -2px;
   }
-  .history-container::-webkit-scrollbar { width: 6px; }
-  .history-container::-webkit-scrollbar-thumb { background: var(--ink-20); border-radius: 3px; }
-  .history-container::-webkit-scrollbar-thumb:hover { background: var(--ink-40); }
+  .history-container::-webkit-scrollbar { width: 4px; }
+  .history-container::-webkit-scrollbar-thumb { background: var(--ink-20); border-radius: 2px; }
 
   .history-item {
     display: grid;
     grid-template-columns: 1.3fr 2fr 1fr auto;
-    gap: 18px; align-items: center;
+    gap: 18px;
+    align-items: center;
     padding: 14px 18px;
     border: 1px solid var(--ink-10);
     border-radius: var(--radius);
-    margin-bottom: 8px;
-    background: var(--surface);
+    margin-bottom: 6px;
+    background: var(--bg);
     transition: all 0.15s;
   }
-  .history-item:hover { border-color: var(--ink-20); background: var(--bg-soft); }
+  .history-item:hover { border-color: var(--ink); }
 
   .history-person { display: flex; flex-direction: column; gap: 3px; }
   .history-seller {
-    font-family: var(--f-serif); font-size: 19px; font-weight: 400;
-    color: var(--ink); line-height: 1.1; letter-spacing: -0.01em;
+    font-family: var(--f-display);
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
   }
-  .history-seller.anon { color: var(--ink-40); font-style: italic; }
+  .history-seller.anon { color: var(--ink-40); }
 
   .history-buyer {
-    font-size: 11px; color: var(--success);
-    text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500;
+    font-family: var(--f-mono);
+    font-size: 10px;
+    color: var(--ink-60);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
   }
-  .history-buyer::before { content: '← '; opacity: 0.5; }
+  .history-buyer::before { content: '← '; }
 
-  .history-time { font-size: 11px; color: var(--ink-40); font-variant-numeric: tabular-nums; }
+  .history-time {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    color: var(--ink-40);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
 
-  .history-items { font-size: 13px; color: var(--ink-60); line-height: 1.4; }
+  .history-items {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    color: var(--ink-60);
+    line-height: 1.45;
+  }
   .history-bank {
-    display: block; margin-top: 3px;
-    font-size: 11px; color: var(--accent); font-style: italic;
+    display: block;
+    margin-top: 3px;
+    font-size: 10px;
+    color: var(--ink-40);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
   }
-  .history-bank strong { font-weight: 600; font-style: normal; }
+  .history-bank strong { color: var(--ink); font-weight: 600; }
 
   .history-total {
-    font-family: var(--f-serif); font-size: 24px; font-weight: 400;
-    color: var(--accent); text-align: right;
-    font-variant-numeric: tabular-nums; letter-spacing: -0.01em;
+    font-family: var(--f-display);
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--ink);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
   }
   .history-total .unit {
-    font-family: var(--f-sans); font-size: 11px; color: var(--ink-40);
-    margin-left: 4px; text-transform: uppercase; letter-spacing: 0.05em;
+    font-family: var(--f-mono);
+    font-size: 10px;
+    color: var(--ink-40);
+    margin-left: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .history-delete {
-    width: 28px; height: 28px; border-radius: 50%;
-    border: 1px solid var(--ink-20); background: var(--surface);
-    color: var(--ink-40); cursor: pointer; font-size: 12px;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--ink-20);
+    background: var(--bg);
+    color: var(--ink-60);
+    cursor: pointer;
+    font-size: 11px;
     transition: all 0.15s;
-    display: inline-flex; align-items: center; justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
-  .history-delete:hover { background: var(--danger); border-color: var(--danger); color: white; }
-
-  .empty-history {
-    text-align: center; padding: 48px 20px;
-    color: var(--ink-40); font-style: italic;
-    font-family: var(--f-serif); font-size: 18px;
+  .history-delete:hover {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
   }
 
-  .lock-overlay {
-    position: fixed; inset: 0;
-    background: rgba(24, 22, 21, 0.55);
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--ink-40);
+    font-family: var(--f-display);
+    font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ================ ADMINS TAB ================ */
+  .admins-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 12px;
+  }
+  .admin-card {
+    padding: 20px;
+    border: 1px solid var(--ink-10);
+    border-radius: var(--radius);
+    background: var(--bg);
+    transition: all 0.15s;
+    position: relative;
+    cursor: pointer;
+  }
+  .admin-card:hover { border-color: var(--ink); }
+  .admin-card.is-me { border-color: var(--ink); }
+
+  .admin-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .admin-name {
+    font-family: var(--f-display);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  .admin-login {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-60);
+    margin-top: 3px;
+    letter-spacing: 0.02em;
+  }
+  .admin-login::before { content: '@'; opacity: 0.5; }
+
+  .admin-role {
+    font-family: var(--f-mono);
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .admin-role.chief { background: var(--ink); color: var(--bg); }
+  .admin-role.admin { background: var(--ink-05); color: var(--ink-60); border: 1px solid var(--ink-10); }
+
+  .admin-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    padding-top: 14px;
+    border-top: 1px dashed var(--ink-10);
+  }
+  .admin-stat {
+    padding-right: 12px;
+  }
+  .admin-stat + .admin-stat { border-left: 1px dashed var(--ink-10); padding-left: 12px; }
+  .admin-stat-label {
+    font-family: var(--f-mono);
+    font-size: 9px;
+    color: var(--ink-60);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .admin-stat-value {
+    font-family: var(--f-display);
+    font-size: 20px;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+  .admin-stat-value .unit-small {
+    font-family: var(--f-mono);
+    font-size: 9px;
+    color: var(--ink-40);
+    margin-left: 3px;
+    letter-spacing: 0.04em;
+  }
+
+  .admin-card-actions {
+    margin-top: 14px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .admin-card-actions .btn {
+    font-size: 10px;
+    padding: 6px 12px;
+  }
+
+  /* ================ LOGIN / MODAL ================ */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     z-index: 10000;
-    display: flex; align-items: center; justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 20px;
     animation: fadeIn 0.2s ease;
   }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-  .lock-box {
-    max-width: 400px; width: 100%;
-    background: var(--surface);
+  .modal-box {
+    max-width: 440px;
+    width: 100%;
+    background: var(--bg);
     padding: 36px 34px 28px;
     border-radius: var(--radius-lg);
-    box-shadow: 0 25px 70px rgba(0,0,0,0.18);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.25);
     position: relative;
-    animation: scaleIn 0.25s cubic-bezier(.2,.9,.3,1);
+    animation: scaleIn 0.24s cubic-bezier(.2,.9,.3,1);
+    border: 1px solid var(--ink);
   }
   @keyframes scaleIn { from { opacity: 0; transform: scale(.96) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
-  .lock-title {
-    font-family: var(--f-serif); font-size: 32px; font-weight: 400;
-    letter-spacing: -0.02em; color: var(--ink); margin-bottom: 4px;
+  .modal-title {
+    font-family: var(--f-display);
+    font-size: 28px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 2px;
   }
-  .lock-title em { font-style: italic; color: var(--accent); }
+  .modal-sub {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-60);
+    margin-bottom: 22px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
 
-  .lock-sub { font-size: 13px; color: var(--ink-60); margin-bottom: 24px; }
+  .modal-box input, .modal-box select {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 
-  .lock-box input { width: 100%; margin-bottom: 10px; }
+  .modal-label {
+    display: block;
+    font-family: var(--f-mono);
+    font-size: 10px;
+    color: var(--ink-60);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+    margin-top: 10px;
+  }
+  .modal-label:first-child, .modal-box form > .modal-label:first-of-type { margin-top: 0; }
 
-  .lock-error { color: var(--danger); font-size: 13px; min-height: 18px; margin: 4px 0 8px; }
-  .lock-hint { font-size: 12px; color: var(--ink-40); margin-top: 16px; text-align: center; }
+  .modal-error {
+    color: var(--danger);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    min-height: 16px;
+    margin: 4px 0 8px;
+    letter-spacing: 0.02em;
+  }
 
-  .lock-close {
-    position: absolute; top: 14px; right: 14px;
-    width: 28px; height: 28px; border-radius: 50%;
-    background: transparent; border: 1px solid var(--ink-20);
-    color: var(--ink-60); font-size: 13px; cursor: pointer;
+  .modal-hint {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    color: var(--ink-40);
+    margin-top: 14px;
+    text-align: center;
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid var(--ink-20);
+    color: var(--ink-60);
+    font-size: 13px;
+    cursor: pointer;
     transition: all 0.15s;
-    display: inline-flex; align-items: center; justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
-  .lock-close:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .modal-close:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 
-  .lock-box button[type="submit"] {
-    width: 100%; padding: 12px; margin-top: 4px; justify-content: center;
+  .modal-box .btn[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    justify-content: center;
   }
 
+  /* ================ TOAST ================ */
   .toast {
-    position: fixed; bottom: 24px; left: 50%;
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
     transform: translateX(-50%) translateY(20px);
-    background: var(--ink); color: var(--bg);
-    padding: 12px 22px; border-radius: 999px;
-    font-size: 13px; font-weight: 500;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
-    opacity: 0; transition: all 0.28s cubic-bezier(.2,.9,.3,1);
-    z-index: 9999; pointer-events: none;
+    background: var(--ink);
+    color: var(--bg);
+    padding: 11px 22px;
+    border-radius: 999px;
+    font-family: var(--f-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    opacity: 0;
+    transition: all 0.28s cubic-bezier(.2,.9,.3,1);
+    z-index: 9999;
+    pointer-events: none;
+    text-transform: uppercase;
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   .toast.error { background: var(--danger); }
 
+  /* ================ TAB VIEWS ================ */
+  .view { display: none; }
+  .view.active { display: block; animation: viewIn 0.3s ease; }
+  @keyframes viewIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ================ RESPONSIVE ================ */
   @media (max-width: 720px) {
     .topbar-inner { padding: 12px 18px; }
-    .wrapper { padding: 24px 18px 50px; }
+    .wrapper { padding: 32px 18px 60px; }
     .card { padding: 22px 20px; }
     .item-row { grid-template-columns: 1fr 1fr; gap: 10px; }
     .item-name { grid-column: 1 / -1; }
@@ -499,47 +1042,90 @@
     .history-item { grid-template-columns: 1fr auto; gap: 8px; }
     .history-items, .history-total { grid-column: 1 / -1; text-align: left; }
     .total-card { flex-direction: column; align-items: flex-start; gap: 8px; }
-    .total-value { font-size: 40px; }
+    .total-value { font-size: 44px; }
     .group-summary { grid-template-columns: 1fr; gap: 14px; }
     .summary-block { padding: 14px 0; border-top: 1px solid var(--ink-10); }
     .summary-block:first-child { padding-top: 0; border-top: none; }
     .summary-block + .summary-block::before { display: none; }
-    .brand-sub { display: none; }
-    .stat-card:nth-child(n+3) { border-top: 1px solid var(--ink-10); }
-    .stat-card:nth-child(2n) { border-right: none; }
+    .brand-text .sep { display: none; }
+    .brand-text span:last-child { display: none; }
+    .nav-tab { font-size: 11px; padding: 6px 10px; }
   }
 </style>
 </head>
 <body>
 
-<div class="lock-overlay" id="lock-overlay" style="display:none">
-  <div class="lock-box">
-    <button type="button" class="lock-close" id="lock-close" title="Закрыть">✕</button>
-    <div class="lock-title">Вход для <em>админов</em></div>
-    <div class="lock-sub">Банк Острова · приватный доступ</div>
+<!-- Animated background -->
+<div class="bg-grid"></div>
+<div class="bg-rays">
+  <div class="ray"></div>
+  <div class="ray"></div>
+  <div class="ray"></div>
+</div>
+<div class="bg-noise"></div>
+
+<!-- Login modal -->
+<div class="overlay" id="lock-overlay" style="display:none">
+  <div class="modal-box">
+    <button type="button" class="modal-close" id="lock-close" title="Закрыть">✕</button>
+    <div class="modal-title">Вход</div>
+    <div class="modal-sub">Приватный доступ</div>
     <form id="lock-form" autocomplete="off">
-      <input type="text" id="lock-login" placeholder="Логин" autocomplete="off">
-      <input type="password" id="lock-input" placeholder="Пароль" autocomplete="off">
-      <div class="lock-error" id="lock-error"></div>
-      <button type="submit" class="btn success">Войти</button>
+      <label class="modal-label">Логин</label>
+      <input type="text" id="lock-login" placeholder="username" autocomplete="off">
+      <label class="modal-label">Пароль</label>
+      <input type="password" id="lock-input" autocomplete="off">
+      <div class="modal-error" id="lock-error"></div>
+      <button type="submit" class="btn primary">Войти</button>
     </form>
-    <div class="lock-hint">Без входа доступен только калькулятор</div>
+    <div class="modal-hint">Без входа доступен только калькулятор</div>
   </div>
 </div>
 
+<!-- Add admin modal (chief only) -->
+<div class="overlay" id="admin-modal" style="display:none">
+  <div class="modal-box">
+    <button type="button" class="modal-close" id="admin-modal-close" title="Закрыть">✕</button>
+    <div class="modal-title" id="admin-modal-title">Новый админ</div>
+    <div class="modal-sub" id="admin-modal-sub">Добавление сотрудника</div>
+    <form id="admin-form" autocomplete="off">
+      <label class="modal-label">Логин</label>
+      <input type="text" id="admin-f-login" placeholder="ivan" autocomplete="off" maxlength="24">
+      <label class="modal-label">Отображаемое имя</label>
+      <input type="text" id="admin-f-name" placeholder="Иван" autocomplete="off" maxlength="32">
+      <label class="modal-label">Пароль</label>
+      <input type="password" id="admin-f-password" autocomplete="new-password" minlength="4">
+      <label class="modal-label">Роль</label>
+      <select id="admin-f-role">
+        <option value="admin">Админ · только запись</option>
+        <option value="chief">Главный · полный доступ</option>
+      </select>
+      <div class="modal-error" id="admin-f-error"></div>
+      <button type="submit" class="btn primary">Создать</button>
+    </form>
+    <div class="modal-hint">Главный админ может управлять всеми аккаунтами</div>
+  </div>
+</div>
+
+<!-- TOPBAR -->
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand">
-      <span class="brand-logo">Банк <em>Острова</em></span>
-      <span class="brand-sub">Скупка</span>
+      <span class="brand-mark"></span>
+      <span class="brand-text">Банк Острова <span class="sep">/</span> <span>Скупка</span></span>
     </div>
     <div class="topbar-actions">
+      <div class="nav-tabs" id="nav-tabs">
+        <button class="nav-tab active" data-view="calc">Калькулятор</button>
+        <button class="nav-tab" data-view="journal">Журнал</button>
+        <button class="nav-tab chief-only" data-view="admins" style="display:none">Админы</button>
+      </div>
       <div class="sync-badge" id="sync-badge">
         <span class="sync-dot"></span>
         <span id="sync-text">Готов</span>
       </div>
       <button class="auth-btn" id="auth-btn">
-        <span id="auth-btn-text">Войти</span>
+        <span id="auth-btn-text">Вход</span>
       </button>
     </div>
   </div>
@@ -547,140 +1133,190 @@
 
 <div class="wrapper">
 
+  <!-- HERO -->
   <section class="hero">
-    <h1 class="hero-title">Скупка <em>пустотелых</em><br>и жемчуга</h1>
+    <div class="hero-meta">Mars · Tolyk odobril, pepo zacenil. Mne pohyi.</div>
+    <h1 class="hero-title">Скупка пустотелых<br><span class="dim">&amp; жемчуга</span></h1>
     <p class="hero-sub">Введи количество — увидишь сколько получишь гильзами.</p>
   </section>
 
-  <div class="card">
-    <div class="buyer-info admin-only" id="buyer-info" style="display:none">
-      Принимает: <strong id="buyer-name">—</strong>
-    </div>
+  <!-- ============ VIEW: CALCULATOR ============ -->
+  <div class="view active" id="view-calc">
 
-    <div class="seller-field admin-only" id="seller-field" style="display:none">
-      <label for="seller-name">Продавец</label>
-      <input type="text" id="seller-name" placeholder="Имя продавца (необязательно)" maxlength="40" autocomplete="off">
-    </div>
-
-    <div class="card-header" style="margin-top:0;padding-top:0;border:none;margin-bottom:14px;">
-      <h2 class="card-title">Части пустотелых</h2>
-      <span class="card-rate"><strong>4</strong> части = <strong>1</strong> гильза</span>
-    </div>
-
-    <div class="items-grid">
-      <div class="item-cell"><label>Глаз</label><input type="number" class="part-input" data-part="eye" placeholder="0" min="0" step="1"></div>
-      <div class="item-cell"><label>Железа</label><input type="number" class="part-input" data-part="gland" placeholder="0" min="0" step="1"></div>
-      <div class="item-cell"><label>Чешуя</label><input type="number" class="part-input" data-part="scale" placeholder="0" min="0" step="1"></div>
-      <div class="item-cell"><label>Слюна</label><input type="number" class="part-input" data-part="saliva" placeholder="0" min="0" step="1"></div>
-    </div>
-
-    <div class="group-summary">
-      <div class="summary-block"><span class="label">Всего</span><span class="value" id="parts-total">0<span class="unit-xs">шт</span></span></div>
-      <div class="summary-block"><span class="label">Заработок</span><span class="value gold" id="parts-earn">0<span class="unit-xs">гильз</span></span></div>
-      <div class="summary-block"><span class="label">Остаток</span><span class="value remain" id="parts-remainder">0<span class="unit-xs">шт</span></span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header" style="margin-bottom:14px;">
-      <h2 class="card-title">Водоросли</h2>
-      <span class="card-rate"><strong>5</strong> штук = <strong>1</strong> гильза</span>
-    </div>
-
-    <div class="items-grid">
-      <div class="item-cell"><label>Красные</label><input type="number" class="algae-input" data-algae="red" placeholder="0" min="0" step="1"></div>
-      <div class="item-cell"><label>Жёлтые</label><input type="number" class="algae-input" data-algae="yellow" placeholder="0" min="0" step="1"></div>
-      <div class="item-cell"><label>Синие</label><input type="number" class="algae-input" data-algae="blue" placeholder="0" min="0" step="1"></div>
-    </div>
-
-    <div class="group-summary">
-      <div class="summary-block"><span class="label">Всего</span><span class="value" id="algae-total">0<span class="unit-xs">шт</span></span></div>
-      <div class="summary-block"><span class="label">Заработок</span><span class="value gold" id="algae-earn">0<span class="unit-xs">гильз</span></span></div>
-      <div class="summary-block"><span class="label">Остаток</span><span class="value remain" id="algae-remainder">0<span class="unit-xs">шт</span></span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header" style="margin-bottom:18px;">
-      <h2 class="card-title">Жемчуг</h2>
-      <span class="card-rate">поштучно</span>
-    </div>
-
-    <div class="rows-container">
-      <div class="item-row">
-        <div class="item-name">Белая жемчужина</div>
-        <div class="item-rate">1 шт = <strong>3 гильзы</strong></div>
-        <input type="number" id="pearl-white" placeholder="0" min="0" step="1">
-        <div class="result" id="white-result"><span class="label">Заработок</span><strong>0</strong></div>
+    <div class="card">
+      <div class="buyer-info admin-only" id="buyer-info" style="display:none">
+        Принимает <strong id="buyer-name">—</strong>
       </div>
-      <div class="item-row">
-        <div class="item-name">Чёрная жемчужина</div>
-        <div class="item-rate">1 шт = <strong>6 гильз</strong></div>
-        <input type="number" id="pearl-black" placeholder="0" min="0" step="1">
-        <div class="result" id="black-result"><span class="label">Заработок</span><strong>0</strong></div>
+
+      <div class="seller-field admin-only" id="seller-field" style="display:none">
+        <label for="seller-name">Продавец</label>
+        <input type="text" id="seller-name" placeholder="Имя (необязательно)" maxlength="40" autocomplete="off">
       </div>
-      <div class="item-row">
-        <div class="item-name">Золотая жемчужина</div>
-        <div class="item-rate">1 шт = <strong>8 гильз</strong></div>
-        <input type="number" id="pearl-gold" placeholder="0" min="0" step="1">
-        <div class="result" id="gold-result"><span class="label">Заработок</span><strong>0</strong></div>
+
+      <div class="card-header" style="margin-top:0;padding-top:0;border:none;margin-bottom:16px;">
+        <h2 class="card-title">Части пустотелых</h2>
+        <span class="card-meta"><strong>4</strong> части = <strong>1</strong> гильза</span>
+      </div>
+
+      <div class="items-grid">
+        <div class="item-cell"><label>Глаз</label><input type="number" class="part-input" data-part="eye" placeholder="0" min="0" step="1"></div>
+        <div class="item-cell"><label>Железа</label><input type="number" class="part-input" data-part="gland" placeholder="0" min="0" step="1"></div>
+        <div class="item-cell"><label>Чешуя</label><input type="number" class="part-input" data-part="scale" placeholder="0" min="0" step="1"></div>
+        <div class="item-cell"><label>Слюна</label><input type="number" class="part-input" data-part="saliva" placeholder="0" min="0" step="1"></div>
+      </div>
+
+      <div class="group-summary">
+        <div class="summary-block"><span class="label">Всего</span><span class="value dim" id="parts-total">0<span class="unit-xs">шт</span></span></div>
+        <div class="summary-block"><span class="label">Заработок</span><span class="value" id="parts-earn">0<span class="unit-xs">гильз</span></span></div>
+        <div class="summary-block"><span class="label">Остаток</span><span class="value dim" id="parts-remainder">0<span class="unit-xs">шт</span></span></div>
       </div>
     </div>
 
-    <div class="total-card">
-      <span class="total-label">Всего к выплате</span>
-      <span class="total-value"><em id="total-amount">0</em><span class="unit">гильз</span></span>
+    <div class="card">
+      <div class="card-header" style="margin-bottom:16px;">
+        <h2 class="card-title">Водоросли</h2>
+        <span class="card-meta"><strong>5</strong> штук = <strong>1</strong> гильза</span>
+      </div>
+
+      <div class="items-grid">
+        <div class="item-cell"><label>Красные</label><input type="number" class="algae-input" data-algae="red" placeholder="0" min="0" step="1"></div>
+        <div class="item-cell"><label>Жёлтые</label><input type="number" class="algae-input" data-algae="yellow" placeholder="0" min="0" step="1"></div>
+        <div class="item-cell"><label>Синие</label><input type="number" class="algae-input" data-algae="blue" placeholder="0" min="0" step="1"></div>
+      </div>
+
+      <div class="group-summary">
+        <div class="summary-block"><span class="label">Всего</span><span class="value dim" id="algae-total">0<span class="unit-xs">шт</span></span></div>
+        <div class="summary-block"><span class="label">Заработок</span><span class="value" id="algae-earn">0<span class="unit-xs">гильз</span></span></div>
+        <div class="summary-block"><span class="label">Остаток</span><span class="value dim" id="algae-remainder">0<span class="unit-xs">шт</span></span></div>
+      </div>
     </div>
 
-    <div class="actions">
-      <button class="btn success admin-only" id="save-btn" style="display:none">Записать продажу</button>
-      <button class="btn" id="clear-btn">Очистить поля</button>
+    <div class="card">
+      <div class="card-header" style="margin-bottom:18px;">
+        <h2 class="card-title">Жемчуг</h2>
+        <span class="card-meta">поштучно</span>
+      </div>
+
+      <div class="rows-container">
+        <div class="item-row">
+          <div class="item-name">Белая жемчужина</div>
+          <div class="item-rate">1 = <strong>3 гильзы</strong></div>
+          <input type="number" id="pearl-white" placeholder="0" min="0" step="1">
+          <div class="result" id="white-result"><span class="label">Итого</span><strong>0</strong></div>
+        </div>
+        <div class="item-row">
+          <div class="item-name">Чёрная жемчужина</div>
+          <div class="item-rate">1 = <strong>6 гильз</strong></div>
+          <input type="number" id="pearl-black" placeholder="0" min="0" step="1">
+          <div class="result" id="black-result"><span class="label">Итого</span><strong>0</strong></div>
+        </div>
+        <div class="item-row">
+          <div class="item-name">Золотая жемчужина</div>
+          <div class="item-rate">1 = <strong>8 гильз</strong></div>
+          <input type="number" id="pearl-gold" placeholder="0" min="0" step="1">
+          <div class="result" id="gold-result"><span class="label">Итого</span><strong>0</strong></div>
+        </div>
+      </div>
+
+      <div class="total-card">
+        <span class="total-label">Всего к выплате</span>
+        <span class="total-value"><span id="total-amount">0</span><span class="unit">гильз</span></span>
+      </div>
+
+      <div class="actions">
+        <button class="btn primary admin-only" id="save-btn" style="display:none">Записать продажу</button>
+        <button class="btn ghost" id="clear-btn">Очистить поля</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ VIEW: JOURNAL ============ -->
+  <div class="view admin-only" id="view-journal" style="display:none">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Журнал продаж</h2>
+        <span class="card-meta" id="journal-count">—</span>
+      </div>
+
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label>Продавец</label>
+          <select id="seller-filter-select"><option value="__all__">Все</option></select>
+        </div>
+        <div class="filter-group">
+          <label>Покупатель</label>
+          <select id="buyer-filter-select"><option value="__all__">Все</option></select>
+        </div>
+        <span class="filter-info" id="filter-info"></span>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card"><span class="stat-label">Продаж</span><div class="stat-value" id="stat-count">0</div></div>
+        <div class="stat-card"><span class="stat-label">Выплачено</span><div class="stat-value"><span id="stat-total">0</span><span class="unit-small">гильз</span></div></div>
+        <div class="stat-card"><span class="stat-label">В банк</span><div class="stat-value"><span id="stat-bank">0</span><span class="unit-small">гильз</span></div></div>
+        <div class="stat-card"><span class="stat-label">Средняя</span><div class="stat-value"><span id="stat-avg">0</span><span class="unit-small">гильз</span></div></div>
+        <div class="stat-card"><span class="stat-label">Лучшая</span><div class="stat-value"><span id="stat-best">0</span><span class="unit-small">гильз</span></div></div>
+      </div>
+
+      <div class="history-container" id="history-container">
+        <div class="empty">Пока нет записанных продаж</div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="export-btn">Выгрузить отчёт</button>
+        <button class="btn danger chief-only" id="clear-history-btn" style="display:none">Очистить журнал</button>
+      </div>
     </div>
   </div>
 
-  <div class="card admin-only" id="journal-block" style="display:none">
-    <div class="card-header" style="margin-bottom:20px;">
-      <h2 class="card-title">Журнал продаж</h2>
-      <span class="card-rate" id="journal-count">—</span>
-    </div>
+  <!-- ============ VIEW: ADMINS (CHIEF ONLY) ============ -->
+  <div class="view chief-only" id="view-admins" style="display:none">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Админы</h2>
+        <span class="card-meta" id="admins-count">—</span>
+      </div>
 
-    <div class="filter-bar">
-      <div class="filter-group"><label>Продавец</label><select id="seller-filter-select"><option value="__all__">Все</option></select></div>
-      <div class="filter-group"><label>Покупатель</label><select id="buyer-filter-select"><option value="__all__">Все</option></select></div>
-      <span class="filter-info" id="filter-info"></span>
-    </div>
+      <div class="filter-bar">
+        <span class="filter-info" style="margin-left:0;color:var(--ink-60)">
+          Главный администратор управляет всеми учётными записями
+        </span>
+      </div>
 
-    <div class="stats-grid">
-      <div class="stat-card"><span class="stat-label">Продаж</span><div class="stat-value" id="stat-count">0</div></div>
-      <div class="stat-card"><span class="stat-label">Выплачено</span><div class="stat-value"><span id="stat-total">0</span><span class="unit-small">гильз</span></div></div>
-      <div class="stat-card"><span class="stat-label">В банк</span><div class="stat-value"><span id="stat-bank">0</span><span class="unit-small">гильз</span></div></div>
-      <div class="stat-card"><span class="stat-label">Средняя</span><div class="stat-value"><span id="stat-avg">0</span><span class="unit-small">гильз</span></div></div>
-      <div class="stat-card"><span class="stat-label">Лучшая</span><div class="stat-value"><span id="stat-best">0</span><span class="unit-small">гильз</span></div></div>
-    </div>
+      <div class="admins-grid" id="admins-grid">
+        <div class="empty">Загрузка…</div>
+      </div>
 
-    <div class="history-container" id="history-container">
-      <div class="empty-history">Пока нет записанных продаж…</div>
-    </div>
-
-    <div class="actions">
-      <button class="btn excel" id="export-btn">Выгрузить отчёт</button>
-      <button class="btn danger chief-only" id="clear-history-btn" style="display:none">Очистить журнал</button>
+      <div class="actions">
+        <button class="btn primary" id="admin-add-btn">Добавить админа</button>
+      </div>
     </div>
   </div>
 
 </div>
 
-<div class="toast" id="toast">Продажа записана</div>
+<div class="toast" id="toast">Записано</div>
 
 <script>
+// =========================================================================
+//  КОНФИГ
+// =========================================================================
 const CONFIG = {
-  github: { owner: 'Monka910', repo: 'calc', branch: 'main', path: 'log.json' },
+  github: {
+    owner:  'Monka910',
+    repo:   'calc',
+    branch: 'main',
+    pathLog:    'log.json',
+    pathAdmins: 'admins.json'
+  },
 
-  admins: [
+  // Начальный (fallback) список админов — используется только если admins.json
+  // ещё не создан в репозитории. После первого входа admins.json автоматически
+  // создаётся на GitHub и дальше берётся оттуда.
+  bootstrapAdmins: [
     { login: 'Monka', name: 'Monka', role: 'chief',
-      passwordHash: 'e47d3eff8cb2669c60095acd32e7002e39913c0aa08c4528e5df0df33ad41ada' },
-    { login: 'Al', name: 'Al', role: 'chief',
-      passwordHash: 'bc30cf08b5d9fd782f9e07593ac6c751efa17d74d063c9a4b8cd8de10898abe9' }
+      passwordHash: 'e47d3eff8cb2669c60095acd32e7002e39913c0aa08c4528e5df0df33ad41ada' }
   ],
 
   tokenKey: 'github-token',
@@ -692,20 +1328,35 @@ const CONFIG = {
   }
 };
 
+// =========================================================================
+//  SHA-256
+// =========================================================================
 async function sha256(text) {
   const buf = new TextEncoder().encode(text);
   const hash = await crypto.subtle.digest('SHA-256', buf);
   return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-const AUTH_KEY = 'calc-current-user-v2';
+// =========================================================================
+//  СОСТОЯНИЕ
+// =========================================================================
+const AUTH_KEY = 'calc-current-user-v3';
+const $ = (id) => document.getElementById(id);
 
+let admins = [];      // текущий список админов (с GitHub)
+let adminsSha = null; // sha файла admins.json на GitHub
+let history = [];
+let historySha = null;
+
+// =========================================================================
+//  БАЗОВЫЕ ФУНКЦИИ
+// =========================================================================
 function getCurrentUser() {
   try {
     const raw = localStorage.getItem(AUTH_KEY) || sessionStorage.getItem(AUTH_KEY);
     if (!raw) return null;
     const data = JSON.parse(raw);
-    const admin = CONFIG.admins.find(a => a.login === data.login);
+    const admin = admins.find(a => a.login === data.login);
     if (!admin) return null;
     return { login: admin.login, name: admin.name, role: admin.role };
   } catch(e) { return null; }
@@ -724,8 +1375,174 @@ function logout() {
   location.reload();
 }
 
-const $ = (id) => document.getElementById(id);
+function getToken() { return localStorage.getItem(CONFIG.tokenKey) || ''; }
+function setToken(t) { t ? localStorage.setItem(CONFIG.tokenKey, t) : localStorage.removeItem(CONFIG.tokenKey); }
 
+async function promptForToken() {
+  const msg = 'Введи GitHub Personal Access Token.\n\nКак получить:\n1. github.com → Settings → Developer settings\n2. Personal access tokens → Tokens (classic) → Generate new\n3. Scope: repo\n\nТокен сохранится в твоём браузере.';
+  const t = prompt(msg, '');
+  if (t === null) return null;
+  if (t.trim()) setToken(t.trim());
+  return getToken();
+}
+
+function encodeB64UTF8(s) { return btoa(unescape(encodeURIComponent(s))); }
+function decodeB64UTF8(s) { return decodeURIComponent(escape(atob(s))); }
+
+function setSyncStatus(status, text) {
+  const badge = $('sync-badge');
+  badge.classList.remove('syncing', 'error');
+  if (status) badge.classList.add(status);
+  $('sync-text').textContent = text;
+}
+
+// =========================================================================
+//  GITHUB: УНИВЕРСАЛЬНЫЕ ОПЕРАЦИИ
+// =========================================================================
+async function ghLoad(path) {
+  const url = `https://api.github.com/repos/${CONFIG.github.owner}/${CONFIG.github.repo}/contents/${path}?ref=${CONFIG.github.branch}`;
+  const headers = { 'Accept': 'application/vnd.github.v3+json' };
+  const token = getToken();
+  if (token) headers['Authorization'] = `token ${token}`;
+
+  const res = await fetch(url, { headers, cache: 'no-store' });
+  if (res.status === 404) return { data: null, sha: null };
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const json = await res.json();
+  let content = null;
+  try {
+    content = JSON.parse(decodeB64UTF8(json.content.replace(/\s/g, '')));
+  } catch(e) { content = null; }
+  return { data: content, sha: json.sha };
+}
+
+async function ghSave(path, data, sha, message) {
+  let token = getToken();
+  if (!token) {
+    token = await promptForToken();
+    if (!token) throw new Error('Нет токена');
+  }
+
+  const url = `https://api.github.com/repos/${CONFIG.github.owner}/${CONFIG.github.repo}/contents/${path}`;
+  const body = {
+    message: message || `Update ${path} (${new Date().toISOString()})`,
+    content: encodeB64UTF8(JSON.stringify(data, null, 2)),
+    branch: CONFIG.github.branch
+  };
+  if (sha) body.sha = sha;
+
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `token ${token}`,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+
+  if (res.status === 409 || res.status === 422) { const err = new Error('Конфликт'); err.conflict = true; throw err; }
+  if (res.status === 401) { setToken(''); const err = new Error('Токен невалиден'); err.unauthorized = true; throw err; }
+  if (!res.ok) { const d = await res.json().catch(()=>({})); throw new Error(d.message || `HTTP ${res.status}`); }
+
+  const json = await res.json();
+  return { sha: json.content.sha };
+}
+
+// =========================================================================
+//  ADMINS.JSON
+// =========================================================================
+async function loadAdmins() {
+  try {
+    const { data, sha } = await ghLoad(CONFIG.github.pathAdmins);
+    if (!data || !Array.isArray(data) || data.length === 0) {
+      // Файла ещё нет — используем bootstrap
+      admins = CONFIG.bootstrapAdmins.slice();
+      adminsSha = sha;
+    } else {
+      admins = data;
+      adminsSha = sha;
+    }
+  } catch(e) {
+    console.error('loadAdmins err:', e);
+    // Оффлайн или ошибка — используем bootstrap чтобы хотя бы вход работал
+    admins = CONFIG.bootstrapAdmins.slice();
+    adminsSha = null;
+  }
+}
+
+async function saveAdmins() {
+  setSyncStatus('syncing', 'Сохранение админов…');
+  try {
+    const { sha } = await ghSave(CONFIG.github.pathAdmins, admins, adminsSha, 'Update admins');
+    adminsSha = sha;
+    setSyncStatus('', `${admins.length} админов`);
+    return true;
+  } catch(e) {
+    if (e.conflict) {
+      await loadAdmins();
+      showToast('Список админов изменился другим пользователем. Обновлено.', true);
+      return false;
+    }
+    if (e.unauthorized) {
+      setSyncStatus('error', 'Токен невалиден');
+      showToast('Токен невалидный', true);
+      return false;
+    }
+    setSyncStatus('error', 'Ошибка');
+    showToast(`Ошибка: ${e.message}`, true);
+    return false;
+  }
+}
+
+// =========================================================================
+//  LOG.JSON (история продаж)
+// =========================================================================
+async function loadHistory() {
+  setSyncStatus('syncing', 'Загрузка…');
+  try {
+    const { data, sha } = await ghLoad(CONFIG.github.pathLog);
+    history = Array.isArray(data) ? data : [];
+    historySha = sha;
+    setSyncStatus('', `${history.length} записей`);
+  } catch(e) {
+    console.error('load err:', e);
+    setSyncStatus('error', 'Ошибка загрузки');
+    try {
+      const raw = localStorage.getItem('shopping-history-backup');
+      if (raw) history = JSON.parse(raw);
+    } catch(_){}
+  }
+}
+
+async function saveHistory() {
+  try { localStorage.setItem('shopping-history-backup', JSON.stringify(history)); } catch(_){}
+  setSyncStatus('syncing', 'Сохранение…');
+  try {
+    const { sha } = await ghSave(CONFIG.github.pathLog, history, historySha, 'Update log');
+    historySha = sha;
+    setSyncStatus('', `${history.length} записей`);
+    return true;
+  } catch(e) {
+    if (e.conflict) {
+      await loadHistory();
+      showToast('Журнал изменился другим пользователем. Обновлено.', true);
+      return false;
+    }
+    if (e.unauthorized) {
+      setSyncStatus('error', 'Токен невалиден');
+      showToast('Токен невалидный', true);
+      return false;
+    }
+    setSyncStatus('error', 'Ошибка');
+    showToast(`Ошибка: ${e.message}`, true);
+    return false;
+  }
+}
+
+// =========================================================================
+//  АВТОРИЗАЦИЯ
+// =========================================================================
 $('auth-btn').addEventListener('click', () => {
   if (getCurrentUser()) {
     if (confirm('Выйти из админ-режима?')) logout();
@@ -735,7 +1552,9 @@ $('auth-btn').addEventListener('click', () => {
 $('lock-close').addEventListener('click', closeLoginModal);
 $('lock-overlay').addEventListener('click', (e) => { if (e.target.id === 'lock-overlay') closeLoginModal(); });
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && $('lock-overlay').style.display === 'flex') closeLoginModal();
+  if (e.key !== 'Escape') return;
+  if ($('lock-overlay').style.display === 'flex') closeLoginModal();
+  if ($('admin-modal').style.display === 'flex') closeAdminModal();
 });
 
 function openLoginModal() {
@@ -745,7 +1564,6 @@ function openLoginModal() {
   $('lock-error').textContent = '';
   setTimeout(() => $('lock-login').focus(), 50);
 }
-
 function closeLoginModal() {
   $('lock-overlay').style.display = 'none';
   $('lock-login').value = '';
@@ -762,7 +1580,10 @@ $('lock-form').addEventListener('submit', async (e) => {
 
   if (!login || !pwd) { err.textContent = 'Введи логин и пароль'; return; }
 
-  const admin = CONFIG.admins.find(a => a.login.toLowerCase() === login.toLowerCase());
+  // На случай если admins ещё не загрузились
+  if (admins.length === 0) await loadAdmins();
+
+  const admin = admins.find(a => a.login.toLowerCase() === login.toLowerCase());
   if (!admin) { err.textContent = 'Нет доступа'; return; }
 
   const hash = await sha256(pwd);
@@ -787,11 +1608,26 @@ function enterAdminMode() {
   $('auth-btn').classList.add('authed');
 
   $('sync-badge').style.display = 'inline-flex';
+  $('nav-tabs').classList.add('visible');
+
   initAdminApp();
 }
 
-if (getCurrentUser()) enterAdminMode();
+// =========================================================================
+//  TABS / VIEWS
+// =========================================================================
+function switchView(name) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.view === name));
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === `view-${name}`));
+  if (name === 'admins') renderAdmins();
+}
+document.querySelectorAll('.nav-tab').forEach(t => {
+  t.addEventListener('click', () => switchView(t.dataset.view));
+});
 
+// =========================================================================
+//  РАСЧЁТЫ
+// =========================================================================
 const RATES = { parts: { per: 4, get: 1 }, algae: { per: 5, get: 1 }, white: 3, black: 6, gold: 8 };
 const PART_NAMES = { eye: 'Глаз', gland: 'Железа', scale: 'Чешуя', saliva: 'Слюна' };
 const ALGAE_NAMES = { red: 'Красные', yellow: 'Жёлтые', blue: 'Синие' };
@@ -838,9 +1674,9 @@ function updateAll() {
   $('algae-total').innerHTML     = `${a.total}<span class="unit-xs">шт</span>`;
   $('algae-earn').innerHTML      = `${a.earn}<span class="unit-xs">гильз</span>`;
   $('algae-remainder').innerHTML = `${a.remainder}<span class="unit-xs">шт</span>`;
-  $('white-result').innerHTML = `<span class="label">Заработок</span><strong>${w.earn}</strong>`;
-  $('black-result').innerHTML = `<span class="label">Заработок</span><strong>${b.earn}</strong>`;
-  $('gold-result').innerHTML  = `<span class="label">Заработок</span><strong>${g.earn}</strong>`;
+  $('white-result').innerHTML = `<span class="label">Итого</span><strong>${w.earn}</strong>`;
+  $('black-result').innerHTML = `<span class="label">Итого</span><strong>${b.earn}</strong>`;
+  $('gold-result').innerHTML  = `<span class="label">Итого</span><strong>${g.earn}</strong>`;
 
   const total = p.earn + a.earn + w.earn + b.earn + g.earn;
   $('total-amount').textContent = total;
@@ -863,101 +1699,9 @@ function calcBankData(state) {
   return { bankPaysTotal, sellerGot: state.total, bankFee: bankPaysTotal - state.total };
 }
 
-let history = [];
-let fileSha = null;
-
-function setSyncStatus(status, text) {
-  const badge = $('sync-badge');
-  badge.classList.remove('syncing', 'error');
-  if (status) badge.classList.add(status);
-  $('sync-text').textContent = text;
-}
-
-function getToken() { return localStorage.getItem(CONFIG.tokenKey) || ''; }
-function setToken(t) { t ? localStorage.setItem(CONFIG.tokenKey, t) : localStorage.removeItem(CONFIG.tokenKey); }
-
-async function promptForToken() {
-  const msg = 'Введи GitHub Personal Access Token.\n\nКак получить:\n1. github.com → Settings → Developer settings\n2. Personal access tokens → Tokens (classic) → Generate new\n3. Scope: repo\n\nТокен сохранится в твоём браузере.';
-  const t = prompt(msg, '');
-  if (t === null) return null;
-  if (t.trim()) setToken(t.trim());
-  return getToken();
-}
-
-function encodeB64UTF8(s) { return btoa(unescape(encodeURIComponent(s))); }
-function decodeB64UTF8(s) { return decodeURIComponent(escape(atob(s))); }
-
-async function loadHistory() {
-  setSyncStatus('syncing', 'Загрузка…');
-  const url = `https://api.github.com/repos/${CONFIG.github.owner}/${CONFIG.github.repo}/contents/${CONFIG.github.path}?ref=${CONFIG.github.branch}`;
-  try {
-    const headers = { 'Accept': 'application/vnd.github.v3+json' };
-    const token = getToken();
-    if (token) headers['Authorization'] = `token ${token}`;
-    const res = await fetch(url, { headers, cache: 'no-store' });
-    if (res.status === 404) { history = []; fileSha = null; setSyncStatus('', 'Пустой журнал'); return; }
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    fileSha = data.sha;
-    try {
-      history = JSON.parse(decodeB64UTF8(data.content.replace(/\s/g, '')));
-      if (!Array.isArray(history)) history = [];
-    } catch(e) { history = []; }
-    setSyncStatus('', `${history.length} записей`);
-  } catch(e) {
-    console.error('load err:', e);
-    setSyncStatus('error', 'Ошибка загрузки');
-    try {
-      const raw = localStorage.getItem('shopping-history-backup');
-      if (raw) history = JSON.parse(raw);
-    } catch(_){}
-  }
-}
-
-async function saveHistory() {
-  try { localStorage.setItem('shopping-history-backup', JSON.stringify(history)); } catch(_){}
-
-  let token = getToken();
-  if (!token) {
-    token = await promptForToken();
-    if (!token) { setSyncStatus('error', 'Нужен токен'); showToast('Без токена нельзя сохранить', true); return false; }
-  }
-  setSyncStatus('syncing', 'Сохранение…');
-
-  const url = `https://api.github.com/repos/${CONFIG.github.owner}/${CONFIG.github.repo}/contents/${CONFIG.github.path}`;
-  const body = {
-    message: `Update (${new Date().toISOString()})`,
-    content: encodeB64UTF8(JSON.stringify(history, null, 2)),
-    branch: CONFIG.github.branch
-  };
-  if (fileSha) body.sha = fileSha;
-
-  try {
-    const res = await fetch(url, {
-      method: 'PUT',
-      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    if (res.status === 409 || res.status === 422) {
-      setSyncStatus('syncing', 'Обновление…');
-      await loadHistory();
-      showToast('Кто-то уже обновил журнал. Попробуй снова.', true);
-      return false;
-    }
-    if (res.status === 401) { setToken(''); setSyncStatus('error', 'Токен невалиден'); showToast('Токен невалидный', true); return false; }
-    if (!res.ok) { const d = await res.json().catch(()=>({})); throw new Error(d.message || `HTTP ${res.status}`); }
-    const data = await res.json();
-    fileSha = data.content.sha;
-    setSyncStatus('', `${history.length} записей`);
-    return true;
-  } catch(e) {
-    console.error('save err:', e);
-    setSyncStatus('error', 'Ошибка');
-    showToast(`Ошибка: ${e.message}`, true);
-    return false;
-  }
-}
-
+// =========================================================================
+//  ЗАПИСЬ ПРОДАЖИ
+// =========================================================================
 $('save-btn').addEventListener('click', async () => {
   const user = getCurrentUser();
   if (!user) { showToast('Нужен вход', true); return; }
@@ -969,7 +1713,8 @@ $('save-btn').addEventListener('click', async () => {
   const bank = calcBankData(state);
 
   const entry = {
-    id: Date.now(), date: new Date().toISOString(),
+    id: Date.now(),
+    date: new Date().toISOString(),
     buyer: user.name, buyerLogin: user.login,
     seller: sellerName || null,
     items: {
@@ -979,8 +1724,10 @@ $('save-btn').addEventListener('click', async () => {
       algaeSold: state.a.sold, algaeRemainder: state.a.remainder,
       white: state.w.sold, black: state.b.sold, gold: state.g.sold
     },
-    earnings: { parts: state.p.earn, algae: state.a.earn,
-      white: state.w.earn, black: state.b.earn, gold: state.g.earn },
+    earnings: {
+      parts: state.p.earn, algae: state.a.earn,
+      white: state.w.earn, black: state.b.earn, gold: state.g.earn
+    },
     bankPays: bank.bankPaysTotal,
     bankFee:  bank.bankFee,
     total:    state.total
@@ -1015,7 +1762,7 @@ $('clear-history-btn').addEventListener('click', async () => {
   const user = getCurrentUser();
   if (!user || user.role !== 'chief') { showToast('Нет прав', true); return; }
   if (history.length === 0) return;
-  if (!confirm(`Стереть все ${history.length} записей? Это необратимо.`)) return;
+  if (!confirm(`Стереть все ${history.length} записей? Необратимо.`)) return;
   const backup = history.slice();
   history = [];
   const ok = await saveHistory();
@@ -1024,6 +1771,9 @@ $('clear-history-btn').addEventListener('click', async () => {
   renderHistory();
 });
 
+// =========================================================================
+//  EXCEL
+// =========================================================================
 $('export-btn').addEventListener('click', () => {
   if (history.length === 0) { showToast('Нет данных', true); return; }
   const sorted = history.slice().sort((x, y) => new Date(x.date) - new Date(y.date));
@@ -1070,6 +1820,9 @@ $('export-btn').addEventListener('click', () => {
   showToast('Отчёт выгружен');
 });
 
+// =========================================================================
+//  ЖУРНАЛ РЕНДЕР
+// =========================================================================
 function formatDate(iso) {
   const d = new Date(iso);
   const pad = n => String(n).padStart(2, '0');
@@ -1142,7 +1895,7 @@ function renderHistory() {
   $('journal-count').textContent = history.length ? `${history.length} записей` : '—';
 
   if (count === 0) {
-    container.innerHTML = `<div class="empty-history">${history.length === 0 ? 'Пока нет записанных продаж…' : 'Нет записей по фильтру'}</div>`;
+    container.innerHTML = `<div class="empty">${history.length === 0 ? 'Пока нет записанных продаж' : 'Нет записей по фильтру'}</div>`;
     return;
   }
 
@@ -1205,6 +1958,185 @@ function renderHistory() {
 $('seller-filter-select').addEventListener('change', (e) => { filterSeller = e.target.value; renderHistory(); });
 $('buyer-filter-select').addEventListener('change',  (e) => { filterBuyer  = e.target.value; renderHistory(); });
 
+// =========================================================================
+//  АДМИНЫ UI
+// =========================================================================
+function getAdminStats(login) {
+  const entries = history.filter(e => (e.buyerLogin === login) || (e.buyer && e.buyer === login));
+  const count = entries.length;
+  const total = entries.reduce((s, e) => s + (e.total || 0), 0);
+  const bank  = entries.reduce((s, e) => s + (e.bankFee || 0), 0);
+  return { count, total, bank };
+}
+
+function renderAdmins() {
+  const user = getCurrentUser();
+  if (!user || user.role !== 'chief') return;
+
+  const grid = $('admins-grid');
+  $('admins-count').textContent = `${admins.length} аккаунтов`;
+
+  if (admins.length === 0) {
+    grid.innerHTML = `<div class="empty">Пока нет админов</div>`;
+    return;
+  }
+
+  grid.innerHTML = admins.map(a => {
+    const stats = getAdminStats(a.login);
+    // Также пробуем найти по имени если buyerLogin не совпал
+    const statsByName = history.filter(e => e.buyer === a.name)
+      .reduce((acc, e) => { acc.count++; acc.total += (e.total || 0); acc.bank += (e.bankFee || 0); return acc; },
+              { count: 0, total: 0, bank: 0 });
+    const s = stats.count >= statsByName.count ? stats : statsByName;
+
+    const isMe = a.login === user.login;
+    const canManage = !isMe; // Главный не может удалить сам себя
+
+    return `
+      <div class="admin-card ${isMe ? 'is-me' : ''}" data-login="${a.login}">
+        <div class="admin-card-head">
+          <div>
+            <div class="admin-name">${a.name}</div>
+            <div class="admin-login">${a.login}</div>
+          </div>
+          <span class="admin-role ${a.role}">${a.role === 'chief' ? 'главный' : 'админ'}</span>
+        </div>
+        <div class="admin-stats">
+          <div class="admin-stat">
+            <span class="admin-stat-label">Продаж</span>
+            <span class="admin-stat-value">${s.count}</span>
+          </div>
+          <div class="admin-stat">
+            <span class="admin-stat-label">Оборот</span>
+            <span class="admin-stat-value">${s.total}<span class="unit-small">гильз</span></span>
+          </div>
+          <div class="admin-stat">
+            <span class="admin-stat-label">В банк</span>
+            <span class="admin-stat-value">${s.bank}<span class="unit-small">гильз</span></span>
+          </div>
+        </div>
+        <div class="admin-card-actions">
+          <button class="btn ghost" data-act="view" data-login="${a.login}">Продажи</button>
+          <button class="btn ghost" data-act="pass" data-login="${a.login}">Сменить пароль</button>
+          ${canManage ? `<button class="btn danger" data-act="del" data-login="${a.login}">Удалить</button>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  grid.querySelectorAll('[data-act]').forEach(btn => {
+    btn.addEventListener('click', async (ev) => {
+      ev.stopPropagation();
+      const login = ev.currentTarget.dataset.login;
+      const act = ev.currentTarget.dataset.act;
+      if (act === 'view') {
+        // Фильтруем журнал по покупателю (тестово ебашим)
+        const admin = admins.find(a => a.login === login);
+        if (!admin) return;
+        filterBuyer = admin.name;
+        switchView('journal');
+        renderHistory();
+        // Обновить выпадашку
+        setTimeout(() => {
+          const bSel = $('buyer-filter-select');
+          if (Array.from(bSel.options).some(o => o.value === admin.name)) {
+            bSel.value = admin.name;
+          }
+        }, 50);
+      } else if (act === 'pass') {
+        await changeAdminPassword(login);
+      } else if (act === 'del') {
+        await deleteAdmin(login);
+      }
+    });
+  });
+}
+
+async function deleteAdmin(login) {
+  const user = getCurrentUser();
+  if (!user || user.role !== 'chief') return;
+  if (login === user.login) { showToast('Нельзя удалить самого себя', true); return; }
+  const admin = admins.find(a => a.login === login);
+  if (!admin) return;
+  if (!confirm(`Удалить админа "${admin.name}" (@${admin.login})?\n\nПользователь потеряет доступ. Это действие обратимо только через повторное создание.`)) return;
+
+  const backup = admins.slice();
+  admins = admins.filter(a => a.login !== login);
+  const ok = await saveAdmins();
+  if (!ok) { admins = backup; renderAdmins(); return; }
+  renderAdmins();
+  showToast(`${admin.name} удалён`);
+}
+
+async function changeAdminPassword(login) {
+  const user = getCurrentUser();
+  if (!user || user.role !== 'chief') return;
+  const admin = admins.find(a => a.login === login);
+  if (!admin) return;
+  const newPwd = prompt(`Новый пароль для "${admin.name}":\n(минимум 4 символа)`);
+  if (newPwd === null) return;
+  if (newPwd.length < 4) { showToast('Минимум 4 символа', true); return; }
+  const hash = await sha256(newPwd);
+
+  const backup = admins.slice();
+  admins = admins.map(a => a.login === login ? { ...a, passwordHash: hash } : a);
+  const ok = await saveAdmins();
+  if (!ok) { admins = backup; return; }
+  showToast(`Пароль для ${admin.name} обновлён`);
+}
+
+// =========================================================================
+//  МОДАЛКА "ДОБАВИТЬ АДМИНА"
+// =========================================================================
+$('admin-add-btn').addEventListener('click', () => openAdminModal());
+$('admin-modal-close').addEventListener('click', closeAdminModal);
+$('admin-modal').addEventListener('click', (e) => { if (e.target.id === 'admin-modal') closeAdminModal(); });
+
+function openAdminModal() {
+  $('admin-modal').style.display = 'flex';
+  $('admin-f-login').value = '';
+  $('admin-f-name').value = '';
+  $('admin-f-password').value = '';
+  $('admin-f-role').value = 'admin';
+  $('admin-f-error').textContent = '';
+  setTimeout(() => $('admin-f-login').focus(), 50);
+}
+function closeAdminModal() {
+  $('admin-modal').style.display = 'none';
+}
+
+$('admin-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const user = getCurrentUser();
+  if (!user || user.role !== 'chief') return;
+
+  const login = $('admin-f-login').value.trim();
+  const name  = $('admin-f-name').value.trim();
+  const pwd   = $('admin-f-password').value;
+  const role  = $('admin-f-role').value;
+  const err = $('admin-f-error');
+  err.textContent = '';
+
+  if (!login || !name || !pwd) { err.textContent = 'Все поля обязательны'; return; }
+  if (!/^[a-zA-Z0-9_-]{2,24}$/.test(login)) { err.textContent = 'Логин: 2-24 символов, буквы/цифры/_-'; return; }
+  if (pwd.length < 4) { err.textContent = 'Пароль минимум 4 символа'; return; }
+  if (admins.some(a => a.login.toLowerCase() === login.toLowerCase())) { err.textContent = 'Логин уже занят'; return; }
+
+  const hash = await sha256(pwd);
+  const backup = admins.slice();
+  admins.push({ login, name, role, passwordHash: hash });
+
+  const ok = await saveAdmins();
+  if (!ok) { admins = backup; return; }
+
+  closeAdminModal();
+  renderAdmins();
+  showToast(`${name} добавлен`);
+});
+
+// =========================================================================
+//  TOAST
+// =========================================================================
 let toastTimer;
 function showToast(msg, isError = false) {
   const t = $('toast');
@@ -1215,13 +2147,22 @@ function showToast(msg, isError = false) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
 }
 
+// =========================================================================
+//  ИНИЦИАЛИЗАЦИЯ
+// =========================================================================
 async function initAdminApp() {
   await loadHistory();
   updateAll();
   renderHistory();
 }
 
-updateAll();
+async function boot() {
+  updateAll();
+  // Всегда пробуем загрузить список админов (чтобы авто-логин работал)
+  await loadAdmins();
+  if (getCurrentUser()) enterAdminMode();
+}
+boot();
 </script>
 
 </body>
