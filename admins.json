@@ -10,5 +10,11 @@
     "name": "pepo",
     "role": "chief",
     "passwordHash": "e374e48fb68170ddd1b99f633f61a3cc9dc905ad48cfe8f8b918669a2b6149a2"
+  },
+  {
+    "login": "Al",
+    "name": "Al",
+    "role": "chief",
+    "passwordHash": "bc30cf08b5d9fd782f9e07593ac6c751efa17d74d063c9a4b8cd8de10898abe9"
   }
 ]
