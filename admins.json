@@ -22,5 +22,11 @@
     "name": "mrgrondo",
     "role": "chief",
     "passwordHash": "6e9f42d9681dff607bce6596af9e2ee9024b6eea800a3c3b0b2ad092ba14639d"
+  },
+  {
+    "login": "mura",
+    "name": "mura",
+    "role": "admin",
+    "passwordHash": "f886db6160f7f9dbdbdcb2b1c8486a6ada0639bfa8a12627a3874d4fa65f7e69"
   }
 ]
