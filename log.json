@@ -1,5 +1,42 @@
 [
   {
+    "id": 1776607752315,
+    "date": "2026-04-19T14:09:12.315Z",
+    "buyer": "Monka",
+    "buyerLogin": "Monka",
+    "seller": "Пенис",
+    "items": {
+      "partsBreakdown": {
+        "eye": 76,
+        "gland": 12,
+        "scale": 34,
+        "saliva": 34345
+      },
+      "algaeBreakdown": {
+        "red": 0,
+        "yellow": 0,
+        "blue": 0
+      },
+      "partsSold": 34464,
+      "partsRemainder": 3,
+      "algaeSold": 0,
+      "algaeRemainder": 0,
+      "white": 124,
+      "black": 43,
+      "gold": 4
+    },
+    "earnings": {
+      "parts": 8616,
+      "algae": 0,
+      "white": 372,
+      "black": 258,
+      "gold": 32
+    },
+    "bankPays": 12321,
+    "bankFee": 3043,
+    "total": 9278
+  },
+  {
     "id": 1776446467438,
     "date": "2026-04-17T17:21:07.438Z",
     "seller": "Ким",
