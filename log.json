@@ -1,5 +1,42 @@
 [
   {
+    "id": 1776608161744,
+    "date": "2026-04-19T14:16:01.744Z",
+    "buyer": "mura",
+    "buyerLogin": "mura",
+    "seller": "Сенди",
+    "items": {
+      "partsBreakdown": {
+        "eye": 348,
+        "gland": 366,
+        "scale": 331,
+        "saliva": 334
+      },
+      "algaeBreakdown": {
+        "red": 0,
+        "yellow": 0,
+        "blue": 0
+      },
+      "partsSold": 1376,
+      "partsRemainder": 3,
+      "algaeSold": 0,
+      "algaeRemainder": 0,
+      "white": 104,
+      "black": 48,
+      "gold": 23
+    },
+    "earnings": {
+      "parts": 344,
+      "algae": 0,
+      "white": 312,
+      "black": 288,
+      "gold": 184
+    },
+    "bankPays": 1417,
+    "bankFee": 289,
+    "total": 1128
+  },
+  {
     "id": 1776446467438,
     "date": "2026-04-17T17:21:07.438Z",
     "seller": "Ким",
