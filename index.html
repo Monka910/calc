@@ -1708,46 +1708,201 @@ $('clear-history-btn').addEventListener('click', async () => {
 
 $('export-btn').addEventListener('click', () => {
   if (history.length === 0) { showToast('Нет данных', true); return; }
+
   const sorted = history.slice().sort((x, y) => new Date(x.date) - new Date(y.date));
 
-  const rows = sorted.map(e => {
+  const pad = n => String(n).padStart(2, '0');
+  const fmtDate = iso => {
+    const d = new Date(iso);
+    return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  };
+
+  const getItemsText = e => {
     const bits = [];
     const pb = e.items.partsBreakdown;
     if (pb) Object.entries(pb).forEach(([k, v]) => { if (v > 0) bits.push(`${PART_NAMES[k] || k}: ${v}`); });
+
     const ab = e.items.algaeBreakdown;
     if (ab) Object.entries(ab).forEach(([k, v]) => { if (v > 0) bits.push(`${ALGAE_NAMES[k] || k} водоросли: ${v}`); });
+
     if (e.items.white > 0) bits.push(`Белая жемчужина: ${e.items.white}`);
     if (e.items.black > 0) bits.push(`Чёрная жемчужина: ${e.items.black}`);
     if (e.items.gold  > 0) bits.push(`Золотая жемчужина: ${e.items.gold}`);
 
-    const d = new Date(e.date);
-    const pad = n => String(n).padStart(2, '0');
-    return {
-      'Дата': `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`,
-      'Покупатель': e.buyer || '—',
-      'Продавец': e.seller || '—',
-      'Что продано': bits.join(', ') || '—',
-      'Выплачено продавцу': e.total,
-      'Банк заплатил': e.bankPays || (e.total + (e.bankFee || 0)),
-      'Комиссия банка': e.bankFee || 0
-    };
+    return bits.join(', ') || '—';
+  };
+
+  const tP = sorted.reduce((s, e) => s + (e.total || 0), 0);
+  const tBP = sorted.reduce((s, e) => s + (e.bankPays || (e.total + (e.bankFee || 0))), 0);
+  const tF = sorted.reduce((s, e) => s + (e.bankFee || 0), 0);
+  const avg = sorted.length ? Math.round(tP / sorted.length) : 0;
+
+  const aoa = [
+    ['БАНК ОСТРОВА / ОТЧЁТ ПО СКУПКЕ'],
+    [`Дата выгрузки: ${fmtDate(new Date().toISOString())}`],
+    [],
+    ['Продаж', 'Выплачено продавцам', 'Банк заплатил', 'Комиссия банка', 'Средняя продажа'],
+    [sorted.length, tP, tBP, tF, avg],
+    [],
+    ['Дата', 'Покупатель', 'Продавец', 'Что продано', 'Выплачено продавцу', 'Банк заплатил', 'Комиссия банка']
+  ];
+
+  sorted.forEach(e => {
+    aoa.push([
+      fmtDate(e.date),
+      e.buyer || '—',
+      e.seller || '—',
+      getItemsText(e),
+      e.total || 0,
+      e.bankPays || (e.total + (e.bankFee || 0)),
+      e.bankFee || 0
+    ]);
   });
 
-  const tP = rows.reduce((s, r) => s + r['Выплачено продавцу'], 0);
-  const tBP = rows.reduce((s, r) => s + r['Банк заплатил'], 0);
-  const tF = rows.reduce((s, r) => s + r['Комиссия банка'], 0);
-  rows.push({});
-  rows.push({ 'Дата': 'ИТОГО', 'Покупатель': '', 'Продавец': '',
-    'Что продано': `Записей: ${sorted.length}`,
-    'Выплачено продавцу': tP, 'Банк заплатил': tBP, 'Комиссия банка': tF });
+  aoa.push([]);
+  aoa.push(['ИТОГО', '', '', `Записей: ${sorted.length}`, tP, tBP, tF]);
 
-  const ws = XLSX.utils.json_to_sheet(rows);
-  ws['!cols'] = [{ wch: 18 }, { wch: 16 }, { wch: 18 }, { wch: 55 }, { wch: 18 }, { wch: 14 }, { wch: 14 }];
+  const ws = XLSX.utils.aoa_to_sheet(aoa);
+
+  ws['!cols'] = [
+    { wch: 20 },
+    { wch: 18 },
+    { wch: 20 },
+    { wch: 62 },
+    { wch: 22 },
+    { wch: 18 },
+    { wch: 18 }
+  ];
+
+  ws['!rows'] = [
+    { hpt: 34 },
+    { hpt: 22 },
+    { hpt: 8 },
+    { hpt: 26 },
+    { hpt: 30 },
+    { hpt: 8 },
+    { hpt: 30 }
+  ];
+
+  ws['!merges'] = [
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 6 } },
+    { s: { r: 1, c: 0 }, e: { r: 1, c: 6 } }
+  ];
+
+  ws['!autofilter'] = {
+    ref: `A7:G${aoa.length - 2}`
+  };
+
+  const borderThin = {
+    top: { style: 'thin', color: { rgb: 'D9E2EC' } },
+    bottom: { style: 'thin', color: { rgb: 'D9E2EC' } },
+    left: { style: 'thin', color: { rgb: 'D9E2EC' } },
+    right: { style: 'thin', color: { rgb: 'D9E2EC' } }
+  };
+
+  const styles = {
+    title: {
+      font: { bold: true, sz: 18, color: { rgb: 'FFFFFF' } },
+      fill: { fgColor: { rgb: '111827' } },
+      alignment: { horizontal: 'center', vertical: 'center' }
+    },
+    subtitle: {
+      font: { sz: 11, color: { rgb: '6B7280' } },
+      alignment: { horizontal: 'center', vertical: 'center' }
+    },
+    summaryHead: {
+      font: { bold: true, color: { rgb: 'FFFFFF' } },
+      fill: { fgColor: { rgb: '2563EB' } },
+      alignment: { horizontal: 'center', vertical: 'center' },
+      border: borderThin
+    },
+    summaryValue: {
+      font: { bold: true, sz: 14, color: { rgb: '111827' } },
+      fill: { fgColor: { rgb: 'EFF6FF' } },
+      alignment: { horizontal: 'center', vertical: 'center' },
+      border: borderThin
+    },
+    tableHead: {
+      font: { bold: true, color: { rgb: 'FFFFFF' } },
+      fill: { fgColor: { rgb: '111827' } },
+      alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+      border: borderThin
+    },
+    textCell: {
+      font: { color: { rgb: '111827' } },
+      alignment: { vertical: 'top', wrapText: true },
+      border: borderThin
+    },
+    moneyCell: {
+      font: { bold: true, color: { rgb: '065F46' } },
+      fill: { fgColor: { rgb: 'ECFDF5' } },
+      alignment: { horizontal: 'center', vertical: 'center' },
+      border: borderThin,
+      numFmt: '#,##0'
+    },
+    bankCell: {
+      font: { bold: true, color: { rgb: '92400E' } },
+      fill: { fgColor: { rgb: 'FFFBEB' } },
+      alignment: { horizontal: 'center', vertical: 'center' },
+      border: borderThin,
+      numFmt: '#,##0'
+    },
+    feeCell: {
+      font: { bold: true, color: { rgb: '991B1B' } },
+      fill: { fgColor: { rgb: 'FEF2F2' } },
+      alignment: { horizontal: 'center', vertical: 'center' },
+      border: borderThin,
+      numFmt: '#,##0'
+    },
+    total: {
+      font: { bold: true, color: { rgb: 'FFFFFF' } },
+      fill: { fgColor: { rgb: '0F172A' } },
+      alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+      border: borderThin
+    }
+  };
+
+  const range = XLSX.utils.decode_range(ws['!ref']);
+
+  for (let R = range.s.r; R <= range.e.r; R++) {
+    for (let C = range.s.c; C <= range.e.c; C++) {
+      const addr = XLSX.utils.encode_cell({ r: R, c: C });
+      if (!ws[addr]) continue;
+
+      if (R === 0) ws[addr].s = styles.title;
+      else if (R === 1) ws[addr].s = styles.subtitle;
+      else if (R === 3) ws[addr].s = styles.summaryHead;
+      else if (R === 4) ws[addr].s = styles.summaryValue;
+      else if (R === 6) ws[addr].s = styles.tableHead;
+      else if (R === aoa.length - 1) ws[addr].s = styles.total;
+      else if (R > 6) {
+        if (C === 4) ws[addr].s = styles.moneyCell;
+        else if (C === 5) ws[addr].s = styles.bankCell;
+        else if (C === 6) ws[addr].s = styles.feeCell;
+        else ws[addr].s = styles.textCell;
+      }
+    }
+  }
+
+  for (let R = 7; R < aoa.length - 2; R++) {
+    const fill = R % 2 === 0 ? 'F8FAFC' : 'FFFFFF';
+    for (let C = 0; C <= 3; C++) {
+      const addr = XLSX.utils.encode_cell({ r: R, c: C });
+      if (ws[addr]) {
+        ws[addr].s = {
+          ...styles.textCell,
+          fill: { fgColor: { rgb: fill } }
+        };
+      }
+    }
+  }
+
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Отчёт Банка');
 
   const now = new Date();
   const fn = `Отчёт_Банк_${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}.xlsx`;
+
   XLSX.writeFile(wb, fn);
   showToast('Отчёт выгружен');
 });
