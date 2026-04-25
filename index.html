@@ -1961,7 +1961,7 @@ $('export-btn').addEventListener('click', () => {
   const fn = `Банк_Острова_Ведомость_${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}.xlsx`;
 
   XLSX.writeFile(wb, fn);
-  showToast('Красивая ведомость выгружена');
+  showToast('Выгружено');
 });
 
 function formatDate(iso) {
