@@ -1,42 +1,5 @@
 [
   {
-    "id": 1777129578568,
-    "date": "2026-04-25T15:06:18.568Z",
-    "buyer": "Monka",
-    "buyerLogin": "Monka",
-    "seller": "test",
-    "items": {
-      "partsBreakdown": {
-        "eye": 0,
-        "gland": 0,
-        "scale": 0,
-        "saliva": 0
-      },
-      "algaeBreakdown": {
-        "red": 0,
-        "yellow": 0,
-        "blue": 0
-      },
-      "partsSold": 0,
-      "partsRemainder": 0,
-      "algaeSold": 0,
-      "algaeRemainder": 0,
-      "white": 6,
-      "black": 6,
-      "gold": 6
-    },
-    "earnings": {
-      "parts": 0,
-      "algae": 0,
-      "white": 18,
-      "black": 36,
-      "gold": 48
-    },
-    "bankPays": 120,
-    "bankFee": 18,
-    "total": 102
-  },
-  {
     "id": 1776858435750,
     "date": "2026-04-22T11:47:15.750Z",
     "buyer": "mura",
