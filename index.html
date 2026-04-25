@@ -1710,8 +1710,8 @@ $('export-btn').addEventListener('click', () => {
   if (history.length === 0) { showToast('Нет данных', true); return; }
 
   const sorted = history.slice().sort((x, y) => new Date(x.date) - new Date(y.date));
-
   const pad = n => String(n).padStart(2, '0');
+
   const fmtDate = iso => {
     const d = new Date(iso);
     return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
@@ -1729,27 +1729,38 @@ $('export-btn').addEventListener('click', () => {
     if (e.items.black > 0) bits.push(`Чёрная жемчужина: ${e.items.black}`);
     if (e.items.gold  > 0) bits.push(`Золотая жемчужина: ${e.items.gold}`);
 
-    return bits.join(', ') || '—';
+    return bits.join('\n') || '—';
+  };
+
+  const getMainCategory = e => {
+    if ((e.items.white || 0) || (e.items.black || 0) || (e.items.gold || 0)) return 'Жемчуг';
+    if (e.items.algaeSold > 0) return 'Водоросли';
+    if (e.items.partsSold > 0) return 'Части';
+    return 'Смешанное';
   };
 
   const tP = sorted.reduce((s, e) => s + (e.total || 0), 0);
   const tBP = sorted.reduce((s, e) => s + (e.bankPays || (e.total + (e.bankFee || 0))), 0);
   const tF = sorted.reduce((s, e) => s + (e.bankFee || 0), 0);
   const avg = sorted.length ? Math.round(tP / sorted.length) : 0;
+  const best = sorted.reduce((m, e) => Math.max(m, e.total || 0), 0);
 
   const aoa = [
-    ['БАНК ОСТРОВА / ОТЧЁТ ПО СКУПКЕ'],
-    [`Дата выгрузки: ${fmtDate(new Date().toISOString())}`],
+    ['БАНК ОСТРОВА'],
+    ['Ведомость скупки пустотелых, водорослей и жемчуга'],
+    [`Сформировано: ${fmtDate(new Date().toISOString())}`],
     [],
-    ['Продаж', 'Выплачено продавцам', 'Банк заплатил', 'Комиссия банка', 'Средняя продажа'],
-    [sorted.length, tP, tBP, tF, avg],
+    ['ПРОДАЖ', 'ВЫПЛАЧЕНО', 'БАНК ЗАПЛАТИЛ', 'КОМИССИЯ', 'СРЕДНЯЯ', 'ЛУЧШАЯ'],
+    [sorted.length, tP, tBP, tF, avg, best],
     [],
-    ['Дата', 'Покупатель', 'Продавец', 'Что продано', 'Выплачено продавцу', 'Банк заплатил', 'Комиссия банка']
+    ['#', 'Дата', 'Категория', 'Покупатель', 'Продавец', 'Состав продажи', 'Продавцу', 'Банк', 'Комиссия']
   ];
 
-  sorted.forEach(e => {
+  sorted.forEach((e, i) => {
     aoa.push([
+      i + 1,
       fmtDate(e.date),
+      getMainCategory(e),
       e.buyer || '—',
       e.seller || '—',
       getItemsText(e),
@@ -1760,105 +1771,141 @@ $('export-btn').addEventListener('click', () => {
   });
 
   aoa.push([]);
-  aoa.push(['ИТОГО', '', '', `Записей: ${sorted.length}`, tP, tBP, tF]);
+  aoa.push(['', '', '', '', 'ИТОГО', `Записей: ${sorted.length}`, tP, tBP, tF]);
 
   const ws = XLSX.utils.aoa_to_sheet(aoa);
 
   ws['!cols'] = [
+    { wch: 6 },
     { wch: 20 },
+    { wch: 16 },
     { wch: 18 },
     { wch: 20 },
-    { wch: 62 },
-    { wch: 22 },
-    { wch: 18 },
-    { wch: 18 }
+    { wch: 48 },
+    { wch: 16 },
+    { wch: 16 },
+    { wch: 16 }
   ];
 
   ws['!rows'] = [
+    { hpt: 36 },
+    { hpt: 24 },
+    { hpt: 20 },
+    { hpt: 8 },
+    { hpt: 28 },
     { hpt: 34 },
-    { hpt: 22 },
     { hpt: 8 },
-    { hpt: 26 },
-    { hpt: 30 },
-    { hpt: 8 },
-    { hpt: 30 }
+    { hpt: 32 }
   ];
 
   ws['!merges'] = [
-    { s: { r: 0, c: 0 }, e: { r: 0, c: 6 } },
-    { s: { r: 1, c: 0 }, e: { r: 1, c: 6 } }
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 8 } },
+    { s: { r: 1, c: 0 }, e: { r: 1, c: 8 } },
+    { s: { r: 2, c: 0 }, e: { r: 2, c: 8 } }
   ];
 
   ws['!autofilter'] = {
-    ref: `A7:G${aoa.length - 2}`
+    ref: `A8:I${aoa.length - 2}`
   };
 
-  const borderThin = {
-    top: { style: 'thin', color: { rgb: 'D9E2EC' } },
-    bottom: { style: 'thin', color: { rgb: 'D9E2EC' } },
-    left: { style: 'thin', color: { rgb: 'D9E2EC' } },
-    right: { style: 'thin', color: { rgb: 'D9E2EC' } }
+  const border = {
+    top: { style: 'thin', color: { rgb: 'D6DEE8' } },
+    bottom: { style: 'thin', color: { rgb: 'D6DEE8' } },
+    left: { style: 'thin', color: { rgb: 'D6DEE8' } },
+    right: { style: 'thin', color: { rgb: 'D6DEE8' } }
   };
 
-  const styles = {
+  const moneyFmt = '#,##0 "гильз"';
+
+  const style = {
     title: {
-      font: { bold: true, sz: 18, color: { rgb: 'FFFFFF' } },
-      fill: { fgColor: { rgb: '111827' } },
+      font: { bold: true, sz: 22, color: { rgb: 'F8FAFC' } },
+      fill: { fgColor: { rgb: '0B1120' } },
       alignment: { horizontal: 'center', vertical: 'center' }
     },
     subtitle: {
-      font: { sz: 11, color: { rgb: '6B7280' } },
+      font: { sz: 12, color: { rgb: 'D9B76E' } },
+      fill: { fgColor: { rgb: '0B1120' } },
       alignment: { horizontal: 'center', vertical: 'center' }
     },
-    summaryHead: {
-      font: { bold: true, color: { rgb: 'FFFFFF' } },
-      fill: { fgColor: { rgb: '2563EB' } },
-      alignment: { horizontal: 'center', vertical: 'center' },
-      border: borderThin
+    date: {
+      font: { sz: 10, color: { rgb: '94A3B8' } },
+      fill: { fgColor: { rgb: '111827' } },
+      alignment: { horizontal: 'center', vertical: 'center' }
     },
-    summaryValue: {
-      font: { bold: true, sz: 14, color: { rgb: '111827' } },
-      fill: { fgColor: { rgb: 'EFF6FF' } },
+    kpiHead: {
+      font: { bold: true, sz: 10, color: { rgb: 'F8FAFC' } },
+      fill: { fgColor: { rgb: '1E293B' } },
       alignment: { horizontal: 'center', vertical: 'center' },
-      border: borderThin
+      border
+    },
+    kpiValue: {
+      font: { bold: true, sz: 15, color: { rgb: '0B1120' } },
+      fill: { fgColor: { rgb: 'FFF7E6' } },
+      alignment: { horizontal: 'center', vertical: 'center' },
+      border,
+      numFmt: '#,##0'
     },
     tableHead: {
-      font: { bold: true, color: { rgb: 'FFFFFF' } },
-      fill: { fgColor: { rgb: '111827' } },
+      font: { bold: true, sz: 10, color: { rgb: 'FFFFFF' } },
+      fill: { fgColor: { rgb: '182235' } },
       alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
-      border: borderThin
+      border
     },
-    textCell: {
-      font: { color: { rgb: '111827' } },
+    base: {
+      font: { sz: 10, color: { rgb: '111827' } },
       alignment: { vertical: 'top', wrapText: true },
-      border: borderThin
+      border
     },
-    moneyCell: {
-      font: { bold: true, color: { rgb: '065F46' } },
+    center: {
+      font: { sz: 10, color: { rgb: '111827' } },
+      alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+      border
+    },
+    parts: {
+      font: { bold: true, sz: 10, color: { rgb: '075985' } },
+      fill: { fgColor: { rgb: 'E0F2FE' } },
+      alignment: { horizontal: 'center', vertical: 'center' },
+      border
+    },
+    algae: {
+      font: { bold: true, sz: 10, color: { rgb: '166534' } },
+      fill: { fgColor: { rgb: 'DCFCE7' } },
+      alignment: { horizontal: 'center', vertical: 'center' },
+      border
+    },
+    pearl: {
+      font: { bold: true, sz: 10, color: { rgb: '92400E' } },
+      fill: { fgColor: { rgb: 'FEF3C7' } },
+      alignment: { horizontal: 'center', vertical: 'center' },
+      border
+    },
+    paid: {
+      font: { bold: true, sz: 11, color: { rgb: '065F46' } },
       fill: { fgColor: { rgb: 'ECFDF5' } },
       alignment: { horizontal: 'center', vertical: 'center' },
-      border: borderThin,
-      numFmt: '#,##0'
+      border,
+      numFmt: moneyFmt
     },
-    bankCell: {
-      font: { bold: true, color: { rgb: '92400E' } },
-      fill: { fgColor: { rgb: 'FFFBEB' } },
+    bank: {
+      font: { bold: true, sz: 11, color: { rgb: '1D4ED8' } },
+      fill: { fgColor: { rgb: 'EFF6FF' } },
       alignment: { horizontal: 'center', vertical: 'center' },
-      border: borderThin,
-      numFmt: '#,##0'
+      border,
+      numFmt: moneyFmt
     },
-    feeCell: {
-      font: { bold: true, color: { rgb: '991B1B' } },
+    fee: {
+      font: { bold: true, sz: 11, color: { rgb: '991B1B' } },
       fill: { fgColor: { rgb: 'FEF2F2' } },
       alignment: { horizontal: 'center', vertical: 'center' },
-      border: borderThin,
-      numFmt: '#,##0'
+      border,
+      numFmt: moneyFmt
     },
     total: {
-      font: { bold: true, color: { rgb: 'FFFFFF' } },
-      fill: { fgColor: { rgb: '0F172A' } },
+      font: { bold: true, sz: 12, color: { rgb: 'FFFFFF' } },
+      fill: { fgColor: { rgb: '0B1120' } },
       alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
-      border: borderThin
+      border
     }
   };
 
@@ -1869,42 +1916,51 @@ $('export-btn').addEventListener('click', () => {
       const addr = XLSX.utils.encode_cell({ r: R, c: C });
       if (!ws[addr]) continue;
 
-      if (R === 0) ws[addr].s = styles.title;
-      else if (R === 1) ws[addr].s = styles.subtitle;
-      else if (R === 3) ws[addr].s = styles.summaryHead;
-      else if (R === 4) ws[addr].s = styles.summaryValue;
-      else if (R === 6) ws[addr].s = styles.tableHead;
-      else if (R === aoa.length - 1) ws[addr].s = styles.total;
-      else if (R > 6) {
-        if (C === 4) ws[addr].s = styles.moneyCell;
-        else if (C === 5) ws[addr].s = styles.bankCell;
-        else if (C === 6) ws[addr].s = styles.feeCell;
-        else ws[addr].s = styles.textCell;
+      if (R === 0) ws[addr].s = style.title;
+      else if (R === 1) ws[addr].s = style.subtitle;
+      else if (R === 2) ws[addr].s = style.date;
+      else if (R === 4) ws[addr].s = style.kpiHead;
+      else if (R === 5) ws[addr].s = style.kpiValue;
+      else if (R === 7) ws[addr].s = style.tableHead;
+      else if (R === aoa.length - 1) ws[addr].s = style.total;
+      else if (R > 7) {
+        if (C === 0 || C === 1 || C === 3 || C === 4) ws[addr].s = style.center;
+        else if (C === 2) {
+          const category = ws[addr].v;
+          if (category === 'Жемчуг') ws[addr].s = style.pearl;
+          else if (category === 'Водоросли') ws[addr].s = style.algae;
+          else ws[addr].s = style.parts;
+        }
+        else if (C === 6) ws[addr].s = style.paid;
+        else if (C === 7) ws[addr].s = style.bank;
+        else if (C === 8) ws[addr].s = style.fee;
+        else ws[addr].s = style.base;
       }
     }
   }
 
-  for (let R = 7; R < aoa.length - 2; R++) {
-    const fill = R % 2 === 0 ? 'F8FAFC' : 'FFFFFF';
-    for (let C = 0; C <= 3; C++) {
+  for (let R = 8; R < aoa.length - 2; R++) {
+    const bg = R % 2 === 0 ? 'F8FAFC' : 'FFFFFF';
+    for (let C = 0; C <= 5; C++) {
       const addr = XLSX.utils.encode_cell({ r: R, c: C });
-      if (ws[addr]) {
+      if (ws[addr] && C !== 2) {
         ws[addr].s = {
-          ...styles.textCell,
-          fill: { fgColor: { rgb: fill } }
+          ...ws[addr].s,
+          fill: { fgColor: { rgb: bg } }
         };
       }
     }
+    ws['!rows'][R] = { hpt: 42 };
   }
 
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Отчёт Банка');
+  XLSX.utils.book_append_sheet(wb, ws, 'Ведомость');
 
   const now = new Date();
-  const fn = `Отчёт_Банк_${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}.xlsx`;
+  const fn = `Банк_Острова_Ведомость_${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}.xlsx`;
 
   XLSX.writeFile(wb, fn);
-  showToast('Отчёт выгружен');
+  showToast('Красивая ведомость выгружена');
 });
 
 function formatDate(iso) {
