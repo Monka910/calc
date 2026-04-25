@@ -1733,13 +1733,6 @@ $('export-btn').addEventListener('click', () => {
     return bits.join('\n') || '—';
   };
 
-  const getMainCategory = e => {
-    if ((e.items.white || 0) || (e.items.black || 0) || (e.items.gold || 0)) return 'Жемчуг';
-    if (e.items.algaeSold > 0) return 'Водоросли';
-    if (e.items.partsSold > 0) return 'Части';
-    return 'Смешанное';
-  };
-
   const tP = sorted.reduce((s, e) => s + (e.total || 0), 0);
   const tBP = sorted.reduce((s, e) => s + (e.bankPays || (e.total + (e.bankFee || 0))), 0);
   const tF = sorted.reduce((s, e) => s + (e.bankFee || 0), 0);
@@ -1754,14 +1747,13 @@ $('export-btn').addEventListener('click', () => {
     ['ПРОДАЖ', 'ВЫПЛАЧЕНО', 'БАНК ЗАПЛАТИЛ', 'КОМИССИЯ', 'СРЕДНЯЯ', 'ЛУЧШАЯ'],
     [sorted.length, tP, tBP, tF, avg, best],
     [],
-    ['#', 'Дата', 'Категория', 'Покупатель', 'Продавец', 'Состав продажи', 'Продавцу', 'Банк', 'Комиссия']
+    ['#', 'Дата', 'Покупатель', 'Продавец', 'Состав продажи', 'Продавцу', 'Банк', 'Комиссия']
   ];
 
   sorted.forEach((e, i) => {
     aoa.push([
       i + 1,
       fmtDate(e.date),
-      getMainCategory(e),
       e.buyer || '—',
       e.seller || '—',
       getItemsText(e),
@@ -1772,17 +1764,16 @@ $('export-btn').addEventListener('click', () => {
   });
 
   aoa.push([]);
-  aoa.push(['', '', '', '', 'ИТОГО', `Записей: ${sorted.length}`, tP, tBP, tF]);
+  aoa.push(['', '', '', 'ИТОГО', `Записей: ${sorted.length}`, tP, tBP, tF]);
 
   const ws = XLSX.utils.aoa_to_sheet(aoa);
 
   ws['!cols'] = [
     { wch: 6 },
     { wch: 20 },
-    { wch: 16 },
     { wch: 18 },
     { wch: 20 },
-    { wch: 48 },
+    { wch: 54 },
     { wch: 16 },
     { wch: 16 },
     { wch: 16 }
@@ -1800,13 +1791,13 @@ $('export-btn').addEventListener('click', () => {
   ];
 
   ws['!merges'] = [
-    { s: { r: 0, c: 0 }, e: { r: 0, c: 8 } },
-    { s: { r: 1, c: 0 }, e: { r: 1, c: 8 } },
-    { s: { r: 2, c: 0 }, e: { r: 2, c: 8 } }
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 7 } },
+    { s: { r: 1, c: 0 }, e: { r: 1, c: 7 } },
+    { s: { r: 2, c: 0 }, e: { r: 2, c: 7 } }
   ];
 
   ws['!autofilter'] = {
-    ref: `A8:I${aoa.length - 2}`
+    ref: `A8:H${aoa.length - 2}`
   };
 
   const border = {
@@ -1863,24 +1854,6 @@ $('export-btn').addEventListener('click', () => {
       alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
       border
     },
-    parts: {
-      font: { bold: true, sz: 10, color: { rgb: '075985' } },
-      fill: { fgColor: { rgb: 'E0F2FE' } },
-      alignment: { horizontal: 'center', vertical: 'center' },
-      border
-    },
-    algae: {
-      font: { bold: true, sz: 10, color: { rgb: '166534' } },
-      fill: { fgColor: { rgb: 'DCFCE7' } },
-      alignment: { horizontal: 'center', vertical: 'center' },
-      border
-    },
-    pearl: {
-      font: { bold: true, sz: 10, color: { rgb: '92400E' } },
-      fill: { fgColor: { rgb: 'FEF3C7' } },
-      alignment: { horizontal: 'center', vertical: 'center' },
-      border
-    },
     paid: {
       font: { bold: true, sz: 11, color: { rgb: '065F46' } },
       fill: { fgColor: { rgb: 'ECFDF5' } },
@@ -1925,16 +1898,10 @@ $('export-btn').addEventListener('click', () => {
       else if (R === 7) ws[addr].s = style.tableHead;
       else if (R === aoa.length - 1) ws[addr].s = style.total;
       else if (R > 7) {
-        if (C === 0 || C === 1 || C === 3 || C === 4) ws[addr].s = style.center;
-        else if (C === 2) {
-          const category = ws[addr].v;
-          if (category === 'Жемчуг') ws[addr].s = style.pearl;
-          else if (category === 'Водоросли') ws[addr].s = style.algae;
-          else ws[addr].s = style.parts;
-        }
-        else if (C === 6) ws[addr].s = style.paid;
-        else if (C === 7) ws[addr].s = style.bank;
-        else if (C === 8) ws[addr].s = style.fee;
+        if (C === 0 || C === 1 || C === 2 || C === 3) ws[addr].s = style.center;
+        else if (C === 5) ws[addr].s = style.paid;
+        else if (C === 6) ws[addr].s = style.bank;
+        else if (C === 7) ws[addr].s = style.fee;
         else ws[addr].s = style.base;
       }
     }
@@ -1942,9 +1909,9 @@ $('export-btn').addEventListener('click', () => {
 
   for (let R = 8; R < aoa.length - 2; R++) {
     const bg = R % 2 === 0 ? 'F8FAFC' : 'FFFFFF';
-    for (let C = 0; C <= 5; C++) {
+    for (let C = 0; C <= 4; C++) {
       const addr = XLSX.utils.encode_cell({ r: R, c: C });
-      if (ws[addr] && C !== 2) {
+      if (ws[addr]) {
         ws[addr].s = {
           ...ws[addr].s,
           fill: { fgColor: { rgb: bg } }
@@ -1963,6 +1930,7 @@ $('export-btn').addEventListener('click', () => {
   XLSX.writeFile(wb, fn);
   showToast('Выгружено');
 });
+
 
 function formatDate(iso) {
   const d = new Date(iso);
