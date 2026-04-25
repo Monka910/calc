@@ -42,7 +42,6 @@
     overflow-x: hidden;
   }
 
-  /* ================ ANIMATED GRID BACKGROUND ================ */
   .bg-grid {
     position: fixed;
     inset: -2px;
@@ -98,7 +97,6 @@
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   }
 
-  /* ================ TOPBAR ================ */
   .topbar {
     position: sticky;
     top: 0;
@@ -235,7 +233,6 @@
     font-weight: 500;
   }
 
-  /* ================ WRAPPER ================ */
   .wrapper {
     max-width: 1080px;
     margin: 0 auto;
@@ -244,7 +241,6 @@
     z-index: 2;
   }
 
-  /* ================ HERO ================ */
   .hero { margin-bottom: 42px; }
   .hero-meta {
     display: flex;
@@ -279,7 +275,6 @@
     line-height: 1.6;
   }
 
-  /* ================ CARD ================ */
   .card {
     background: var(--bg);
     border: 1px solid var(--ink-10);
@@ -317,7 +312,6 @@
   }
   .card-meta strong { color: var(--ink); font-weight: 600; }
 
-  /* ================ BUYER INFO ================ */
   .buyer-info {
     display: flex;
     align-items: center;
@@ -342,7 +336,6 @@
     flex-shrink: 0;
   }
 
-  /* ================ SELLER FIELD ================ */
   .seller-field {
     display: flex;
     align-items: center;
@@ -393,7 +386,6 @@
   }
   select:focus { border-color: var(--ink); }
 
-  /* ================ ITEMS GRID ================ */
   .items-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -413,7 +405,6 @@
     text-transform: uppercase;
   }
 
-  /* ================ GROUP SUMMARY ================ */
   .group-summary {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -462,7 +453,6 @@
     letter-spacing: 0.03em;
   }
 
-  /* ================ PEARL ROWS ================ */
   .rows-container { display: flex; flex-direction: column; gap: 10px; }
 
   .item-row {
@@ -515,7 +505,6 @@
     letter-spacing: -0.01em;
   }
 
-  /* ================ TOTAL CARD ================ */
   .total-card {
     margin-top: 28px;
     padding: 28px 32px;
@@ -566,7 +555,6 @@
     text-transform: uppercase;
   }
 
-  /* ================ BUTTONS ================ */
   .actions {
     display: flex;
     gap: 8px;
@@ -603,7 +591,6 @@
   button.btn.danger:hover { background: var(--danger); color: var(--bg); border-color: var(--danger); }
   button.btn[disabled] { opacity: 0.4; cursor: not-allowed; }
 
-  /* ================ FILTERS ================ */
   .filter-bar {
     display: flex;
     align-items: center;
@@ -629,7 +616,6 @@
     letter-spacing: 0.04em;
   }
 
-  /* ================ STATS ================ */
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -678,7 +664,6 @@
     .stat-card:nth-child(2n) { border-right: none; }
   }
 
-  /* ================ HISTORY ================ */
   .history-container {
     max-height: 560px;
     overflow-y: auto;
@@ -793,7 +778,6 @@
     letter-spacing: -0.01em;
   }
 
-  /* ================ ADMINS TAB ================ */
   .admins-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
@@ -894,7 +878,6 @@
     padding: 6px 12px;
   }
 
-  /* ================ LOGIN / MODAL ================ */
   .overlay {
     position: fixed;
     inset: 0;
@@ -1001,7 +984,6 @@
     justify-content: center;
   }
 
-  /* ================ TOAST ================ */
   .toast {
     position: fixed;
     bottom: 24px;
@@ -1025,12 +1007,10 @@
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   .toast.error { background: var(--danger); }
 
-  /* ================ TAB VIEWS ================ */
   .view { display: none; }
   .view.active { display: block; animation: viewIn 0.3s ease; }
   @keyframes viewIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* ================ RESPONSIVE ================ */
   @media (max-width: 720px) {
     .topbar-inner { padding: 12px 18px; }
     .wrapper { padding: 32px 18px 60px; }
@@ -1055,7 +1035,6 @@
 </head>
 <body>
 
-<!-- Animated background -->
 <div class="bg-grid"></div>
 <div class="bg-rays">
   <div class="ray"></div>
@@ -1064,7 +1043,6 @@
 </div>
 <div class="bg-noise"></div>
 
-<!-- Login modal -->
 <div class="overlay" id="lock-overlay" style="display:none">
   <div class="modal-box">
     <button type="button" class="modal-close" id="lock-close" title="Закрыть">✕</button>
@@ -1082,7 +1060,6 @@
   </div>
 </div>
 
-<!-- Add admin modal (chief only) -->
 <div class="overlay" id="admin-modal" style="display:none">
   <div class="modal-box">
     <button type="button" class="modal-close" id="admin-modal-close" title="Закрыть">✕</button>
@@ -1107,7 +1084,6 @@
   </div>
 </div>
 
-<!-- TOPBAR -->
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand">
@@ -1133,14 +1109,12 @@
 
 <div class="wrapper">
 
-  <!-- HERO -->
   <section class="hero">
     <div class="hero-meta">Mars · Tolyk odobril, pepo zacenil. Mne pohyi.</div>
     <h1 class="hero-title">Скупка пустотелых<br><span class="dim">&amp; жемчуга</span></h1>
     <p class="hero-sub">Введи количество — увидишь сколько получишь гильзами.</p>
   </section>
 
-  <!-- ============ VIEW: CALCULATOR ============ -->
   <div class="view active" id="view-calc">
 
     <div class="card">
@@ -1231,7 +1205,6 @@
 
   </div>
 
-  <!-- ============ VIEW: JOURNAL ============ -->
   <div class="view admin-only" id="view-journal" style="display:none">
     <div class="card">
       <div class="card-header">
@@ -1270,7 +1243,6 @@
     </div>
   </div>
 
-  <!-- ============ VIEW: ADMINS (CHIEF ONLY) ============ -->
   <div class="view chief-only" id="view-admins" style="display:none">
     <div class="card">
       <div class="card-header">
@@ -1299,9 +1271,6 @@
 <div class="toast" id="toast">Записано</div>
 
 <script>
-// =========================================================================
-//  КОНФИГ
-// =========================================================================
 const CONFIG = {
   github: {
     owner:  'Monka910',
@@ -1311,9 +1280,6 @@ const CONFIG = {
     pathAdmins: 'admins.json'
   },
 
-  // Начальный (fallback) список админов — используется только если admins.json
-  // ещё не создан в репозитории. После первого входа admins.json автоматически
-  // создаётся на GitHub и дальше берётся оттуда.
   bootstrapAdmins: [
     { login: 'Monka', name: 'Monka', role: 'chief',
       passwordHash: 'e47d3eff8cb2669c60095acd32e7002e39913c0aa08c4528e5df0df33ad41ada' }
@@ -1328,29 +1294,20 @@ const CONFIG = {
   }
 };
 
-// =========================================================================
-//  SHA-256
-// =========================================================================
 async function sha256(text) {
   const buf = new TextEncoder().encode(text);
   const hash = await crypto.subtle.digest('SHA-256', buf);
   return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// =========================================================================
-//  СОСТОЯНИЕ
-// =========================================================================
 const AUTH_KEY = 'calc-current-user-v3';
 const $ = (id) => document.getElementById(id);
 
-let admins = [];      // текущий список админов (с GitHub)
-let adminsSha = null; // sha файла admins.json на GitHub
+let admins = [];      
+let adminsSha = null; 
 let history = [];
 let historySha = null;
 
-// =========================================================================
-//  БАЗОВЫЕ ФУНКЦИИ
-// =========================================================================
 function getCurrentUser() {
   try {
     const raw = localStorage.getItem(AUTH_KEY) || sessionStorage.getItem(AUTH_KEY);
@@ -1396,9 +1353,6 @@ function setSyncStatus(status, text) {
   $('sync-text').textContent = text;
 }
 
-// =========================================================================
-//  GITHUB: УНИВЕРСАЛЬНЫЕ ОПЕРАЦИИ
-// =========================================================================
 async function ghLoad(path) {
   const url = `https://api.github.com/repos/${CONFIG.github.owner}/${CONFIG.github.repo}/contents/${path}?ref=${CONFIG.github.branch}`;
   const headers = { 'Accept': 'application/vnd.github.v3+json' };
@@ -1449,14 +1403,11 @@ async function ghSave(path, data, sha, message) {
   return { sha: json.content.sha };
 }
 
-// =========================================================================
-//  ADMINS.JSON
-// =========================================================================
 async function loadAdmins() {
   try {
     const { data, sha } = await ghLoad(CONFIG.github.pathAdmins);
     if (!data || !Array.isArray(data) || data.length === 0) {
-      // Файла ещё нет — используем bootstrap
+
       admins = CONFIG.bootstrapAdmins.slice();
       adminsSha = sha;
     } else {
@@ -1465,7 +1416,7 @@ async function loadAdmins() {
     }
   } catch(e) {
     console.error('loadAdmins err:', e);
-    // Оффлайн или ошибка — используем bootstrap чтобы хотя бы вход работал
+
     admins = CONFIG.bootstrapAdmins.slice();
     adminsSha = null;
   }
@@ -1495,9 +1446,6 @@ async function saveAdmins() {
   }
 }
 
-// =========================================================================
-//  LOG.JSON (история продаж)
-// =========================================================================
 async function loadHistory() {
   setSyncStatus('syncing', 'Загрузка…');
   try {
@@ -1540,9 +1488,6 @@ async function saveHistory() {
   }
 }
 
-// =========================================================================
-//  АВТОРИЗАЦИЯ
-// =========================================================================
 $('auth-btn').addEventListener('click', () => {
   if (getCurrentUser()) {
     if (confirm('Выйти из админ-режима?')) logout();
@@ -1580,7 +1525,6 @@ $('lock-form').addEventListener('submit', async (e) => {
 
   if (!login || !pwd) { err.textContent = 'Введи логин и пароль'; return; }
 
-  // На случай если admins ещё не загрузились
   if (admins.length === 0) await loadAdmins();
 
   const admin = admins.find(a => a.login.toLowerCase() === login.toLowerCase());
@@ -1613,9 +1557,6 @@ function enterAdminMode() {
   initAdminApp();
 }
 
-// =========================================================================
-//  TABS / VIEWS
-// =========================================================================
 function switchView(name) {
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.view === name));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === `view-${name}`));
@@ -1625,9 +1566,6 @@ document.querySelectorAll('.nav-tab').forEach(t => {
   t.addEventListener('click', () => switchView(t.dataset.view));
 });
 
-// =========================================================================
-//  РАСЧЁТЫ
-// =========================================================================
 const RATES = { parts: { per: 4, get: 1 }, algae: { per: 5, get: 1 }, white: 3, black: 6, gold: 8 };
 const PART_NAMES = { eye: 'Глаз', gland: 'Железа', scale: 'Чешуя', saliva: 'Слюна' };
 const ALGAE_NAMES = { red: 'Красные', yellow: 'Жёлтые', blue: 'Синие' };
@@ -1699,9 +1637,6 @@ function calcBankData(state) {
   return { bankPaysTotal, sellerGot: state.total, bankFee: bankPaysTotal - state.total };
 }
 
-// =========================================================================
-//  ЗАПИСЬ ПРОДАЖИ
-// =========================================================================
 $('save-btn').addEventListener('click', async () => {
   const user = getCurrentUser();
   if (!user) { showToast('Нужен вход', true); return; }
@@ -1771,9 +1706,6 @@ $('clear-history-btn').addEventListener('click', async () => {
   renderHistory();
 });
 
-// =========================================================================
-//  EXCEL
-// =========================================================================
 $('export-btn').addEventListener('click', () => {
   if (history.length === 0) { showToast('Нет данных', true); return; }
   const sorted = history.slice().sort((x, y) => new Date(x.date) - new Date(y.date));
@@ -1820,9 +1752,6 @@ $('export-btn').addEventListener('click', () => {
   showToast('Отчёт выгружен');
 });
 
-// =========================================================================
-//  ЖУРНАЛ РЕНДЕР
-// =========================================================================
 function formatDate(iso) {
   const d = new Date(iso);
   const pad = n => String(n).padStart(2, '0');
@@ -1958,9 +1887,6 @@ function renderHistory() {
 $('seller-filter-select').addEventListener('change', (e) => { filterSeller = e.target.value; renderHistory(); });
 $('buyer-filter-select').addEventListener('change',  (e) => { filterBuyer  = e.target.value; renderHistory(); });
 
-// =========================================================================
-//  АДМИНЫ UI
-// =========================================================================
 function getAdminStats(login) {
   const entries = history.filter(e => (e.buyerLogin === login) || (e.buyer && e.buyer === login));
   const count = entries.length;
@@ -1983,14 +1909,13 @@ function renderAdmins() {
 
   grid.innerHTML = admins.map(a => {
     const stats = getAdminStats(a.login);
-    // Также пробуем найти по имени если buyerLogin не совпал
     const statsByName = history.filter(e => e.buyer === a.name)
       .reduce((acc, e) => { acc.count++; acc.total += (e.total || 0); acc.bank += (e.bankFee || 0); return acc; },
               { count: 0, total: 0, bank: 0 });
     const s = stats.count >= statsByName.count ? stats : statsByName;
 
     const isMe = a.login === user.login;
-    const canManage = !isMe; // Главный не может удалить сам себя
+    const canManage = !isMe; 
 
     return `
       <div class="admin-card ${isMe ? 'is-me' : ''}" data-login="${a.login}">
@@ -2036,7 +1961,6 @@ function renderAdmins() {
         filterBuyer = admin.name;
         switchView('journal');
         renderHistory();
-        // Обновить выпадашку
         setTimeout(() => {
           const bSel = $('buyer-filter-select');
           if (Array.from(bSel.options).some(o => o.value === admin.name)) {
@@ -2085,9 +2009,6 @@ async function changeAdminPassword(login) {
   showToast(`Пароль для ${admin.name} обновлён`);
 }
 
-// =========================================================================
-//  МОДАЛКА "ДОБАВИТЬ АДМИНА"
-// =========================================================================
 $('admin-add-btn').addEventListener('click', () => openAdminModal());
 $('admin-modal-close').addEventListener('click', closeAdminModal);
 $('admin-modal').addEventListener('click', (e) => { if (e.target.id === 'admin-modal') closeAdminModal(); });
@@ -2134,9 +2055,6 @@ $('admin-form').addEventListener('submit', async (e) => {
   showToast(`${name} добавлен`);
 });
 
-// =========================================================================
-//  TOAST
-// =========================================================================
 let toastTimer;
 function showToast(msg, isError = false) {
   const t = $('toast');
@@ -2147,9 +2065,6 @@ function showToast(msg, isError = false) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
 }
 
-// =========================================================================
-//  ИНИЦИАЛИЗАЦИЯ
-// =========================================================================
 async function initAdminApp() {
   await loadHistory();
   updateAll();
@@ -2158,7 +2073,7 @@ async function initAdminApp() {
 
 async function boot() {
   updateAll();
-  // Всегда пробуем загрузить список админов (чтобы авто-логин работал)
+
   await loadAdmins();
   if (getCurrentUser()) enterAdminMode();
 }
