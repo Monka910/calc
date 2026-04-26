@@ -257,33 +257,5 @@
     "bankPays": 1417,
     "bankFee": 289,
     "total": 1128
-  },
-  {
-    "id": 1776446467438,
-    "date": "2026-04-17T17:21:07.438Z",
-    "seller": "Ким",
-    "items": {
-      "partsBreakdown": {
-        "eye": 15,
-        "gland": 15,
-        "scale": 20,
-        "saliva": 26,
-        "esul": 0
-      },
-      "partsTotal": 76,
-      "partsSold": 76,
-      "partsRemainder": 0,
-      "white": 5,
-      "black": 2,
-      "gold": 1
-    },
-    "earnings": {
-      "parts": 19,
-      "white": 15,
-      "black": 12,
-      "gold": 8
-    },
-    "bankFee": 8,
-    "total": 54
   }
 ]
