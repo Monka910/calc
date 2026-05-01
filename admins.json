@@ -34,5 +34,11 @@
     "name": "Ed",
     "role": "admin",
     "passwordHash": "6fc3137b105eeaa648e92826089edca777e09293d78fab463431247ca7aa6784"
+  },
+  {
+    "login": "6o6p3bepb",
+    "name": "Синий",
+    "role": "admin",
+    "passwordHash": "22177b6f2afa998f2a75cf8ad35227bb659a047a31558b876479530eb267a660"
   }
 ]
