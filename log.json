@@ -1,5 +1,42 @@
 [
   {
+    "id": 1778262993697,
+    "date": "2026-05-08T17:56:33.697Z",
+    "buyer": "Синий",
+    "buyerLogin": "6o6p3bepb",
+    "seller": "Искандер",
+    "items": {
+      "partsBreakdown": {
+        "eye": 336,
+        "gland": 308,
+        "scale": 352,
+        "saliva": 340
+      },
+      "algaeBreakdown": {
+        "red": 0,
+        "yellow": 0,
+        "blue": 0
+      },
+      "partsSold": 1336,
+      "partsRemainder": 0,
+      "algaeSold": 0,
+      "algaeRemainder": 0,
+      "white": 113,
+      "black": 47,
+      "gold": 24
+    },
+    "earnings": {
+      "parts": 334,
+      "algae": 0,
+      "white": 339,
+      "black": 282,
+      "gold": 192
+    },
+    "bankPays": 1442,
+    "bankFee": 295,
+    "total": 1147
+  },
+  {
     "id": 1778262770295,
     "date": "2026-05-08T17:52:50.295Z",
     "buyer": "Синий",
