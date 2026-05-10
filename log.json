@@ -1,5 +1,43 @@
 [
   {
+    "id": 1778398136993,
+    "date": "2026-05-10T07:28:56.993Z",
+    "buyer": "Monka",
+    "buyerLogin": "Monka",
+    "seller": "тест",
+    "quickBuyPeople": 1,
+    "items": {
+      "partsBreakdown": {
+        "eye": 24,
+        "gland": 43,
+        "scale": 232,
+        "saliva": 12
+      },
+      "algaeBreakdown": {
+        "red": 0,
+        "yellow": 0,
+        "blue": 0
+      },
+      "partsSold": 308,
+      "partsRemainder": 3,
+      "algaeSold": 0,
+      "algaeRemainder": 0,
+      "white": 34,
+      "black": 12,
+      "gold": 43
+    },
+    "earnings": {
+      "parts": 77,
+      "algae": 0,
+      "white": 102,
+      "black": 72,
+      "gold": 344
+    },
+    "bankPays": 709,
+    "bankFee": 114,
+    "total": 595
+  },
+  {
     "id": 1778262993697,
     "date": "2026-05-08T17:56:33.697Z",
     "buyer": "Синий",
