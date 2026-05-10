@@ -2148,7 +2148,7 @@ function getEntryQuickPeople(entry) {
   if (Number.isFinite(Number(entry.quickBuyPeople))) {
     return Math.max(0, Math.floor(Number(entry.quickBuyPeople)));
   }
-  return (!entry.seller || !String(entry.seller).trim()) ? 1 : 0;
+  return 0;
 }
 
 function calcEntrySalary(entry) {
