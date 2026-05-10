@@ -40,5 +40,11 @@
     "name": "Синий",
     "role": "admin",
     "passwordHash": "22177b6f2afa998f2a75cf8ad35227bb659a047a31558b876479530eb267a660"
+  },
+  {
+    "login": "Piska",
+    "name": "Piska",
+    "role": "admin",
+    "passwordHash": "7fd06f0e2a61fec4b93fcf78df8759e5e4e2a2da2f5a627cfad24b801416ebbb"
   }
 ]
