@@ -364,6 +364,7 @@
     font-variant-numeric: tabular-nums;
   }
   input#seller-name { flex: 1; }
+  input#quick-people { width: 110px; }
   input[type="number"] { width: 100%; font-weight: 500; }
   input[type="number"]::-webkit-inner-spin-button { opacity: 0.25; }
   input:focus { border-color: var(--ink); box-shadow: 0 0 0 3px var(--ink-05); }
@@ -768,6 +769,148 @@
     border-color: var(--ink);
     color: var(--bg);
   }
+  .history-actions {
+    display: inline-flex;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+
+  .history-action {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--ink-20);
+    background: var(--bg);
+    color: var(--ink-60);
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .history-action:hover {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+  }
+
+  .salary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .salary-card {
+    padding: 18px;
+    border: 1px solid var(--ink-10);
+    border-radius: var(--radius);
+    background: var(--bg);
+  }
+  .salary-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .salary-name {
+    font-family: var(--f-display);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  .salary-login {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-60);
+    margin-top: 3px;
+  }
+  .salary-login::before { content: '@'; opacity: 0.5; }
+  .salary-total {
+    font-family: var(--f-display);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .salary-total .unit-small {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    color: var(--ink-40);
+    margin-left: 4px;
+    text-transform: uppercase;
+  }
+  .salary-lines {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--ink-10);
+    padding-top: 12px;
+  }
+  .salary-line {
+    padding-right: 10px;
+    border-right: 1px dashed var(--ink-10);
+  }
+  .salary-line:last-child { border-right: none; padding-right: 0; }
+  .salary-label {
+    display: block;
+    font-family: var(--f-mono);
+    font-size: 9px;
+    color: var(--ink-60);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+  .salary-value {
+    font-family: var(--f-display);
+    font-size: 20px;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .salary-rules {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-60);
+    line-height: 1.7;
+    margin-bottom: 18px;
+  }
+  .top-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .top-row {
+    display: grid;
+    grid-template-columns: 42px 1fr auto auto;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 14px;
+    border: 1px solid var(--ink-10);
+    border-radius: var(--radius);
+  }
+  .top-rank {
+    font-family: var(--f-display);
+    font-size: 20px;
+    color: var(--ink-40);
+    font-variant-numeric: tabular-nums;
+  }
+  .top-name {
+    font-family: var(--f-display);
+    font-size: 18px;
+    color: var(--ink);
+  }
+  .top-meta, .top-money {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-60);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
 
   .empty {
     text-align: center;
@@ -1021,6 +1164,12 @@
     .result { grid-column: 1 / -1; text-align: left; padding-top: 6px; border-top: 1px dashed var(--ink-10); }
     .history-item { grid-template-columns: 1fr auto; gap: 8px; }
     .history-items, .history-total { grid-column: 1 / -1; text-align: left; }
+    .history-actions { grid-column: 1 / -1; justify-content: flex-start; }
+    .seller-field { align-items: stretch; flex-direction: column; }
+    input#quick-people { width: 100%; }
+    .salary-lines { grid-template-columns: repeat(2, 1fr); gap: 12px 0; }
+    .top-row { grid-template-columns: 34px 1fr; }
+    .top-meta, .top-money { grid-column: 2; }
     .total-card { flex-direction: column; align-items: flex-start; gap: 8px; }
     .total-value { font-size: 44px; }
     .group-summary { grid-template-columns: 1fr; gap: 14px; }
@@ -1094,6 +1243,7 @@
       <div class="nav-tabs" id="nav-tabs">
         <button class="nav-tab active" data-view="calc">Калькулятор</button>
         <button class="nav-tab" data-view="journal">Журнал</button>
+        <button class="nav-tab" data-view="salary">Зарплата</button>
         <button class="nav-tab chief-only" data-view="admins" style="display:none">Админы</button>
       </div>
       <div class="sync-badge" id="sync-badge">
@@ -1125,6 +1275,8 @@
       <div class="seller-field admin-only" id="seller-field" style="display:none">
         <label for="seller-name">Продавец</label>
         <input type="text" id="seller-name" placeholder="Имя (необязательно)" maxlength="40" autocomplete="off">
+        <label for="quick-people">Быстрая скупка</label>
+        <input type="number" id="quick-people" placeholder="чел." min="0" step="1">
       </div>
 
       <div class="card-header" style="margin-top:0;padding-top:0;border:none;margin-bottom:16px;">
@@ -1240,6 +1392,42 @@
       <div class="actions">
         <button class="btn" id="export-btn">Выгрузить отчёт</button>
         <button class="btn danger chief-only" id="clear-history-btn" style="display:none">Очистить журнал</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="view admin-only" id="view-salary" style="display:none">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Зарплата</h2>
+        <span class="card-meta" id="salary-count">—</span>
+      </div>
+
+      <div class="salary-rules">
+        Части монстров: до 1000 шт. = 5 гильз, выше 1000 шт. = 10 гильз ·
+        Жемчуг: до 500 гильз = 5 гильз, выше 500 гильз = 10 гильз ·
+        Быстрая скупка: 5 гильз за человека
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card"><span class="stat-label">Всего зарплата</span><div class="stat-value"><span id="salary-total">0</span><span class="unit-small">гильз</span></div></div>
+        <div class="stat-card"><span class="stat-label">Покупателей</span><div class="stat-value" id="salary-buyers">0</div></div>
+        <div class="stat-card"><span class="stat-label">Продаж</span><div class="stat-value" id="salary-sales">0</div></div>
+        <div class="stat-card"><span class="stat-label">Быстрая скупка</span><div class="stat-value"><span id="salary-fast">0</span><span class="unit-small">чел.</span></div></div>
+      </div>
+
+      <div class="salary-grid" id="salary-grid">
+        <div class="empty">Пока нет данных для зарплаты</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">ТОП покупателей</h2>
+        <span class="card-meta">по сумме зарплаты</span>
+      </div>
+      <div class="top-list" id="buyers-top">
+        <div class="empty">Пока нет продаж</div>
       </div>
     </div>
   </div>
@@ -1561,6 +1749,7 @@ function enterAdminMode() {
 function switchView(name) {
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.view === name));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === `view-${name}`));
+  if (name === 'salary') renderSalary();
   if (name === 'admins') renderAdmins();
 }
 document.querySelectorAll('.nav-tab').forEach(t => {
@@ -1646,6 +1835,7 @@ $('save-btn').addEventListener('click', async () => {
   if (state.total === 0) { showToast('Нечего продавать', true); return; }
 
   const sellerName = ($('seller-name').value || '').trim();
+  const quickPeople = Math.max(0, Math.floor(parseInt($('quick-people').value) || 0));
   const bank = calcBankData(state);
 
   const entry = {
@@ -1653,6 +1843,7 @@ $('save-btn').addEventListener('click', async () => {
     date: new Date().toISOString(),
     buyer: user.name, buyerLogin: user.login,
     seller: sellerName || null,
+    quickBuyPeople: quickPeople,
     items: {
       partsBreakdown: { ...state.partsBreakdown },
       algaeBreakdown: { ...state.algaeBreakdown },
@@ -1672,17 +1863,20 @@ $('save-btn').addEventListener('click', async () => {
   history.unshift(entry);
   const ok = await saveHistory();
   renderHistory();
+  renderSalary();
 
   if (ok) {
     partInputs.forEach(el => el.value = '');
     algaeInputs.forEach(el => el.value = '');
     Object.values(pearlInputs).forEach(el => el.value = '');
+    $('quick-people').value = '';
     updateAll();
     const s = sellerName ? ` от ${sellerName}` : '';
     showToast(`Записано · ${state.total} гильз${s}`);
   } else {
     history.shift();
     renderHistory();
+    renderSalary();
   }
 });
 
@@ -1691,6 +1885,7 @@ $('clear-btn').addEventListener('click', () => {
   algaeInputs.forEach(el => el.value = '');
   Object.values(pearlInputs).forEach(el => el.value = '');
   const s = $('seller-name'); if (s) s.value = '';
+  const q = $('quick-people'); if (q) q.value = '';
   updateAll();
 });
 
@@ -1705,6 +1900,7 @@ $('clear-history-btn').addEventListener('click', async () => {
   if (!ok) { history = backup; showToast('Не удалось очистить', true); }
   else showToast('Журнал очищен');
   renderHistory();
+  renderSalary();
 });
 
 $('export-btn').addEventListener('click', () => {
@@ -1938,6 +2134,45 @@ function formatDate(iso) {
   return `${pad(d.getDate())}.${pad(d.getMonth()+1)} · ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
+function escapeHTML(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[ch]));
+}
+
+function getEntryQuickPeople(entry) {
+  if (Number.isFinite(Number(entry.quickBuyPeople))) {
+    return Math.max(0, Math.floor(Number(entry.quickBuyPeople)));
+  }
+  return (!entry.seller || !String(entry.seller).trim()) ? 1 : 0;
+}
+
+function calcEntrySalary(entry) {
+  const items = entry.items || {};
+  const earnings = entry.earnings || {};
+  const partsSold = Number(items.partsSold || 0);
+  const pearlTotal = Number(earnings.white || 0) + Number(earnings.black || 0) + Number(earnings.gold || 0);
+  const quickPeople = getEntryQuickPeople(entry);
+  const partsPay = partsSold > 0 ? (partsSold > 1000 ? 10 : 5) : 0;
+  const pearlPay = pearlTotal > 0 ? (pearlTotal > 500 ? 10 : 5) : 0;
+  const quickPay = quickPeople * 5;
+  return { partsPay, pearlPay, quickPay, quickPeople, total: partsPay + pearlPay + quickPay };
+}
+
+function getBuyerKey(entry) {
+  return entry.buyerLogin || entry.buyer || 'unknown';
+}
+
+function getBuyerName(entry) {
+  if (entry.buyer && String(entry.buyer).trim()) return entry.buyer;
+  const admin = admins.find(a => a.login === entry.buyerLogin);
+  return admin ? admin.name : 'Без имени';
+}
+
 let filterSeller = '__all__';
 let filterBuyer  = '__all__';
 
@@ -1979,6 +2214,32 @@ function filterHistory() {
     if (filterBuyer !== '__all__' && (e.buyer || '').trim() !== filterBuyer) return false;
     return true;
   });
+}
+
+async function editHistorySeller(id) {
+  const idx = history.findIndex(e => e.id === id);
+  if (idx === -1) return;
+
+  const current = history[idx].seller || '';
+  const next = prompt('Имя продавца в журнале:', current);
+  if (next === null) return;
+
+  const clean = next.trim();
+  const backup = history.slice();
+  history[idx] = { ...history[idx], seller: clean || null };
+
+  renderHistory();
+  renderSalary();
+
+  const ok = await saveHistory();
+  if (!ok) {
+    history = backup;
+    renderHistory();
+    renderSalary();
+    return;
+  }
+
+  showToast(clean ? `Имя обновлено: ${clean}` : 'Имя очищено');
 }
 
 function renderHistory() {
@@ -2028,12 +2289,16 @@ function renderHistory() {
     if (e.items.gold  > 0) parts.push(`зол.жем: ${e.items.gold}`);
 
     const itemsStr = parts.join(' · ') || '—';
-    const seller = e.seller && e.seller.trim()
-      ? `<span class="history-seller">${e.seller}</span>`
+    const sellerText = e.seller && e.seller.trim();
+    const seller = sellerText
+      ? `<span class="history-seller">${escapeHTML(e.seller)}</span>`
       : `<span class="history-seller anon">без имени</span>`;
-    const buyerStr = e.buyer ? `<span class="history-buyer">${e.buyer}</span>` : '';
+    const buyerStr = e.buyer ? `<span class="history-buyer">${escapeHTML(e.buyer)}</span>` : '';
     const bankStr = (e.bankFee > 0) ? `<span class="history-bank">в банк <strong>${e.bankFee}</strong></span>` : '';
-    const delBtn = canDelete ? `<button class="history-delete" data-id="${e.id}" title="Удалить">✕</button>` : `<span></span>`;
+    const quickPeople = getEntryQuickPeople(e);
+    const quickStr = quickPeople > 0 ? `<span class="history-bank">быстрая скупка <strong>${quickPeople}</strong> чел.</span>` : '';
+    const editBtn = `<button class="history-action history-edit" data-id="${e.id}" title="Редактировать имя">✎</button>`;
+    const delBtn = canDelete ? `<button class="history-action history-delete" data-id="${e.id}" title="Удалить">✕</button>` : '';
 
     return `
       <div class="history-item">
@@ -2042,12 +2307,19 @@ function renderHistory() {
           ${buyerStr}
           <span class="history-time">${formatDate(e.date)}</span>
         </div>
-        <div class="history-items">${itemsStr}${bankStr}</div>
+        <div class="history-items">${itemsStr}${bankStr}${quickStr}</div>
         <div class="history-total">${e.total}<span class="unit">гильз</span></div>
-        ${delBtn}
+        <div class="history-actions">${editBtn}${delBtn}</div>
       </div>
     `;
   }).join('');
+
+  container.querySelectorAll('.history-edit').forEach(btn => {
+    btn.addEventListener('click', async (ev) => {
+      const id = parseInt(ev.currentTarget.dataset.id);
+      await editHistorySeller(id);
+    });
+  });
 
   if (canDelete) {
     container.querySelectorAll('.history-delete').forEach(btn => {
@@ -2059,9 +2331,118 @@ function renderHistory() {
         const ok = await saveHistory();
         if (!ok) history = backup;
         renderHistory();
+        renderSalary();
       });
     });
   }
+}
+
+function buildSalaryRows() {
+  const rows = new Map();
+  admins.forEach(a => {
+    rows.set(a.login, {
+      login: a.login,
+      name: a.name,
+      sales: 0,
+      turnover: 0,
+      parts: 0,
+      pearls: 0,
+      quick: 0,
+      quickPeople: 0,
+      total: 0
+    });
+  });
+
+  history.forEach(entry => {
+    const key = getBuyerKey(entry);
+    let row = rows.get(key);
+    if (!row) {
+      const matched = admins.find(a => a.login === entry.buyerLogin || a.login === entry.buyer || a.name === entry.buyer);
+      row = matched ? rows.get(matched.login) : null;
+    }
+    if (!row) {
+      row = {
+        login: key,
+        name: getBuyerName(entry),
+        sales: 0,
+        turnover: 0,
+        parts: 0,
+        pearls: 0,
+        quick: 0,
+        quickPeople: 0,
+        total: 0
+      };
+      rows.set(key, row);
+    }
+
+    const pay = calcEntrySalary(entry);
+    row.sales += 1;
+    row.turnover += Number(entry.total || 0);
+    row.parts += pay.partsPay;
+    row.pearls += pay.pearlPay;
+    row.quick += pay.quickPay;
+    row.quickPeople += pay.quickPeople;
+    row.total += pay.total;
+  });
+
+  return Array.from(rows.values()).sort((a, b) => b.total - a.total || b.sales - a.sales || a.name.localeCompare(b.name, 'ru'));
+}
+
+function renderSalary() {
+  const grid = $('salary-grid');
+  const top = $('buyers-top');
+  if (!grid || !top) return;
+
+  const user = getCurrentUser();
+  const isChief = user && user.role === 'chief';
+  const rows = buildSalaryRows();
+  const visibleRows = isChief
+    ? rows
+    : rows.filter(r => user && (r.login === user.login || r.name === user.name));
+  const activeRows = visibleRows.filter(r => r.sales > 0 || r.total > 0);
+  const totalSalary = visibleRows.reduce((sum, r) => sum + r.total, 0);
+  const totalSales = visibleRows.reduce((sum, r) => sum + r.sales, 0);
+  const totalQuickPeople = visibleRows.reduce((sum, r) => sum + r.quickPeople, 0);
+
+  $('salary-total').textContent = totalSalary;
+  $('salary-buyers').textContent = activeRows.length;
+  $('salary-sales').textContent = totalSales;
+  $('salary-fast').textContent = totalQuickPeople;
+  $('salary-count').textContent = totalSalary ? `${totalSalary} гильз` : (isChief ? '—' : 'только моя');
+
+  if (visibleRows.length === 0) {
+    grid.innerHTML = `<div class="empty">Пока нет данных для зарплаты</div>`;
+    top.innerHTML = `<div class="empty">Пока нет продаж</div>`;
+    return;
+  }
+
+  grid.innerHTML = visibleRows.map(row => `
+    <div class="salary-card">
+      <div class="salary-card-head">
+        <div>
+          <div class="salary-name">${escapeHTML(row.name)}</div>
+          <div class="salary-login">${escapeHTML(row.login)}</div>
+        </div>
+        <div class="salary-total">${row.total}<span class="unit-small">гильз</span></div>
+      </div>
+      <div class="salary-lines">
+        <div class="salary-line"><span class="salary-label">Части</span><span class="salary-value">${row.parts}</span></div>
+        <div class="salary-line"><span class="salary-label">Жемчуг</span><span class="salary-value">${row.pearls}</span></div>
+        <div class="salary-line"><span class="salary-label">Быстрая</span><span class="salary-value">${row.quick}</span></div>
+        <div class="salary-line"><span class="salary-label">Продаж</span><span class="salary-value">${row.sales}</span></div>
+      </div>
+    </div>
+  `).join('');
+
+  const topRows = rows.filter(r => r.sales > 0 || r.total > 0).slice(0, 10);
+  top.innerHTML = topRows.length ? topRows.map((row, index) => `
+    <div class="top-row">
+      <div class="top-rank">${index + 1}</div>
+      <div class="top-name">${escapeHTML(row.name)}</div>
+      <div class="top-meta">${row.sales} продаж</div>
+      <div class="top-money">${row.total} гильз</div>
+    </div>
+  `).join('') : `<div class="empty">Пока нет продаж</div>`;
 }
 
 $('seller-filter-select').addEventListener('change', (e) => { filterSeller = e.target.value; renderHistory(); });
@@ -2249,6 +2630,7 @@ async function initAdminApp() {
   await loadHistory();
   updateAll();
   renderHistory();
+  renderSalary();
 }
 
 async function boot() {
