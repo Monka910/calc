@@ -1,5 +1,43 @@
 [
   {
+    "id": 1778530067195,
+    "date": "2026-05-11T20:07:47.195Z",
+    "buyer": "Ed",
+    "buyerLogin": "Ed",
+    "seller": "Ненси",
+    "quickBuyPeople": 0,
+    "items": {
+      "partsBreakdown": {
+        "eye": 94,
+        "gland": 100,
+        "scale": 82,
+        "saliva": 88
+      },
+      "algaeBreakdown": {
+        "red": 0,
+        "yellow": 0,
+        "blue": 0
+      },
+      "partsSold": 364,
+      "partsRemainder": 0,
+      "algaeSold": 0,
+      "algaeRemainder": 0,
+      "white": 33,
+      "black": 13,
+      "gold": 2
+    },
+    "earnings": {
+      "parts": 91,
+      "algae": 0,
+      "white": 99,
+      "black": 78,
+      "gold": 16
+    },
+    "bankPays": 362,
+    "bankFee": 78,
+    "total": 284
+  },
+  {
     "id": 1778529645469,
     "date": "2026-05-11T20:00:45.469Z",
     "buyer": "Ed",
