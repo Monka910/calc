@@ -1,5 +1,18 @@
 [
   {
+    "id": 1779632798292,
+    "date": "2026-05-24T14:26:38.292Z",
+    "action": "sale_deleted",
+    "actor": "Monka",
+    "actorLogin": "Monka",
+    "details": {
+      "saleId": 1779632758587,
+      "seller": "хуй",
+      "buyer": "Monka",
+      "total": 72
+    }
+  },
+  {
     "id": 1779632759770,
     "date": "2026-05-24T14:25:59.770Z",
     "action": "sale_created",
