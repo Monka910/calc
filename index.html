@@ -28,6 +28,33 @@
     --grid: 32px;
   }
 
+  body[data-theme="dark"] {
+    --bg: #0f1115;
+    --bg-soft: #151820;
+    --ink: #f5f7fb;
+    --ink-80: #e4e7ee;
+    --ink-60: #a9b0bd;
+    --ink-40: #737b8a;
+    --ink-20: #3b4250;
+    --ink-10: #252b36;
+    --ink-05: #171b23;
+    --danger: #ff6b6b;
+  }
+
+  body[data-theme="dark"] .topbar {
+    background: rgba(15,17,21,0.88);
+  }
+
+  body[data-theme="dark"] .bg-grid {
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px);
+  }
+
+  body[data-theme="dark"] .ray {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
 
@@ -150,20 +177,27 @@
   }
   .brand-text .sep { color: var(--ink-40); margin: 0 6px; }
 
-  .topbar-actions { display: flex; align-items: center; gap: 8px; }
+  .topbar-actions { display: flex; align-items: center; gap: 8px; min-width: 0; }
+
+  .topbar-actions > * {
+    flex: 0 0 auto;
+  }
 
   .nav-tabs {
-    display: none;
+    display: inline-flex;
     gap: 0;
     margin-right: 8px;
     padding: 2px;
     background: var(--ink-05);
     border-radius: 999px;
+    align-items: center;
+    height: 38px;
   }
   .nav-tabs.visible { display: inline-flex; }
 
   .nav-tab {
-    padding: 6px 14px;
+    height: 34px;
+    padding: 0 14px;
     font-family: var(--f-mono);
     font-size: 12px;
     font-weight: 500;
@@ -174,6 +208,9 @@
     cursor: pointer;
     transition: all 0.2s;
     letter-spacing: 0.02em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
   .nav-tab:hover { color: var(--ink); }
   .nav-tab.active {
@@ -182,10 +219,11 @@
   }
 
   .sync-badge {
-    display: none;
+    display: inline-flex;
     align-items: center;
     gap: 7px;
-    padding: 6px 11px;
+    min-height: 38px;
+    padding: 0 13px;
     background: var(--ink-05);
     border: 1px solid var(--ink-10);
     border-radius: 999px;
@@ -203,7 +241,8 @@
   @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .3; transform: scale(1.5); } }
 
   .auth-btn {
-    padding: 7px 16px;
+    height: 38px;
+    padding: 0 16px;
     font-family: var(--f-mono);
     font-size: 12px;
     font-weight: 500;
@@ -218,10 +257,124 @@
     gap: 7px;
     letter-spacing: 0.03em;
     text-transform: uppercase;
+    justify-content: center;
+    line-height: 1.1;
+  }
+  .auth-btn #auth-btn-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
   .auth-btn:hover { background: var(--ink); color: var(--bg); }
   .auth-btn.authed { background: var(--ink); color: var(--bg); }
   .auth-btn.authed:hover { background: var(--ink-80); }
+
+  .theme-btn {
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid var(--ink-20);
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--ink);
+    cursor: pointer;
+    font-size: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.18s;
+  }
+  .theme-btn:hover { border-color: var(--ink); background: var(--ink); color: var(--bg); }
+  .theme-btn::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--ink);
+    display: block;
+  }
+  body[data-theme="dark"] .theme-btn::before {
+    background: var(--bg);
+    border: 1px solid var(--ink-20);
+  }
+
+  .sticker-btn {
+    height: 38px;
+    padding: 0 14px;
+    font-family: var(--f-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--ink-20);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .sticker-btn:hover { border-color: var(--ink); background: var(--ink); color: var(--bg); }
+
+  .admin-sticker {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    vertical-align: middle;
+    flex: 0 0 auto;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.18));
+  }
+  .admin-sticker.sm { width: 20px; height: 20px; }
+  .admin-sticker.lg { width: 32px; height: 32px; }
+
+  .name-with-sticker {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+    line-height: 1;
+  }
+
+  .auth-btn .name-with-sticker {
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .auth-btn .role-pill {
+    margin-left: 0;
+    line-height: 1;
+  }
+
+  .sticker-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .sticker-choice {
+    aspect-ratio: 1;
+    padding: 10px;
+    border: 1px solid var(--ink-10);
+    border-radius: var(--radius);
+    background: var(--ink-05);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .sticker-choice:hover,
+  .sticker-choice.active {
+    border-color: var(--ink);
+    background: var(--bg);
+  }
+  .sticker-choice img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
 
   .role-pill {
     font-size: 9px;
@@ -554,6 +707,22 @@
     font-weight: 400;
     letter-spacing: 0.04em;
     text-transform: uppercase;
+  }
+
+  body[data-theme="dark"] .total-card {
+    background: #f1f4fa;
+    color: #0f1115;
+  }
+
+  body[data-theme="dark"] .total-card::before {
+    background-image:
+      linear-gradient(to right, rgba(15,17,21,0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(15,17,21,0.05) 1px, transparent 1px);
+  }
+
+  body[data-theme="dark"] .total-label,
+  body[data-theme="dark"] .total-value .unit {
+    color: rgba(15,17,21,0.45);
   }
 
   .actions {
@@ -912,6 +1081,49 @@
     font-variant-numeric: tabular-nums;
   }
 
+  .audit-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .audit-item {
+    display: grid;
+    grid-template-columns: 180px 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 16px;
+    border: 1px solid var(--ink-10);
+    border-radius: var(--radius);
+    background: var(--bg);
+  }
+  .audit-time {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-40);
+    font-variant-numeric: tabular-nums;
+  }
+  .audit-action {
+    font-family: var(--f-display);
+    font-size: 18px;
+    color: var(--ink);
+    line-height: 1.15;
+  }
+  .audit-details {
+    margin-top: 4px;
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-60);
+    line-height: 1.45;
+  }
+  .audit-actor {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-60);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
   .empty {
     text-align: center;
     padding: 60px 20px;
@@ -1179,6 +1391,9 @@
     .brand-text .sep { display: none; }
     .brand-text span:last-child { display: none; }
     .nav-tab { font-size: 11px; padding: 6px 10px; }
+    .sticker-grid { grid-template-columns: repeat(3, 1fr); }
+    .audit-item { grid-template-columns: 1fr; gap: 8px; }
+    .audit-actor { white-space: normal; }
   }
 </style>
 </head>
@@ -1233,6 +1448,17 @@
   </div>
 </div>
 
+<div class="overlay" id="sticker-modal" style="display:none">
+  <div class="modal-box">
+    <button type="button" class="modal-close" id="sticker-modal-close" title="Закрыть">✕</button>
+    <div class="modal-title">Мой стикер</div>
+    <div class="modal-sub">Выбери маленькую отметку рядом с ником</div>
+    <div class="sticker-grid" id="sticker-grid"></div>
+    <button type="button" class="btn ghost" id="sticker-clear-btn" style="width:100%;justify-content:center">Убрать стикер</button>
+    <div class="modal-hint">Стикер будет виден в журнале, зарплате, логах и списке админов</div>
+  </div>
+</div>
+
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand">
@@ -1244,6 +1470,7 @@
         <button class="nav-tab active" data-view="calc">Калькулятор</button>
         <button class="nav-tab" data-view="journal">Журнал</button>
         <button class="nav-tab" data-view="salary">Зарплата</button>
+        <button class="nav-tab" data-view="audit">Логи</button>
         <button class="nav-tab chief-only" data-view="admins" style="display:none">Админы</button>
       </div>
       <div class="sync-badge" id="sync-badge">
@@ -1253,6 +1480,8 @@
       <button class="auth-btn" id="auth-btn">
         <span id="auth-btn-text">Вход</span>
       </button>
+      <button class="sticker-btn admin-only" id="sticker-open-btn" type="button" style="display:none">Стикер</button>
+      <button class="theme-btn" id="theme-toggle" type="button" title="Сменить тему">◐</button>
     </div>
   </div>
 </header>
@@ -1432,6 +1661,25 @@
     </div>
   </div>
 
+  <div class="view admin-only" id="view-audit" style="display:none">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Логи</h2>
+        <span class="card-meta" id="audit-count">—</span>
+      </div>
+
+      <div class="filter-bar">
+        <span class="filter-info" style="margin-left:0;color:var(--ink-60)">
+          Последние действия: продажи, правки журнала, удаление записей и изменения админов
+        </span>
+      </div>
+
+      <div class="audit-list" id="audit-list">
+        <div class="empty">Пока нет логов</div>
+      </div>
+    </div>
+  </div>
+
   <div class="view chief-only" id="view-admins" style="display:none">
     <div class="card">
       <div class="card-header">
@@ -1466,7 +1714,8 @@ const CONFIG = {
     repo:   'calc',
     branch: 'main',
     pathLog:    'log.json',
-    pathAdmins: 'admins.json'
+    pathAdmins: 'admins.json',
+    pathAudit:  'audit.json'
   },
 
   bootstrapAdmins: [
@@ -1483,6 +1732,17 @@ const CONFIG = {
   }
 };
 
+const STICKERS = [
+  'stickers/99/ChatGPT_Image_24_._2026_._16_55_25_1-Photoroom.png',
+  'stickers/99/ChatGPT_Image_24_._2026_._16_55_25_2-Photoroom.png',
+  'stickers/99/ChatGPT_Image_24_._2026_._16_55_25_3-Photoroom.png',
+  'stickers/99/ChatGPT_Image_24_._2026_._16_55_26_4-Photoroom.png',
+  'stickers/99/ChatGPT_Image_24_._2026_._16_55_26_5-Photoroom.png',
+  'stickers/99/ChatGPT_Image_24_._2026_._16_55_26_6-Photoroom.png',
+  'stickers/99/ChatGPT_Image_24_._2026_._16_55_27_7-Photoroom.png',
+  'stickers/99/ChatGPT_Image_24_._2026_._16_55_27_8-Photoroom.png'
+];
+
 async function sha256(text) {
   const buf = new TextEncoder().encode(text);
   const hash = await crypto.subtle.digest('SHA-256', buf);
@@ -1490,12 +1750,15 @@ async function sha256(text) {
 }
 
 const AUTH_KEY = 'calc-current-user-v3';
+const THEME_KEY = 'calc-theme-v1';
 const $ = (id) => document.getElementById(id);
 
 let admins = [];      
 let adminsSha = null; 
 let history = [];
 let historySha = null;
+let audit = [];
+let auditSha = null;
 
 function getCurrentUser() {
   try {
@@ -1504,8 +1767,22 @@ function getCurrentUser() {
     const data = JSON.parse(raw);
     const admin = admins.find(a => a.login === data.login);
     if (!admin) return null;
-    return { login: admin.login, name: admin.name, role: admin.role };
+    return { login: admin.login, name: admin.name, role: admin.role, sticker: admin.sticker || '' };
   } catch(e) { return null; }
+}
+
+function getAdminSticker(login, name) {
+  const admin = admins.find(a => (login && a.login === login) || (name && a.name === name));
+  return admin && admin.sticker ? admin.sticker : '';
+}
+
+function renderSticker(src, size = 'sm') {
+  return src ? `<img class="admin-sticker ${size}" src="${escapeHTML(src)}" alt="">` : '';
+}
+
+function renderNameWithSticker(name, login, size = 'sm') {
+  const sticker = getAdminSticker(login, name);
+  return `<span class="name-with-sticker">${renderSticker(sticker, size)}<span>${escapeHTML(name || '—')}</span></span>`;
 }
 
 function setCurrentUser(user) {
@@ -1541,6 +1818,23 @@ function setSyncStatus(status, text) {
   if (status) badge.classList.add(status);
   $('sync-text').textContent = text;
 }
+
+function applyTheme(theme) {
+  const next = theme === 'dark' ? 'dark' : 'light';
+  document.body.dataset.theme = next;
+  localStorage.setItem(THEME_KEY, next);
+  const btn = $('theme-toggle');
+  if (btn) btn.title = next === 'dark' ? 'Светлая тема' : 'Тёмная тема';
+}
+
+function initTheme() {
+  applyTheme(localStorage.getItem(THEME_KEY) || 'light');
+}
+
+$('theme-toggle').addEventListener('click', () => {
+  const current = document.body.dataset.theme === 'dark' ? 'dark' : 'light';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+});
 
 async function ghLoad(path) {
   const url = `https://api.github.com/repos/${CONFIG.github.owner}/${CONFIG.github.repo}/contents/${path}?ref=${CONFIG.github.branch}`;
@@ -1677,6 +1971,52 @@ async function saveHistory() {
   }
 }
 
+async function loadAudit() {
+  try {
+    const { data, sha } = await ghLoad(CONFIG.github.pathAudit);
+    audit = Array.isArray(data) ? data : [];
+    auditSha = sha;
+  } catch(e) {
+    console.error('loadAudit err:', e);
+    try {
+      const raw = localStorage.getItem('audit-log-backup');
+      if (raw) audit = JSON.parse(raw);
+    } catch(_){}
+  }
+}
+
+async function saveAudit() {
+  try { localStorage.setItem('audit-log-backup', JSON.stringify(audit)); } catch(_){}
+  try {
+    const { sha } = await ghSave(CONFIG.github.pathAudit, audit, auditSha, 'Update audit log');
+    auditSha = sha;
+    return true;
+  } catch(e) {
+    if (e.conflict) {
+      await loadAudit();
+      return false;
+    }
+    console.error('saveAudit err:', e);
+    return false;
+  }
+}
+
+async function recordAudit(action, details = {}) {
+  const user = getCurrentUser();
+  const entry = {
+    id: Date.now(),
+    date: new Date().toISOString(),
+    action,
+    actor: user ? user.name : 'system',
+    actorLogin: user ? user.login : null,
+    details
+  };
+  audit.unshift(entry);
+  audit = audit.slice(0, 500);
+  renderAudit();
+  await saveAudit();
+}
+
 $('auth-btn').addEventListener('click', () => {
   if (getCurrentUser()) {
     if (confirm('Выйти из админ-режима?')) logout();
@@ -1689,6 +2029,7 @@ document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
   if ($('lock-overlay').style.display === 'flex') closeLoginModal();
   if ($('admin-modal').style.display === 'flex') closeAdminModal();
+  if ($('sticker-modal').style.display === 'flex') closeStickerModal();
 });
 
 function openLoginModal() {
@@ -1736,8 +2077,8 @@ function enterAdminMode() {
     el.style.display = (user.role === 'chief') ? '' : 'none';
   });
 
-  $('buyer-name').textContent = user.name;
-  $('auth-btn-text').innerHTML = `${user.name} <span class="role-pill">${user.role === 'chief' ? 'главный' : 'админ'}</span>`;
+  $('buyer-name').innerHTML = renderNameWithSticker(user.name, user.login, 'sm');
+  $('auth-btn-text').innerHTML = `${renderNameWithSticker(user.name, user.login, 'sm')} <span class="role-pill">${user.role === 'chief' ? 'главный' : 'админ'}</span>`;
   $('auth-btn').classList.add('authed');
 
   $('sync-badge').style.display = 'inline-flex';
@@ -1750,6 +2091,7 @@ function switchView(name) {
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.view === name));
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === `view-${name}`));
   if (name === 'salary') renderSalary();
+  if (name === 'audit') renderAudit();
   if (name === 'admins') renderAdmins();
 }
 document.querySelectorAll('.nav-tab').forEach(t => {
@@ -1873,6 +2215,13 @@ $('save-btn').addEventListener('click', async () => {
     updateAll();
     const s = sellerName ? ` от ${sellerName}` : '';
     showToast(`Записано · ${state.total} гильз${s}`);
+    await recordAudit('sale_created', {
+      saleId: entry.id,
+      seller: entry.seller,
+      buyer: entry.buyer,
+      total: entry.total,
+      quickBuyPeople: entry.quickBuyPeople || 0
+    });
   } else {
     history.shift();
     renderHistory();
@@ -1895,10 +2244,14 @@ $('clear-history-btn').addEventListener('click', async () => {
   if (history.length === 0) return;
   if (!confirm(`Стереть все ${history.length} записей? Необратимо.`)) return;
   const backup = history.slice();
+  const clearedCount = history.length;
   history = [];
   const ok = await saveHistory();
   if (!ok) { history = backup; showToast('Не удалось очистить', true); }
-  else showToast('Журнал очищен');
+  else {
+    showToast('Журнал очищен');
+    await recordAudit('history_cleared', { count: clearedCount });
+  }
   renderHistory();
   renderSalary();
 });
@@ -2240,6 +2593,11 @@ async function editHistorySeller(id) {
   }
 
   showToast(clean ? `Имя обновлено: ${clean}` : 'Имя очищено');
+  await recordAudit('seller_edited', {
+    saleId: history[idx].id,
+    before: current || null,
+    after: clean || null
+  });
 }
 
 function renderHistory() {
@@ -2293,7 +2651,7 @@ function renderHistory() {
     const seller = sellerText
       ? `<span class="history-seller">${escapeHTML(e.seller)}</span>`
       : `<span class="history-seller anon">без имени</span>`;
-    const buyerStr = e.buyer ? `<span class="history-buyer">${escapeHTML(e.buyer)}</span>` : '';
+    const buyerStr = e.buyer ? `<span class="history-buyer">${renderNameWithSticker(e.buyer, e.buyerLogin, 'sm')}</span>` : '';
     const bankStr = (e.bankFee > 0) ? `<span class="history-bank">в банк <strong>${e.bankFee}</strong></span>` : '';
     const quickPeople = getEntryQuickPeople(e);
     const quickStr = quickPeople > 0 ? `<span class="history-bank">быстрая скупка <strong>${quickPeople}</strong> чел.</span>` : '';
@@ -2327,9 +2685,16 @@ function renderHistory() {
         const id = parseInt(ev.currentTarget.dataset.id);
         if (!confirm('Удалить эту запись?')) return;
         const backup = history.slice();
+        const removed = history.find(e => e.id === id);
         history = history.filter(e => e.id !== id);
         const ok = await saveHistory();
         if (!ok) history = backup;
+        else if (removed) await recordAudit('sale_deleted', {
+          saleId: removed.id,
+          seller: removed.seller,
+          buyer: removed.buyer,
+          total: removed.total
+        });
         renderHistory();
         renderSalary();
       });
@@ -2420,7 +2785,7 @@ function renderSalary() {
     <div class="salary-card">
       <div class="salary-card-head">
         <div>
-          <div class="salary-name">${escapeHTML(row.name)}</div>
+          <div class="salary-name">${renderNameWithSticker(row.name, row.login, 'lg')}</div>
           <div class="salary-login">${escapeHTML(row.login)}</div>
         </div>
         <div class="salary-total">${row.total}<span class="unit-small">гильз</span></div>
@@ -2438,11 +2803,60 @@ function renderSalary() {
   top.innerHTML = topRows.length ? topRows.map((row, index) => `
     <div class="top-row">
       <div class="top-rank">${index + 1}</div>
-      <div class="top-name">${escapeHTML(row.name)}</div>
+      <div class="top-name">${renderNameWithSticker(row.name, row.login, 'sm')}</div>
       <div class="top-meta">${row.sales} продаж</div>
       <div class="top-money">${row.total} гильз</div>
     </div>
   `).join('') : `<div class="empty">Пока нет продаж</div>`;
+}
+
+function auditActionLabel(action) {
+  const labels = {
+    sale_created: 'Продажа записана',
+    seller_edited: 'Имя продавца изменено',
+    sale_deleted: 'Продажа удалена',
+    history_cleared: 'Журнал очищен',
+    admin_created: 'Админ создан',
+    admin_deleted: 'Админ удалён',
+    admin_password_changed: 'Пароль изменён',
+    sticker_changed: 'Стикер изменён'
+  };
+  return labels[action] || action;
+}
+
+function auditDetailsText(details = {}) {
+  const bits = [];
+  if (details.saleId) bits.push(`#${details.saleId}`);
+  if (details.seller !== undefined) bits.push(`продавец: ${details.seller || 'без имени'}`);
+  if (details.buyer) bits.push(`покупатель: ${details.buyer}`);
+  if (details.total !== undefined) bits.push(`сумма: ${details.total}`);
+  if (details.quickBuyPeople) bits.push(`быстрая: ${details.quickBuyPeople} чел.`);
+  if (details.before !== undefined || details.after !== undefined) bits.push(`${details.before || 'без имени'} → ${details.after || 'без имени'}`);
+  if (details.login) bits.push(`@${details.login}`);
+  if (details.name) bits.push(details.name);
+  if (details.count !== undefined) bits.push(`записей: ${details.count}`);
+  if (details.sticker !== undefined) bits.push(details.sticker ? 'стикер выбран' : 'стикер убран');
+  return bits.join(' · ') || '—';
+}
+
+function renderAudit() {
+  const list = $('audit-list');
+  if (!list) return;
+  $('audit-count').textContent = audit.length ? `${audit.length} событий` : '—';
+  if (audit.length === 0) {
+    list.innerHTML = `<div class="empty">Пока нет логов</div>`;
+    return;
+  }
+  list.innerHTML = audit.slice(0, 100).map(entry => `
+    <div class="audit-item">
+      <div class="audit-time">${formatDate(entry.date)}</div>
+      <div>
+        <div class="audit-action">${escapeHTML(auditActionLabel(entry.action))}</div>
+        <div class="audit-details">${escapeHTML(auditDetailsText(entry.details))}</div>
+      </div>
+      <div class="audit-actor">${renderNameWithSticker(entry.actor || 'system', entry.actorLogin, 'sm')}</div>
+    </div>
+  `).join('');
 }
 
 $('seller-filter-select').addEventListener('change', (e) => { filterSeller = e.target.value; renderHistory(); });
@@ -2482,7 +2896,7 @@ function renderAdmins() {
       <div class="admin-card ${isMe ? 'is-me' : ''}" data-login="${a.login}">
         <div class="admin-card-head">
           <div>
-            <div class="admin-name">${a.name}</div>
+            <div class="admin-name">${renderNameWithSticker(a.name, a.login, 'lg')}</div>
             <div class="admin-login">${a.login}</div>
           </div>
           <span class="admin-role ${a.role}">${a.role === 'chief' ? 'главный' : 'админ'}</span>
@@ -2551,6 +2965,7 @@ async function deleteAdmin(login) {
   if (!ok) { admins = backup; renderAdmins(); return; }
   renderAdmins();
   showToast(`${admin.name} удалён`);
+  await recordAudit('admin_deleted', { login: admin.login, name: admin.name });
 }
 
 async function changeAdminPassword(login) {
@@ -2568,11 +2983,16 @@ async function changeAdminPassword(login) {
   const ok = await saveAdmins();
   if (!ok) { admins = backup; return; }
   showToast(`Пароль для ${admin.name} обновлён`);
+  await recordAudit('admin_password_changed', { login: admin.login, name: admin.name });
 }
 
 $('admin-add-btn').addEventListener('click', () => openAdminModal());
 $('admin-modal-close').addEventListener('click', closeAdminModal);
 $('admin-modal').addEventListener('click', (e) => { if (e.target.id === 'admin-modal') closeAdminModal(); });
+$('sticker-open-btn').addEventListener('click', openStickerModal);
+$('sticker-modal-close').addEventListener('click', closeStickerModal);
+$('sticker-modal').addEventListener('click', (e) => { if (e.target.id === 'sticker-modal') closeStickerModal(); });
+$('sticker-clear-btn').addEventListener('click', () => saveMySticker(''));
 
 function openAdminModal() {
   $('admin-modal').style.display = 'flex';
@@ -2585,6 +3005,58 @@ function openAdminModal() {
 }
 function closeAdminModal() {
   $('admin-modal').style.display = 'none';
+}
+
+function openStickerModal() {
+  const user = getCurrentUser();
+  if (!user) return;
+  renderStickerChoices();
+  $('sticker-modal').style.display = 'flex';
+}
+
+function closeStickerModal() {
+  $('sticker-modal').style.display = 'none';
+}
+
+function renderStickerChoices() {
+  const user = getCurrentUser();
+  const current = user ? (user.sticker || '') : '';
+  $('sticker-grid').innerHTML = STICKERS.map(src => `
+    <button type="button" class="sticker-choice ${src === current ? 'active' : ''}" data-src="${escapeHTML(src)}">
+      <img src="${escapeHTML(src)}" alt="">
+    </button>
+  `).join('');
+
+  $('sticker-grid').querySelectorAll('.sticker-choice').forEach(btn => {
+    btn.addEventListener('click', () => saveMySticker(btn.dataset.src));
+  });
+}
+
+async function saveMySticker(src) {
+  const user = getCurrentUser();
+  if (!user) return;
+
+  const backup = admins.slice();
+  admins = admins.map(a => a.login === user.login ? { ...a, sticker: src || '' } : a);
+  const ok = await saveAdmins();
+  if (!ok) {
+    admins = backup;
+    renderStickerChoices();
+    return;
+  }
+
+  closeStickerModal();
+  const nextUser = getCurrentUser();
+  if (nextUser) {
+    $('buyer-name').innerHTML = renderNameWithSticker(nextUser.name, nextUser.login, 'sm');
+    $('auth-btn-text').innerHTML = `${renderNameWithSticker(nextUser.name, nextUser.login, 'sm')} <span class="role-pill">${nextUser.role === 'chief' ? 'главный' : 'админ'}</span>`;
+  }
+  renderHistory();
+  renderSalary();
+  renderAdmins();
+  renderAudit();
+  showToast(src ? 'Стикер сохранён' : 'Стикер убран');
+  await recordAudit('sticker_changed', { login: user.login, name: user.name, sticker: src || null });
 }
 
 $('admin-form').addEventListener('submit', async (e) => {
@@ -2614,6 +3086,7 @@ $('admin-form').addEventListener('submit', async (e) => {
   closeAdminModal();
   renderAdmins();
   showToast(`${name} добавлен`);
+  await recordAudit('admin_created', { login, name, role });
 });
 
 let toastTimer;
@@ -2628,12 +3101,15 @@ function showToast(msg, isError = false) {
 
 async function initAdminApp() {
   await loadHistory();
+  await loadAudit();
   updateAll();
   renderHistory();
   renderSalary();
+  renderAudit();
 }
 
 async function boot() {
+  initTheme();
   updateAll();
 
   await loadAdmins();
