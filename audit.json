@@ -1,5 +1,17 @@
 [
   {
+    "id": 1779631865591,
+    "date": "2026-05-24T14:11:05.591Z",
+    "action": "sticker_changed",
+    "actor": "Monka",
+    "actorLogin": "Monka",
+    "details": {
+      "login": "Monka",
+      "name": "Monka",
+      "sticker": null
+    }
+  },
+  {
     "id": 1779631813032,
     "date": "2026-05-24T14:10:13.032Z",
     "action": "sale_deleted",
