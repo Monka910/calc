@@ -1,5 +1,17 @@
 [
   {
+    "id": 1779631902513,
+    "date": "2026-05-24T14:11:42.513Z",
+    "action": "sticker_changed",
+    "actor": "Monka",
+    "actorLogin": "Monka",
+    "details": {
+      "login": "Monka",
+      "name": "Monka",
+      "sticker": "stickers/99/ChatGPT_Image_24_._2026_._16_55_26_4-Photoroom.png"
+    }
+  },
+  {
     "id": 1779631865591,
     "date": "2026-05-24T14:11:05.591Z",
     "action": "sticker_changed",
