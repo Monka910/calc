@@ -1,5 +1,17 @@
 [
   {
+    "id": 1779634166160,
+    "date": "2026-05-24T14:49:26.160Z",
+    "action": "sticker_changed",
+    "actor": "Синий",
+    "actorLogin": "6o6p3bepb",
+    "details": {
+      "login": "6o6p3bepb",
+      "name": "Синий",
+      "sticker": "stickers/99/ChatGPT_Image_24_._2026_._16_55_27_8-Photoroom.png"
+    }
+  },
+  {
     "id": 1779633254871,
     "date": "2026-05-24T14:34:14.871Z",
     "action": "sticker_changed",
