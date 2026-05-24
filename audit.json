@@ -1,5 +1,19 @@
 [
   {
+    "id": 1779632759770,
+    "date": "2026-05-24T14:25:59.770Z",
+    "action": "sale_created",
+    "actor": "Monka",
+    "actorLogin": "Monka",
+    "details": {
+      "saleId": 1779632758587,
+      "seller": "хуй",
+      "buyer": "Monka",
+      "total": 72,
+      "quickBuyPeople": 0
+    }
+  },
+  {
     "id": 1779632731795,
     "date": "2026-05-24T14:25:31.795Z",
     "action": "sticker_changed",
