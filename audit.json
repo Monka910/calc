@@ -1,5 +1,17 @@
 [
   {
+    "id": 1779632970516,
+    "date": "2026-05-24T14:29:30.516Z",
+    "action": "sticker_changed",
+    "actor": "mura",
+    "actorLogin": "mura",
+    "details": {
+      "login": "mura",
+      "name": "mura",
+      "sticker": "stickers/99/ChatGPT_Image_24_._2026_._16_55_25_3-Photoroom.png"
+    }
+  },
+  {
     "id": 1779632798292,
     "date": "2026-05-24T14:26:38.292Z",
     "action": "sale_deleted",
