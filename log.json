@@ -1,5 +1,43 @@
 [
   {
+    "id": 1780164330789,
+    "date": "2026-05-30T18:05:30.789Z",
+    "buyer": "Ed",
+    "buyerLogin": "Ed",
+    "seller": "Кразар",
+    "quickBuyPeople": 0,
+    "items": {
+      "partsBreakdown": {
+        "eye": 132,
+        "gland": 102,
+        "scale": 138,
+        "saliva": 138
+      },
+      "algaeBreakdown": {
+        "red": 0,
+        "yellow": 0,
+        "blue": 0
+      },
+      "partsSold": 508,
+      "partsRemainder": 2,
+      "algaeSold": 0,
+      "algaeRemainder": 0,
+      "white": 47,
+      "black": 12,
+      "gold": 7
+    },
+    "earnings": {
+      "parts": 127,
+      "algae": 0,
+      "white": 141,
+      "black": 72,
+      "gold": 56
+    },
+    "bankPays": 504,
+    "bankFee": 108,
+    "total": 396
+  },
+  {
     "id": 1780147006247,
     "date": "2026-05-30T13:16:46.247Z",
     "buyer": "mura",
