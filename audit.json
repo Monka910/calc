@@ -1,5 +1,19 @@
 [
   {
+    "id": 1780134401535,
+    "date": "2026-05-30T09:46:41.535Z",
+    "action": "sale_created",
+    "actor": "mura",
+    "actorLogin": "mura",
+    "details": {
+      "saleId": 1780134400378,
+      "seller": "Гил",
+      "buyer": "mura",
+      "total": 8,
+      "quickBuyPeople": 0
+    }
+  },
+  {
     "id": 1780133654064,
     "date": "2026-05-30T09:34:14.064Z",
     "action": "sale_created",
