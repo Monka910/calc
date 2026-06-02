@@ -1,5 +1,17 @@
 [
   {
+    "id": 1780404086523,
+    "date": "2026-06-02T12:41:26.523Z",
+    "action": "sticker_changed",
+    "actor": "Smoky",
+    "actorLogin": "Smoky",
+    "details": {
+      "login": "Smoky",
+      "name": "Smoky",
+      "sticker": "stickers/99/ChatGPT_Image_24_._2026_._16_55_25_3-Photoroom.png"
+    }
+  },
+  {
     "id": 1780395603156,
     "date": "2026-06-02T10:20:03.156Z",
     "action": "admin_created",
