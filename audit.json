@@ -1,5 +1,19 @@
 [
   {
+    "id": 1780421967982,
+    "date": "2026-06-02T17:39:27.982Z",
+    "action": "sale_created",
+    "actor": "mura",
+    "actorLogin": "mura",
+    "details": {
+      "saleId": 1780421966365,
+      "seller": "Эйс",
+      "buyer": "mura",
+      "total": 614,
+      "quickBuyPeople": 1
+    }
+  },
+  {
     "id": 1780407710514,
     "date": "2026-06-02T13:41:50.514Z",
     "action": "admin_deleted",
