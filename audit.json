@@ -1,5 +1,17 @@
 [
   {
+    "id": 1780395603156,
+    "date": "2026-06-02T10:20:03.156Z",
+    "action": "admin_created",
+    "actor": "Monka",
+    "actorLogin": "Monka",
+    "details": {
+      "login": "Smoky",
+      "name": "Smoky",
+      "role": "admin"
+    }
+  },
+  {
     "id": 1780164331961,
     "date": "2026-05-30T18:05:31.961Z",
     "action": "sale_created",
