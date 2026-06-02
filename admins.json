@@ -47,5 +47,11 @@
     "name": "Piska",
     "role": "admin",
     "passwordHash": "7fd06f0e2a61fec4b93fcf78df8759e5e4e2a2da2f5a627cfad24b801416ebbb"
+  },
+  {
+    "login": "Smoky",
+    "name": "Smoky",
+    "role": "admin",
+    "passwordHash": "c3b552bffd31300aa4e06bdd7bbd5380627576d3a71029b412028200ea0a683e"
   }
 ]
