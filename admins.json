@@ -52,6 +52,7 @@
     "login": "Smoky",
     "name": "Smoky",
     "role": "admin",
-    "passwordHash": "c3b552bffd31300aa4e06bdd7bbd5380627576d3a71029b412028200ea0a683e"
+    "passwordHash": "c3b552bffd31300aa4e06bdd7bbd5380627576d3a71029b412028200ea0a683e",
+    "sticker": "stickers/99/ChatGPT_Image_24_._2026_._16_55_25_3-Photoroom.png"
   }
 ]
