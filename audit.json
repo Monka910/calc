@@ -1,5 +1,16 @@
 [
   {
+    "id": 1780407710514,
+    "date": "2026-06-02T13:41:50.514Z",
+    "action": "admin_deleted",
+    "actor": "Monka",
+    "actorLogin": "Monka",
+    "details": {
+      "login": "pepo",
+      "name": "pepo"
+    }
+  },
+  {
     "id": 1780404086523,
     "date": "2026-06-02T12:41:26.523Z",
     "action": "sticker_changed",
