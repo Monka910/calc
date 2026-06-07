@@ -1,5 +1,19 @@
 [
   {
+    "id": 1780853967656,
+    "date": "2026-06-07T17:39:27.656Z",
+    "action": "sale_created",
+    "actor": "Smoky",
+    "actorLogin": "Smoky",
+    "details": {
+      "saleId": 1780853966461,
+      "seller": "Рен",
+      "buyer": "Smoky",
+      "total": 40,
+      "quickBuyPeople": 0
+    }
+  },
+  {
     "id": 1780823150779,
     "date": "2026-06-07T09:05:50.779Z",
     "action": "admin_deleted",
