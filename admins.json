@@ -6,12 +6,6 @@
     "passwordHash": "e47d3eff8cb2669c60095acd32e7002e39913c0aa08c4528e5df0df33ad41ada"
   },
   {
-    "login": "Al",
-    "name": "Al",
-    "role": "admin",
-    "passwordHash": "bc30cf08b5d9fd782f9e07593ac6c751efa17d74d063c9a4b8cd8de10898abe9"
-  },
-  {
     "login": "mrgrondo",
     "name": "mrgrondo",
     "role": "chief",
