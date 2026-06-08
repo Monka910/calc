@@ -1,5 +1,17 @@
 [
   {
+    "id": 1780924793259,
+    "date": "2026-06-08T13:19:53.259Z",
+    "action": "sticker_changed",
+    "actor": "Ed",
+    "actorLogin": "Ed",
+    "details": {
+      "login": "Ed",
+      "name": "Ed",
+      "sticker": "stickers/99/ChatGPT_Image_24_._2026_._16_55_27_7-Photoroom.png"
+    }
+  },
+  {
     "id": 1780924619927,
     "date": "2026-06-08T13:16:59.927Z",
     "action": "sale_created",
