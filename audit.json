@@ -1,5 +1,17 @@
 [
   {
+    "id": 1781285638384,
+    "date": "2026-06-12T17:33:58.384Z",
+    "action": "admin_created",
+    "actor": "mura",
+    "actorLogin": "mura",
+    "details": {
+      "login": "Abu",
+      "name": "Abu",
+      "role": "admin"
+    }
+  },
+  {
     "id": 1781283432514,
     "date": "2026-06-12T16:57:12.514Z",
     "action": "sale_created",
