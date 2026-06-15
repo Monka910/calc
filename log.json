@@ -1,5 +1,43 @@
 [
   {
+    "id": 1781539059454,
+    "date": "2026-06-15T15:57:39.454Z",
+    "buyer": "Smoky",
+    "buyerLogin": "Smoky",
+    "seller": "Рудо",
+    "quickBuyPeople": 1,
+    "items": {
+      "partsBreakdown": {
+        "eye": 225,
+        "gland": 205,
+        "scale": 165,
+        "saliva": 225
+      },
+      "algaeBreakdown": {
+        "red": 0,
+        "yellow": 0,
+        "blue": 0
+      },
+      "partsSold": 820,
+      "partsRemainder": 0,
+      "algaeSold": 0,
+      "algaeRemainder": 0,
+      "white": 55,
+      "black": 13,
+      "gold": 8
+    },
+    "earnings": {
+      "parts": 164,
+      "algae": 0,
+      "white": 165,
+      "black": 65,
+      "gold": 56
+    },
+    "bankPays": 656,
+    "bankFee": 206,
+    "total": 450
+  },
+  {
     "id": 1781445252660,
     "date": "2026-06-14T13:54:12.660Z",
     "buyer": "mura",
