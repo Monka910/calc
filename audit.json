@@ -1,5 +1,19 @@
 [
   {
+    "id": 1781633498220,
+    "date": "2026-06-16T18:11:38.220Z",
+    "action": "sale_created",
+    "actor": "Синий",
+    "actorLogin": "6o6p3bepb",
+    "details": {
+      "saleId": 1781633496607,
+      "seller": "Кразар",
+      "buyer": "Синий",
+      "total": 375,
+      "quickBuyPeople": 0
+    }
+  },
+  {
     "id": 1781554486684,
     "date": "2026-06-15T20:14:46.684Z",
     "action": "sale_created",
