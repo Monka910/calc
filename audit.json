@@ -1,5 +1,17 @@
 [
   {
+    "id": 1782062749777,
+    "date": "2026-06-21T17:25:49.777Z",
+    "action": "seller_edited",
+    "actor": "Ed",
+    "actorLogin": "Ed",
+    "details": {
+      "saleId": 1782062365452,
+      "before": "Рен",
+      "after": "Рен"
+    }
+  },
+  {
     "id": 1782062730801,
     "date": "2026-06-21T17:25:30.801Z",
     "action": "sale_created",
