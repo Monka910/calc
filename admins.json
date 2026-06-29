@@ -38,11 +38,5 @@
     "role": "admin",
     "passwordHash": "c3b552bffd31300aa4e06bdd7bbd5380627576d3a71029b412028200ea0a683e",
     "sticker": "stickers/99/ChatGPT_Image_24_._2026_._16_55_25_3-Photoroom.png"
-  },
-  {
-    "login": "Abu",
-    "name": "Abu",
-    "role": "admin",
-    "passwordHash": "8d3c8fe90142ebf91fa9fb1f0c73519c78ce864724591c0a79b78eaaaaf6714f"
   }
 ]
