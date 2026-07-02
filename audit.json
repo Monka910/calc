@@ -1,5 +1,19 @@
 [
   {
+    "id": 1783004953221,
+    "date": "2026-07-02T15:09:13.221Z",
+    "action": "sale_created",
+    "actor": "mura",
+    "actorLogin": "mura",
+    "details": {
+      "saleId": 1783004951401,
+      "seller": "Ненси",
+      "buyer": "mura",
+      "total": 787,
+      "quickBuyPeople": 1
+    }
+  },
+  {
     "id": 1782751987040,
     "date": "2026-06-29T16:53:07.040Z",
     "action": "admin_deleted",
