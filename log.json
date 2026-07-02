@@ -1,41 +1,41 @@
 [
   {
-    "id": 1783004951401,
-    "date": "2026-07-02T15:09:11.401Z",
-    "buyer": "mura",
-    "buyerLogin": "mura",
-    "seller": "Ненси",
-    "quickBuyPeople": 1,
+    "id": 1783014575872,
+    "date": "2026-07-02T17:49:35.872Z",
+    "buyer": "Синий",
+    "buyerLogin": "6o6p3bepb",
+    "seller": "Макс",
+    "quickBuyPeople": 0,
     "items": {
       "partsBreakdown": {
-        "eye": 300,
-        "gland": 294,
-        "scale": 298,
-        "saliva": 288
+        "eye": 21,
+        "gland": 19,
+        "scale": 20,
+        "saliva": 21
       },
       "algaeBreakdown": {
         "red": 0,
         "yellow": 0,
         "blue": 0
       },
-      "partsSold": 1180,
-      "partsRemainder": 0,
+      "partsSold": 80,
+      "partsRemainder": 1,
       "algaeSold": 0,
       "algaeRemainder": 0,
-      "white": 89,
-      "black": 33,
-      "gold": 17
+      "white": 4,
+      "black": 3,
+      "gold": 1
     },
     "earnings": {
-      "parts": 236,
+      "parts": 16,
       "algae": 0,
-      "white": 267,
-      "black": 165,
-      "gold": 119
+      "white": 12,
+      "black": 15,
+      "gold": 7
     },
-    "bankPays": 1133,
-    "bankFee": 346,
-    "total": 787
+    "bankPays": 72,
+    "bankFee": 22,
+    "total": 50
   },
   {
     "id": 1782661398036,
