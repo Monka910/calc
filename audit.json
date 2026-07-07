@@ -1,5 +1,17 @@
 [
   {
+    "id": 1783454119394,
+    "date": "2026-07-07T19:55:19.394Z",
+    "action": "profile_bg_changed",
+    "actor": "mura",
+    "actorLogin": "mura",
+    "details": {
+      "login": "mura",
+      "name": "mura",
+      "type": "image"
+    }
+  },
+  {
     "id": 1783453998862,
     "date": "2026-07-07T19:53:18.862Z",
     "action": "profile_bg_changed",
