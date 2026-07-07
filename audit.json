@@ -1,5 +1,17 @@
 [
   {
+    "id": 1783453998862,
+    "date": "2026-07-07T19:53:18.862Z",
+    "action": "profile_bg_changed",
+    "actor": "Синий",
+    "actorLogin": "6o6p3bepb",
+    "details": {
+      "login": "6o6p3bepb",
+      "name": "Синий",
+      "type": "preset"
+    }
+  },
+  {
     "id": 1783453952513,
     "date": "2026-07-07T19:52:32.513Z",
     "action": "profile_bg_changed",
