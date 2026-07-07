@@ -1233,6 +1233,202 @@
     padding: 6px 12px;
   }
 
+  .staff-profile-link {
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+  }
+  .staff-profile-link:hover span:last-child {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .profile-card {
+    width: min(400px, calc(100vw - 32px));
+    min-height: 560px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: linear-gradient(145deg, var(--ink-05), var(--bg));
+    background-size: cover;
+    background-position: center;
+    border: 1px solid var(--ink-10);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.28);
+    position: relative;
+  }
+  .profile-body {
+    min-height: 560px;
+    padding: 34px 30px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+    gap: 10px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.22));
+  }
+  .profile-name {
+    font-family: var(--f-display);
+    font-size: 34px;
+    line-height: 1.1;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    text-shadow: 0 2px 16px rgba(0,0,0,0.18);
+    margin-top: 8px;
+  }
+  .profile-login {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    color: var(--ink-60);
+  }
+  .profile-login::before { content: '@'; opacity: 0.5; }
+  .profile-role {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: var(--ink-05);
+    border: 1px solid var(--ink-10);
+    color: var(--ink-60);
+    font-family: var(--f-mono);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .achievement-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    max-width: 380px;
+    margin-top: 8px;
+  }
+  .achievement-badge {
+    width: 48px;
+    height: 48px;
+    border: none;
+    background: transparent;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    cursor: help;
+    box-shadow: none;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.22));
+    transition: transform 0.15s;
+  }
+  .achievement-badge img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    display: block;
+  }
+  .achievement-badge:hover {
+    transform: translateY(-2px) scale(1.08);
+  }
+  .profile-card.dark-tone .profile-name {
+    color: #fff;
+  }
+  .profile-card.dark-tone .profile-login {
+    color: rgba(255,255,255,0.72);
+  }
+  .profile-card.dark-tone .profile-role {
+    background: rgba(255,255,255,0.14);
+    border-color: rgba(255,255,255,0.24);
+    color: rgba(255,255,255,0.78);
+  }
+  .profile-card.dark-tone .profile-settings-title {
+    color: rgba(255,255,255,0.7);
+  }
+  .achievement-popover {
+    min-height: 64px;
+    width: min(100%, 312px);
+    margin-top: 12px;
+    padding: 12px 14px;
+    border: 1px solid rgba(255,255,255,0.34);
+    border-radius: var(--radius);
+    background: rgba(255,255,255,0.18);
+    color: var(--ink);
+    box-shadow: 0 16px 36px rgba(0,0,0,0.18);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: all 0.18s;
+    pointer-events: none;
+  }
+  .achievement-popover.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .achievement-popover-title {
+    font-family: var(--f-display);
+    font-size: 17px;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .achievement-popover-desc {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    line-height: 1.45;
+    color: var(--ink-60);
+  }
+  .profile-card.dark-tone .achievement-popover {
+    background: rgba(0,0,0,0.34);
+    border-color: rgba(255,255,255,0.24);
+    color: #fff;
+  }
+  .profile-card.dark-tone .achievement-popover-title {
+    color: #fff;
+  }
+  .profile-card.dark-tone .achievement-popover-desc {
+    color: rgba(255,255,255,0.72);
+  }
+  .profile-settings {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    bottom: 22px;
+    text-align: left;
+  }
+  .profile-settings-title {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    color: var(--ink-60);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+  .profile-bg-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .profile-bg-choice {
+    height: 34px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.28);
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+  }
+  .profile-bg-choice:hover,
+  .profile-bg-choice.active {
+    transform: translateY(-1px);
+    border-color: var(--ink);
+  }
+  .profile-image-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+  }
+  .profile-image-row input {
+    min-width: 0;
+    font-size: 11px;
+  }
+
   .overlay {
     position: fixed;
     inset: 0;
@@ -1456,6 +1652,13 @@
     <div class="sticker-grid" id="sticker-grid"></div>
     <button type="button" class="btn ghost" id="sticker-clear-btn" style="width:100%;justify-content:center">Убрать стикер</button>
     <div class="modal-hint">Стикер будет виден в журнале, зарплате, логах и списке админов</div>
+  </div>
+</div>
+
+<div class="overlay" id="profile-modal" style="display:none">
+  <div class="profile-card" id="profile-card">
+    <button type="button" class="modal-close" id="profile-modal-close" title="Закрыть">✕</button>
+    <div class="profile-body" id="profile-body"></div>
   </div>
 </div>
 
@@ -1743,6 +1946,37 @@ const STICKERS = [
   'stickers/99/ChatGPT_Image_24_._2026_._16_55_27_8-Photoroom.png'
 ];
 
+const PROFILE_BACKGROUNDS = [
+  { id: 'mono', name: 'Mono', css: 'linear-gradient(145deg, #f3f4f6, #ffffff)' },
+  { id: 'night', name: 'Night', css: 'linear-gradient(145deg, #07090f, #232734)' },
+  { id: 'aurora', name: 'Aurora', css: 'linear-gradient(145deg, #111827, #2563eb 45%, #7c3aed)' },
+  { id: 'ember', name: 'Ember', css: 'linear-gradient(145deg, #1f1308, #b45309 48%, #facc15)' },
+  { id: 'mint', name: 'Mint', css: 'linear-gradient(145deg, #052e2b, #0f766e 48%, #a7f3d0)' }
+];
+
+const ACHIEVEMENTS = [
+  { id: 'first_sale', img: 'achievements/icons-transparent/first_sale.png', icon: '🐸', title: 'Первый выкуп', desc: 'Первая записанная продажа' },
+  { id: 'steady_buyer', img: 'achievements/icons-transparent/steady_buyer.png', icon: '🐸🔟', title: 'Стабильный скупщик', desc: '10 продаж' },
+  { id: 'wholesaler', img: 'achievements/icons-transparent/wholesaler.png', icon: '🐸📦', title: 'Оптовик', desc: '50 продаж' },
+  { id: 'bank_machine', img: 'achievements/icons-transparent/bank_machine.png', icon: '🐸🏦', title: 'Машина банка', desc: '100 продаж' },
+  { id: 'parts_hunter', img: 'achievements/icons-transparent/parts_hunter.png', icon: '🐸⚙️', title: 'Охотник за частями', desc: '5000+ частей монстров' },
+  { id: 'pearl_collector', img: 'achievements/icons-transparent/pearl_collector.png', icon: '🐸⚪', title: 'Коллекционер жемчуга', desc: '500+ жемчужин суммарно' },
+  { id: 'golden_hand', img: 'achievements/icons-transparent/golden_hand.png', icon: '🐸🟡', title: 'Золотая рука', desc: '100+ золотых жемчужин' },
+  { id: 'fast_hands', img: 'achievements/icons-transparent/fast_hands.png', icon: '🐸⚡', title: 'Быстрые руки', desc: '10 быстрых скупок' },
+  { id: 'big_deal', img: 'achievements/icons-transparent/big_deal.png', icon: '🐸💰', title: 'Крупная сделка', desc: 'Одна продажа выше 1000 гильз' },
+  { id: 'whale_deal', img: 'achievements/icons-transparent/whale_deal.png', icon: '🐸🐋', title: 'Китовая сделка', desc: 'Одна продажа выше 3000 гильз' },
+  { id: 'bank_favorite', img: 'achievements/icons-transparent/bank_favorite.png', icon: '🐸💎', title: 'Банковский любимчик', desc: '5000+ гильз оборота через банк' },
+  { id: 'shift_closed', img: 'achievements/icons-transparent/shift_closed.png', icon: '🐸📅', title: 'Смена закрыта', desc: '10 продаж за один день' },
+  { id: 'night_cashier', img: 'achievements/icons-transparent/night_cashier.png', icon: '🐸🌙', title: 'Ночной кассир', desc: 'Продажа с 00:00 до 05:00' },
+  { id: 'pearl_baron', img: 'achievements/icons-transparent/pearl_baron.png', icon: '🐸👑', title: 'Жемчужный барон', desc: 'Заработок на жемчуге больше, чем на частях' },
+  { id: 'hollow_butcher', img: 'achievements/icons-transparent/hollow_butcher.png', icon: '🐸🗡️', title: 'Мясник пустотелых', desc: 'Заработок на частях больше, чем на жемчуге' },
+  { id: 'nameless_deal', img: 'achievements/icons-transparent/nameless_deal.png', icon: '🐸❔', title: 'Безымянная сделка', desc: 'Есть продажа без имени продавца' },
+  { id: 'careful', img: 'achievements/icons-transparent/careful.png', icon: '🐸✅', title: 'Аккуратист', desc: '20 продаж без правок и удалений по логам' },
+  { id: 'month_employee', img: 'achievements/icons-transparent/month_employee.png', icon: '🐸🏆', title: 'Сотрудник месяца', desc: 'Топ-1 по зарплате за месяц' },
+  { id: 'quiet_hero', img: 'achievements/icons-transparent/quiet_hero.png', icon: '🐸🤫', title: 'Тихий герой', desc: '5 продаж подряд меньше 300 гильз' },
+  { id: 'big_drop', img: 'achievements/icons-transparent/big_drop.png', icon: '🐸💥', title: 'Большой занос', desc: 'Продажа, где жемчуг выше 500 гильз' }
+];
+
 async function sha256(text) {
   const buf = new TextEncoder().encode(text);
   const hash = await crypto.subtle.digest('SHA-256', buf);
@@ -1776,13 +2010,21 @@ function getAdminSticker(login, name) {
   return admin && admin.sticker ? admin.sticker : '';
 }
 
+function findAdmin(login, name) {
+  return admins.find(a => (login && a.login === login) || (name && a.name === name)) || null;
+}
+
 function renderSticker(src, size = 'sm') {
   return src ? `<img class="admin-sticker ${size}" src="${escapeHTML(src)}" alt="">` : '';
 }
 
 function renderNameWithSticker(name, login, size = 'sm') {
   const sticker = getAdminSticker(login, name);
-  return `<span class="name-with-sticker">${renderSticker(sticker, size)}<span>${escapeHTML(name || '—')}</span></span>`;
+  const admin = findAdmin(login, name);
+  const attrs = admin
+    ? ` staff-profile-link" role="button" tabindex="0" data-login="${escapeHTML(admin.login)}"`
+    : '"';
+  return `<span class="name-with-sticker${attrs}>${renderSticker(sticker, size)}<span>${escapeHTML(name || '—')}</span></span>`;
 }
 
 function setCurrentUser(user) {
@@ -2030,6 +2272,23 @@ document.addEventListener('keydown', (e) => {
   if ($('lock-overlay').style.display === 'flex') closeLoginModal();
   if ($('admin-modal').style.display === 'flex') closeAdminModal();
   if ($('sticker-modal').style.display === 'flex') closeStickerModal();
+  if ($('profile-modal').style.display === 'flex') closeProfileModal();
+});
+
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('.staff-profile-link');
+  if (!link) return;
+  e.preventDefault();
+  e.stopPropagation();
+  openProfileModal(link.dataset.login);
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const link = e.target.closest && e.target.closest('.staff-profile-link');
+  if (!link) return;
+  e.preventDefault();
+  openProfileModal(link.dataset.login);
 });
 
 function openLoginModal() {
@@ -2810,6 +3069,140 @@ function renderSalary() {
   `).join('') : `<div class="empty">Пока нет продаж</div>`;
 }
 
+function getAdminEntries(admin) {
+  return history
+    .filter(e => (e.buyerLogin && e.buyerLogin === admin.login) || (e.buyer && e.buyer === admin.name))
+    .slice()
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+}
+
+function getEntryPearlEarn(entry) {
+  const earnings = entry.earnings || {};
+  return Number(earnings.white || 0) + Number(earnings.black || 0) + Number(earnings.gold || 0);
+}
+
+function getEntryPearlQty(entry) {
+  const items = entry.items || {};
+  return Number(items.white || 0) + Number(items.black || 0) + Number(items.gold || 0);
+}
+
+function getMonthKey(date) {
+  const d = new Date(date);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
+function hasFiveSmallSalesInRow(entries) {
+  let streak = 0;
+  for (const entry of entries) {
+    if (Number(entry.total || 0) < 300) streak += 1;
+    else streak = 0;
+    if (streak >= 5) return true;
+  }
+  return false;
+}
+
+function getMonthLeaders() {
+  const months = new Map();
+  admins.forEach(admin => {
+    getAdminEntries(admin).forEach(entry => {
+      const key = getMonthKey(entry.date);
+      if (!months.has(key)) months.set(key, new Map());
+      const map = months.get(key);
+      if (!map.has(admin.login)) map.set(admin.login, { login: admin.login, total: 0 });
+      map.get(admin.login).total += calcEntrySalary(entry).total;
+    });
+  });
+  const leaders = new Set();
+  months.forEach(map => {
+    const sorted = Array.from(map.values()).sort((a, b) => b.total - a.total);
+    if (sorted[0] && sorted[0].total > 0) leaders.add(sorted[0].login);
+  });
+  return leaders;
+}
+
+function getUnlockedAchievements(admin) {
+  const entries = getAdminEntries(admin);
+  const sales = entries.length;
+  const partsSold = entries.reduce((sum, e) => sum + Number(e.items?.partsSold || 0), 0);
+  const pearlQty = entries.reduce((sum, e) => sum + getEntryPearlQty(e), 0);
+  const goldQty = entries.reduce((sum, e) => sum + Number(e.items?.gold || 0), 0);
+  const quickPeople = entries.reduce((sum, e) => sum + getEntryQuickPeople(e), 0);
+  const bankTurnover = entries.reduce((sum, e) => sum + Number(e.bankPays || ((e.total || 0) + (e.bankFee || 0))), 0);
+  const partsEarn = entries.reduce((sum, e) => sum + Number(e.earnings?.parts || 0), 0);
+  const pearlEarn = entries.reduce((sum, e) => sum + getEntryPearlEarn(e), 0);
+  const dayCounts = entries.reduce((map, e) => {
+    const key = new Date(e.date).toISOString().slice(0, 10);
+    map[key] = (map[key] || 0) + 1;
+    return map;
+  }, {});
+  const logsForAdmin = audit.filter(e => e.actorLogin === admin.login);
+  const hasEdits = logsForAdmin.some(e => ['seller_edited', 'sale_deleted', 'history_cleared'].includes(e.action));
+  const monthLeaders = getMonthLeaders();
+
+  const unlocked = new Set();
+  if (sales >= 1) unlocked.add('first_sale');
+  if (sales >= 10) unlocked.add('steady_buyer');
+  if (sales >= 50) unlocked.add('wholesaler');
+  if (sales >= 100) unlocked.add('bank_machine');
+  if (partsSold >= 5000) unlocked.add('parts_hunter');
+  if (pearlQty >= 500) unlocked.add('pearl_collector');
+  if (goldQty >= 100) unlocked.add('golden_hand');
+  if (quickPeople >= 10) unlocked.add('fast_hands');
+  if (entries.some(e => Number(e.total || 0) > 1000)) unlocked.add('big_deal');
+  if (entries.some(e => Number(e.total || 0) > 3000)) unlocked.add('whale_deal');
+  if (bankTurnover >= 5000) unlocked.add('bank_favorite');
+  if (Object.values(dayCounts).some(count => count >= 10)) unlocked.add('shift_closed');
+  if (entries.some(e => {
+    const hour = new Date(e.date).getHours();
+    return hour >= 0 && hour < 5;
+  })) unlocked.add('night_cashier');
+  if (pearlEarn > partsEarn && pearlEarn > 0) unlocked.add('pearl_baron');
+  if (partsEarn > pearlEarn && partsEarn > 0) unlocked.add('hollow_butcher');
+  if (entries.some(e => !e.seller || !String(e.seller).trim())) unlocked.add('nameless_deal');
+  if (sales >= 20 && !hasEdits) unlocked.add('careful');
+  if (monthLeaders.has(admin.login)) unlocked.add('month_employee');
+  if (hasFiveSmallSalesInRow(entries)) unlocked.add('quiet_hero');
+  if (entries.some(e => getEntryPearlEarn(e) > 500)) unlocked.add('big_drop');
+
+  return unlocked;
+}
+
+function renderAchievements(admin) {
+  const unlocked = getUnlockedAchievements(admin);
+  if (unlocked.size === 0) return '';
+  return `
+    <div class="achievement-row">
+      ${ACHIEVEMENTS.filter(a => unlocked.has(a.id)).map(a => (
+        `<span class="achievement-badge" tabindex="0" data-title="${escapeHTML(a.title)}" data-desc="${escapeHTML(a.desc)}">${a.img ? `<img src="${escapeHTML(a.img)}" alt="">` : a.icon}</span>`
+      )).join('')}
+    </div>
+    <div class="achievement-popover" id="achievement-popover">
+      <div class="achievement-popover-title"></div>
+      <div class="achievement-popover-desc"></div>
+    </div>
+  `;
+}
+
+function bindAchievementHints() {
+  const popover = $('achievement-popover');
+  if (!popover) return;
+  const title = popover.querySelector('.achievement-popover-title');
+  const desc = popover.querySelector('.achievement-popover-desc');
+  const show = (badge) => {
+    title.textContent = badge.dataset.title || '';
+    desc.textContent = badge.dataset.desc || '';
+    popover.classList.add('visible');
+  };
+  const hide = () => popover.classList.remove('visible');
+
+  document.querySelectorAll('#profile-body .achievement-badge').forEach(badge => {
+    badge.addEventListener('mouseenter', () => show(badge));
+    badge.addEventListener('focus', () => show(badge));
+    badge.addEventListener('mouseleave', hide);
+    badge.addEventListener('blur', hide);
+  });
+}
+
 function auditActionLabel(action) {
   const labels = {
     sale_created: 'Продажа записана',
@@ -2819,7 +3212,8 @@ function auditActionLabel(action) {
     admin_created: 'Админ создан',
     admin_deleted: 'Админ удалён',
     admin_password_changed: 'Пароль изменён',
-    sticker_changed: 'Стикер изменён'
+    sticker_changed: 'Стикер изменён',
+    profile_bg_changed: 'Фон профиля изменён'
   };
   return labels[action] || action;
 }
@@ -2836,6 +3230,7 @@ function auditDetailsText(details = {}) {
   if (details.name) bits.push(details.name);
   if (details.count !== undefined) bits.push(`записей: ${details.count}`);
   if (details.sticker !== undefined) bits.push(details.sticker ? 'стикер выбран' : 'стикер убран');
+  if (details.type) bits.push(details.type === 'image' ? 'картинка' : 'градиент');
   return bits.join(' · ') || '—';
 }
 
@@ -2993,6 +3388,8 @@ $('sticker-open-btn').addEventListener('click', openStickerModal);
 $('sticker-modal-close').addEventListener('click', closeStickerModal);
 $('sticker-modal').addEventListener('click', (e) => { if (e.target.id === 'sticker-modal') closeStickerModal(); });
 $('sticker-clear-btn').addEventListener('click', () => saveMySticker(''));
+$('profile-modal-close').addEventListener('click', closeProfileModal);
+$('profile-modal').addEventListener('click', (e) => { if (e.target.id === 'profile-modal') closeProfileModal(); });
 
 function openAdminModal() {
   $('admin-modal').style.display = 'flex';
@@ -3016,6 +3413,121 @@ function openStickerModal() {
 
 function closeStickerModal() {
   $('sticker-modal').style.display = 'none';
+}
+
+function getProfileBg(admin) {
+  if (admin && admin.profileBg && admin.profileBg.type && admin.profileBg.value) return admin.profileBg;
+  return { type: 'preset', value: 'mono' };
+}
+
+function getProfileBgCss(profileBg) {
+  if (profileBg.type === 'image') {
+    const src = String(profileBg.value || '').replace(/"/g, '\\"');
+    return `linear-gradient(180deg, rgba(0,0,0,0.10), rgba(0,0,0,0.28)), url("${src}")`;
+  }
+  const preset = PROFILE_BACKGROUNDS.find(bg => bg.id === profileBg.value) || PROFILE_BACKGROUNDS[0];
+  return preset.css;
+}
+
+function applyProfileBg(admin) {
+  const card = $('profile-card');
+  const profileBg = getProfileBg(admin);
+  card.style.backgroundImage = getProfileBgCss(profileBg);
+  const dark = profileBg.type === 'image' || ['night', 'aurora', 'ember'].includes(profileBg.value);
+  card.classList.toggle('dark-tone', dark);
+}
+
+function renderProfileSettings(admin) {
+  const current = getCurrentUser();
+  if (!current || current.login !== admin.login) return '';
+  const profileBg = getProfileBg(admin);
+  const imageValue = profileBg.type === 'image' ? profileBg.value : '';
+  return `
+    <div class="profile-settings">
+      <div class="profile-settings-title">Фон профиля</div>
+      <div class="profile-bg-grid">
+        ${PROFILE_BACKGROUNDS.map(bg => `
+          <button type="button"
+            class="profile-bg-choice ${profileBg.type === 'preset' && profileBg.value === bg.id ? 'active' : ''}"
+            data-bg="${escapeHTML(bg.id)}"
+            title="${escapeHTML(bg.name)}"
+            style="background:${escapeHTML(bg.css)}"></button>
+        `).join('')}
+      </div>
+      <div class="profile-image-row">
+        <input type="text" id="profile-image-input" placeholder="Ссылка или путь к картинке" value="${escapeHTML(imageValue)}">
+        <button type="button" class="btn ghost" id="profile-image-save">ОК</button>
+      </div>
+    </div>
+  `;
+}
+
+function openProfileModal(login) {
+  const admin = findAdmin(login, null);
+  if (!admin) return;
+  applyProfileBg(admin);
+  $('profile-body').innerHTML = `
+    <div class="profile-name">${renderNameWithSticker(admin.name, admin.login, 'lg')}</div>
+    <div class="profile-login">${escapeHTML(admin.login)}</div>
+    <div class="profile-role">${admin.role === 'chief' ? 'главный' : 'админ'}</div>
+    ${renderAchievements(admin)}
+    ${renderProfileSettings(admin)}
+  `;
+  $('profile-modal').style.display = 'flex';
+  bindAchievementHints();
+
+  $('profile-body').querySelectorAll('.profile-bg-choice').forEach(btn => {
+    btn.addEventListener('click', () => saveMyProfileBg({ type: 'preset', value: btn.dataset.bg }));
+  });
+  const saveImage = $('profile-image-save');
+  if (saveImage) {
+    saveImage.addEventListener('click', () => {
+      const value = ($('profile-image-input').value || '').trim();
+      if (!value) return;
+      saveMyProfileBg({ type: 'image', value });
+    });
+  }
+}
+
+function closeProfileModal() {
+  $('profile-modal').style.display = 'none';
+}
+
+async function saveMyProfileBg(profileBg) {
+  const user = getCurrentUser();
+  if (!user) return;
+
+  const backup = admins.slice();
+  admins = admins.map(a => a.login === user.login ? { ...a, profileBg } : a);
+  const ok = await saveAdmins();
+  if (!ok) {
+    admins = backup;
+    return;
+  }
+
+  const admin = findAdmin(user.login, null);
+  if (admin) {
+    applyProfileBg(admin);
+    $('profile-body').innerHTML = `
+      <div class="profile-name">${renderNameWithSticker(admin.name, admin.login, 'lg')}</div>
+      <div class="profile-login">${escapeHTML(admin.login)}</div>
+      <div class="profile-role">${admin.role === 'chief' ? 'главный' : 'админ'}</div>
+      ${renderAchievements(admin)}
+      ${renderProfileSettings(admin)}
+    `;
+    bindAchievementHints();
+    $('profile-body').querySelectorAll('.profile-bg-choice').forEach(btn => {
+      btn.addEventListener('click', () => saveMyProfileBg({ type: 'preset', value: btn.dataset.bg }));
+    });
+    const saveImage = $('profile-image-save');
+    if (saveImage) saveImage.addEventListener('click', () => {
+      const value = ($('profile-image-input').value || '').trim();
+      if (value) saveMyProfileBg({ type: 'image', value });
+    });
+  }
+
+  showToast('Фон профиля сохранён');
+  await recordAudit('profile_bg_changed', { login: user.login, name: user.name, type: profileBg.type });
 }
 
 function renderStickerChoices() {
@@ -3120,3 +3632,5 @@ boot();
 
 </body>
 </html>
+
+
