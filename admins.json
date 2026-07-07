@@ -23,8 +23,8 @@
     "passwordHash": "17f80754644d33ac685b0842a402229adbb43fc9312f7bdf36ba24237a1f1ffb",
     "sticker": "stickers/99/ChatGPT_Image_24_._2026_._16_55_26_6-Photoroom.png",
     "profileBg": {
-      "type": "preset",
-      "value": "mint"
+      "type": "image",
+      "value": "https://i.ibb.co/rGPqM73L/image324.png"
     }
   },
   {
@@ -38,7 +38,11 @@
     "login": "6o6p3bepb",
     "name": "Синий",
     "role": "admin",
-    "passwordHash": "22177b6f2afa998f2a75cf8ad35227bb659a047a31558b876479530eb267a660"
+    "passwordHash": "22177b6f2afa998f2a75cf8ad35227bb659a047a31558b876479530eb267a660",
+    "profileBg": {
+      "type": "preset",
+      "value": "night"
+    }
   },
   {
     "login": "Smoky",
