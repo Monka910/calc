@@ -21,7 +21,11 @@
     "name": "mura",
     "role": "chief",
     "passwordHash": "17f80754644d33ac685b0842a402229adbb43fc9312f7bdf36ba24237a1f1ffb",
-    "sticker": "stickers/99/ChatGPT_Image_24_._2026_._16_55_26_6-Photoroom.png"
+    "sticker": "stickers/99/ChatGPT_Image_24_._2026_._16_55_26_6-Photoroom.png",
+    "profileBg": {
+      "type": "image",
+      "value": "https://ibb.co/gM1QwjdX"
+    }
   },
   {
     "login": "Ed",
