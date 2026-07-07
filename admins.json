@@ -6,8 +6,8 @@
     "passwordHash": "e47d3eff8cb2669c60095acd32e7002e39913c0aa08c4528e5df0df33ad41ada",
     "sticker": "stickers/99/ChatGPT_Image_24_._2026_._16_55_26_4-Photoroom.png",
     "profileBg": {
-      "type": "image",
-      "value": "https://i.pinimg.com/736x/d3/aa/0a/d3aa0aa5c70343d70306a488da0f77ff.jpg"
+      "type": "preset",
+      "value": "aurora"
     }
   },
   {
