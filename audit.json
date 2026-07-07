@@ -1,5 +1,17 @@
 [
   {
+    "id": 1783445027616,
+    "date": "2026-07-07T17:23:47.616Z",
+    "action": "profile_bg_changed",
+    "actor": "Monka",
+    "actorLogin": "Monka",
+    "details": {
+      "login": "Monka",
+      "name": "Monka",
+      "type": "preset"
+    }
+  },
+  {
     "id": 1783266543331,
     "date": "2026-07-05T15:49:03.331Z",
     "action": "sale_created",
