@@ -24,7 +24,7 @@
     "sticker": "stickers/99/ChatGPT_Image_24_._2026_._16_55_26_6-Photoroom.png",
     "profileBg": {
       "type": "image",
-      "value": "https://i.ibb.co/rGPqM73L/image324.png"
+      "value": "https://i.ibb.co/MD0v4W0k/image.png"
     }
   },
   {
@@ -38,11 +38,7 @@
     "login": "6o6p3bepb",
     "name": "Синий",
     "role": "admin",
-    "passwordHash": "22177b6f2afa998f2a75cf8ad35227bb659a047a31558b876479530eb267a660",
-    "profileBg": {
-      "type": "preset",
-      "value": "mono"
-    }
+    "passwordHash": "22177b6f2afa998f2a75cf8ad35227bb659a047a31558b876479530eb267a660"
   },
   {
     "login": "Smoky",
