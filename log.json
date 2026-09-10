@@ -1,5 +1,43 @@
 [
   {
+    "id": 1789053629598,
+    "date": "2026-09-10T15:20:29.598Z",
+    "buyer": "mura",
+    "buyerLogin": "mura",
+    "seller": "Крис",
+    "quickBuyPeople": 1,
+    "items": {
+      "partsBreakdown": {
+        "eye": 0,
+        "gland": 0,
+        "scale": 0,
+        "saliva": 0
+      },
+      "algaeBreakdown": {
+        "red": 76,
+        "yellow": 149,
+        "blue": 119
+      },
+      "partsSold": 0,
+      "partsRemainder": 0,
+      "algaeSold": 340,
+      "algaeRemainder": 4,
+      "white": 0,
+      "black": 0,
+      "gold": 0
+    },
+    "earnings": {
+      "parts": 0,
+      "algae": 68,
+      "white": 0,
+      "black": 0,
+      "gold": 0
+    },
+    "bankPays": 68,
+    "bankFee": 0,
+    "total": 68
+  },
+  {
     "id": 1788787611422,
     "date": "2026-09-07T13:26:51.422Z",
     "buyer": "mura",
