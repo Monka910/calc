@@ -1,5 +1,17 @@
 [
   {
+    "id": 1789478069236,
+    "date": "2026-09-15T13:14:29.236Z",
+    "action": "admin_created",
+    "actor": "mura",
+    "actorLogin": "mura",
+    "details": {
+      "login": "Shazam",
+      "name": "Ansel",
+      "role": "admin"
+    }
+  },
+  {
     "id": 1789053659711,
     "date": "2026-09-10T15:20:59.711Z",
     "action": "sale_created",
