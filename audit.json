@@ -1,5 +1,19 @@
 [
   {
+    "id": 1789497182308,
+    "date": "2026-09-15T18:33:02.308Z",
+    "action": "sale_created",
+    "actor": "Ed",
+    "actorLogin": "Ed",
+    "details": {
+      "saleId": 1789497175799,
+      "seller": "Кразар",
+      "buyer": "Ed",
+      "total": 159,
+      "quickBuyPeople": 0
+    }
+  },
+  {
     "id": 1789478293458,
     "date": "2026-09-15T13:18:13.458Z",
     "action": "sale_created",
