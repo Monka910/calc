@@ -1,5 +1,19 @@
 [
   {
+    "id": 1790180750562,
+    "date": "2026-09-23T16:25:50.562Z",
+    "action": "sale_created",
+    "actor": "Ansel",
+    "actorLogin": "Shazam",
+    "details": {
+      "saleId": 1790180732622,
+      "seller": "Jason",
+      "buyer": "Ansel",
+      "total": 18,
+      "quickBuyPeople": 1
+    }
+  },
+  {
     "id": 1790101601637,
     "date": "2026-09-22T18:26:41.637Z",
     "action": "sale_created",
