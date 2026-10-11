@@ -1,5 +1,43 @@
 [
   {
+    "id": 1791740194831,
+    "date": "2026-10-11T17:36:34.831Z",
+    "buyer": "Ansel",
+    "buyerLogin": "Shazam",
+    "seller": "Серж Полнареф",
+    "quickBuyPeople": 1,
+    "items": {
+      "partsBreakdown": {
+        "eye": 75,
+        "gland": 75,
+        "scale": 80,
+        "saliva": 50
+      },
+      "algaeBreakdown": {
+        "red": 0,
+        "yellow": 0,
+        "blue": 0
+      },
+      "partsSold": 280,
+      "partsRemainder": 0,
+      "algaeSold": 0,
+      "algaeRemainder": 0,
+      "white": 27,
+      "black": 11,
+      "gold": 0
+    },
+    "earnings": {
+      "parts": 56,
+      "algae": 0,
+      "white": 81,
+      "black": 55,
+      "gold": 0
+    },
+    "bankPays": 278,
+    "bankFee": 86,
+    "total": 192
+  },
+  {
     "id": 1791405662677,
     "date": "2026-10-07T20:41:02.677Z",
     "buyer": "Ed",
