@@ -1,5 +1,19 @@
 [
   {
+    "id": 1791740196359,
+    "date": "2026-10-11T17:36:36.359Z",
+    "action": "sale_created",
+    "actor": "Ansel",
+    "actorLogin": "Shazam",
+    "details": {
+      "saleId": 1791740194831,
+      "seller": "Серж Полнареф",
+      "buyer": "Ansel",
+      "total": 192,
+      "quickBuyPeople": 1
+    }
+  },
+  {
     "id": 1791405663937,
     "date": "2026-10-07T20:41:03.937Z",
     "action": "sale_created",
