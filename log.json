@@ -1,5 +1,43 @@
 [
   {
+    "id": 1791975335843,
+    "date": "2026-10-14T10:55:35.843Z",
+    "buyer": "mura",
+    "buyerLogin": "mura",
+    "seller": "Бендер",
+    "quickBuyPeople": 1,
+    "items": {
+      "partsBreakdown": {
+        "eye": 66,
+        "gland": 70,
+        "scale": 98,
+        "saliva": 82
+      },
+      "algaeBreakdown": {
+        "red": 0,
+        "yellow": 0,
+        "blue": 0
+      },
+      "partsSold": 315,
+      "partsRemainder": 1,
+      "algaeSold": 0,
+      "algaeRemainder": 0,
+      "white": 21,
+      "black": 20,
+      "gold": 5
+    },
+    "earnings": {
+      "parts": 63,
+      "algae": 0,
+      "white": 63,
+      "black": 100,
+      "gold": 35
+    },
+    "bankPays": 374,
+    "bankFee": 113,
+    "total": 261
+  },
+  {
     "id": 1791959359753,
     "date": "2026-10-14T06:29:19.753Z",
     "buyer": "mura",
