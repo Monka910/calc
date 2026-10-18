@@ -1,5 +1,19 @@
 [
   {
+    "id": 1792311241803,
+    "date": "2026-10-18T08:14:01.803Z",
+    "action": "sale_created",
+    "actor": "Синий",
+    "actorLogin": "6o6p3bepb",
+    "details": {
+      "saleId": 1792311240361,
+      "seller": "Даниэль",
+      "buyer": "Синий",
+      "total": 257,
+      "quickBuyPeople": 0
+    }
+  },
+  {
     "id": 1792308954985,
     "date": "2026-10-18T07:35:54.985Z",
     "action": "sale_created",
