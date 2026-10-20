@@ -1,5 +1,19 @@
 [
   {
+    "id": 1792517827630,
+    "date": "2026-10-20T17:37:07.630Z",
+    "action": "sale_created",
+    "actor": "Smoky",
+    "actorLogin": "Smoky",
+    "details": {
+      "saleId": 1792517825830,
+      "seller": "Крис",
+      "buyer": "Smoky",
+      "total": 64,
+      "quickBuyPeople": 0
+    }
+  },
+  {
     "id": 1792493516044,
     "date": "2026-10-20T10:51:56.044Z",
     "action": "sale_created",
