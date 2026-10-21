@@ -1,5 +1,19 @@
 [
   {
+    "id": 1792591770799,
+    "date": "2026-10-21T14:09:30.799Z",
+    "action": "sale_created",
+    "actor": "mura",
+    "actorLogin": "mura",
+    "details": {
+      "saleId": 1792591768759,
+      "seller": "Бендер",
+      "buyer": "mura",
+      "total": 200,
+      "quickBuyPeople": 1
+    }
+  },
+  {
     "id": 1792517827630,
     "date": "2026-10-20T17:37:07.630Z",
     "action": "sale_created",
