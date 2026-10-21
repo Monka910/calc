@@ -1,5 +1,16 @@
 [
   {
+    "id": 1792591780521,
+    "date": "2026-10-21T14:09:40.521Z",
+    "action": "admin_deleted",
+    "actor": "mura",
+    "actorLogin": "mura",
+    "details": {
+      "login": "Ed",
+      "name": "Ed"
+    }
+  },
+  {
     "id": 1792591770799,
     "date": "2026-10-21T14:09:30.799Z",
     "action": "sale_created",
