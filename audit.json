@@ -1,5 +1,19 @@
 [
   {
+    "id": 1792918510750,
+    "date": "2026-10-25T08:55:10.750Z",
+    "action": "sale_created",
+    "actor": "mura",
+    "actorLogin": "mura",
+    "details": {
+      "saleId": 1792918508869,
+      "seller": "Беллами",
+      "buyer": "mura",
+      "total": 594,
+      "quickBuyPeople": 1
+    }
+  },
+  {
     "id": 1792663695140,
     "date": "2026-10-22T10:08:15.140Z",
     "action": "sale_created",
