@@ -1,5 +1,15 @@
 [
   {
+    "id": 1793543064067,
+    "date": "2026-11-01T14:24:24.067Z",
+    "action": "history_cleared",
+    "actor": "mura",
+    "actorLogin": "mura",
+    "details": {
+      "count": 52
+    }
+  },
+  {
     "id": 1793444446440,
     "date": "2026-10-31T11:00:46.440Z",
     "action": "sale_created",
