@@ -1,5 +1,19 @@
 [
   {
+    "id": 1793617990464,
+    "date": "2026-11-02T11:13:10.464Z",
+    "action": "sale_created",
+    "actor": "mura",
+    "actorLogin": "mura",
+    "details": {
+      "saleId": 1793617988843,
+      "seller": "Шейн",
+      "buyer": "mura",
+      "total": 118,
+      "quickBuyPeople": 1
+    }
+  },
+  {
     "id": 1793557218107,
     "date": "2026-11-01T18:20:18.107Z",
     "action": "sale_created",
