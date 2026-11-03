@@ -1,5 +1,43 @@
 [
   {
+    "id": 1793717228841,
+    "date": "2026-11-03T14:47:08.841Z",
+    "buyer": "Smoky",
+    "buyerLogin": "Smoky",
+    "seller": "Деймон",
+    "quickBuyPeople": 1,
+    "items": {
+      "partsBreakdown": {
+        "eye": 5,
+        "gland": 0,
+        "scale": 0,
+        "saliva": 0
+      },
+      "algaeBreakdown": {
+        "red": 0,
+        "yellow": 0,
+        "blue": 0
+      },
+      "partsSold": 5,
+      "partsRemainder": 0,
+      "algaeSold": 0,
+      "algaeRemainder": 0,
+      "white": 1,
+      "black": 0,
+      "gold": 0
+    },
+    "earnings": {
+      "parts": 1,
+      "algae": 0,
+      "white": 3,
+      "black": 0,
+      "gold": 0
+    },
+    "bankPays": 5,
+    "bankFee": 1,
+    "total": 4
+  },
+  {
     "id": 1793617988843,
     "date": "2026-11-02T11:13:08.843Z",
     "buyer": "mura",
