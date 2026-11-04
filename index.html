@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -41,6 +41,19 @@
     --danger: #ff6b6b;
   }
 
+  body[data-theme="pink"] {
+    --bg: #fffafd;
+    --bg-soft: #fff1f7;
+    --ink: #74435b;
+    --ink-80: #87536d;
+    --ink-60: #aa7890;
+    --ink-40: #cda9b9;
+    --ink-20: #f0d7e2;
+    --ink-10: #f8e8ef;
+    --ink-05: #fff4f8;
+    --danger: #bd4f78;
+  }
+
   body[data-theme="dark"] .topbar {
     background: rgba(15,17,21,0.88);
   }
@@ -53,6 +66,20 @@
 
   body[data-theme="dark"] .ray {
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  }
+
+  body[data-theme="pink"] .topbar {
+    background: rgba(255,250,253,0.92);
+  }
+
+  body[data-theme="pink"] .bg-grid {
+    background-image:
+      linear-gradient(to right, rgba(181,45,103,0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(181,45,103,0.06) 1px, transparent 1px);
+  }
+
+  body[data-theme="pink"] .ray {
+    background: linear-gradient(90deg, transparent, rgba(215,129,166,0.13), transparent);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -295,6 +322,56 @@
     background: var(--bg);
     border: 1px solid var(--ink-20);
   }
+  body[data-theme="pink"] .theme-btn::before {
+    background: #f6abc8;
+    box-shadow: 5px -3px 0 -1px #fffafd;
+  }
+
+  .theme-picker {
+    position: relative;
+    display: inline-flex;
+    align-items: flex-start;
+    z-index: 120;
+  }
+  .theme-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px;
+    border: 1px solid var(--ink-10);
+    border-radius: 999px;
+    background: var(--bg);
+    box-shadow: 0 10px 24px rgba(61,20,40,0.10);
+    opacity: 0;
+    transform: translateY(-5px) scale(0.96);
+    pointer-events: none;
+    transition: opacity 0.16s ease, transform 0.16s ease;
+  }
+  .theme-picker:hover:not(.is-dismissed) .theme-menu,
+  .theme-picker.is-open:not(.is-dismissed) .theme-menu,
+  .theme-picker:focus-within:not(.is-dismissed) .theme-menu {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  .theme-choice {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+  }
+  .theme-choice:hover { transform: scale(1.16); }
+  .theme-choice:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .theme-choice.active { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--ink); }
+  .theme-choice[data-theme-choice="light"] { background: #ffffff; border-color: #d9d9d9; }
+  .theme-choice[data-theme-choice="dark"] { background: #171a21; }
+  .theme-choice[data-theme-choice="pink"] { background: #f6abc8; }
 
   .sticker-btn {
     height: 38px;
@@ -1688,7 +1765,14 @@
         <span id="auth-btn-text">Вход</span>
       </button>
       <button class="sticker-btn admin-only" id="sticker-open-btn" type="button" style="display:none">Стикер</button>
-      <button class="theme-btn" id="theme-toggle" type="button" title="Сменить тему">◐</button>
+      <div class="theme-picker" id="theme-picker">
+        <button class="theme-btn" id="theme-toggle" type="button" title="Выбрать тему" aria-label="Выбрать тему" aria-haspopup="true" aria-expanded="false">◐</button>
+        <div class="theme-menu" role="menu" aria-label="Выбор темы">
+          <button class="theme-choice" type="button" data-theme-choice="light" title="Светлая тема" aria-label="Светлая тема" role="menuitemradio"></button>
+          <button class="theme-choice" type="button" data-theme-choice="dark" title="Тёмная тема" aria-label="Тёмная тема" role="menuitemradio"></button>
+          <button class="theme-choice" type="button" data-theme-choice="pink" title="Нежная розовая тема" aria-label="Нежная розовая тема" role="menuitemradio"></button>
+        </div>
+      </div>
     </div>
   </div>
 </header>
@@ -2072,20 +2156,46 @@ function setSyncStatus(status, text) {
 }
 
 function applyTheme(theme) {
-  const next = theme === 'dark' ? 'dark' : 'light';
+  const next = ['light', 'dark', 'pink'].includes(theme) ? theme : 'light';
   document.body.dataset.theme = next;
   localStorage.setItem(THEME_KEY, next);
   const btn = $('theme-toggle');
-  if (btn) btn.title = next === 'dark' ? 'Светлая тема' : 'Тёмная тема';
+  if (btn) {
+    const currentThemeLabel = { light: 'Светлая', dark: 'Тёмная', pink: 'Нежная розовая' }[next];
+    btn.title = `Тема: ${currentThemeLabel}`;
+    btn.setAttribute('aria-label', `Выбрать тему. Сейчас: ${currentThemeLabel.toLowerCase()}`);
+  }
+  document.querySelectorAll('[data-theme-choice]').forEach(choice => {
+    const active = choice.dataset.themeChoice === next;
+    choice.classList.toggle('active', active);
+    choice.setAttribute('aria-checked', String(active));
+  });
 }
 
 function initTheme() {
   applyTheme(localStorage.getItem(THEME_KEY) || 'light');
 }
 
+const themePicker = $('theme-picker');
 $('theme-toggle').addEventListener('click', () => {
-  const current = document.body.dataset.theme === 'dark' ? 'dark' : 'light';
-  applyTheme(current === 'dark' ? 'light' : 'dark');
+  themePicker.classList.remove('is-dismissed');
+  themePicker.classList.toggle('is-open');
+  $('theme-toggle').setAttribute('aria-expanded', String(themePicker.classList.contains('is-open')));
+});
+
+themePicker.addEventListener('mouseleave', () => {
+  themePicker.classList.remove('is-open', 'is-dismissed');
+  $('theme-toggle').setAttribute('aria-expanded', 'false');
+});
+
+document.querySelectorAll('[data-theme-choice]').forEach(choice => {
+  choice.addEventListener('click', () => {
+    applyTheme(choice.dataset.themeChoice);
+    themePicker.classList.remove('is-open');
+    themePicker.classList.add('is-dismissed');
+    $('theme-toggle').setAttribute('aria-expanded', 'false');
+    $('theme-toggle').focus();
+  });
 });
 
 async function ghLoad(path) {
