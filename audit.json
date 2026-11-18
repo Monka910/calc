@@ -1,5 +1,19 @@
 [
   {
+    "id": 1795008477784,
+    "date": "2026-11-18T13:27:57.784Z",
+    "action": "sale_created",
+    "actor": "Ansel",
+    "actorLogin": "Shazam",
+    "details": {
+      "saleId": 1795008475927,
+      "seller": "Нэнси долг",
+      "buyer": "Ansel",
+      "total": 322,
+      "quickBuyPeople": 0
+    }
+  },
+  {
     "id": 1794943566720,
     "date": "2026-11-17T19:26:06.720Z",
     "action": "sale_created",
