@@ -1,5 +1,15 @@
 [
   {
+    "id": 1795207991651,
+    "date": "2026-11-20T20:53:11.651Z",
+    "action": "blog_posted",
+    "actor": "Monka",
+    "actorLogin": "Monka",
+    "details": {
+      "title": "Test"
+    }
+  },
+  {
     "id": 1795026781832,
     "date": "2026-11-18T18:33:01.832Z",
     "action": "sale_created",
