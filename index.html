@@ -1509,6 +1509,36 @@
     margin-top: 10px;
   }
 
+  .blog-compose {
+    margin-bottom: 24px;
+    padding: 20px;
+    border: 1px solid var(--ink-10);
+    border-radius: var(--radius);
+    background: var(--ink-05);
+  }
+  .blog-compose-title { font-family: var(--f-display); font-size: 19px; margin-bottom: 14px; }
+  .blog-compose input, .blog-compose textarea { width: 100%; }
+  .blog-compose textarea {
+    min-height: 116px;
+    padding: 10px 14px;
+    resize: vertical;
+    font-family: var(--f-mono);
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--ink-20);
+    border-radius: var(--radius-sm);
+    outline: none;
+  }
+  .blog-compose textarea:focus { border-color: var(--ink); box-shadow: 0 0 0 3px var(--ink-05); }
+  .blog-list { display: flex; flex-direction: column; gap: 12px; }
+  .blog-post { padding: 22px; border: 1px solid var(--ink-10); border-radius: var(--radius); background: var(--bg); }
+  .blog-post-meta { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; font-size: 10px; color: var(--ink-60); text-transform: uppercase; letter-spacing: .07em; }
+  .blog-post-meta::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--ink); }
+  .blog-post-title { font-family: var(--f-display); font-size: 24px; line-height: 1.15; letter-spacing: -.01em; margin-bottom: 10px; }
+  .blog-post-body { color: var(--ink-60); line-height: 1.7; white-space: normal; }
+
   .overlay {
     position: fixed;
     inset: 0;
@@ -1668,6 +1698,7 @@
     .brand-text .sep { display: none; }
     .brand-text span:last-child { display: none; }
     .nav-tab { font-size: 11px; padding: 6px 10px; }
+    .blog-post { padding: 18px; }
     .sticker-grid { grid-template-columns: repeat(3, 1fr); }
     .audit-item { grid-template-columns: 1fr; gap: 8px; }
     .audit-actor { white-space: normal; }
@@ -1755,6 +1786,7 @@
         <button class="nav-tab" data-view="journal">Журнал</button>
         <button class="nav-tab" data-view="salary">Зарплата</button>
         <button class="nav-tab" data-view="audit">Логи</button>
+        <button class="nav-tab admin-only" data-view="blog" style="display:none">Dev blog</button>
         <button class="nav-tab chief-only" data-view="admins" style="display:none">Админы</button>
       </div>
       <div class="sync-badge" id="sync-badge">
@@ -1781,7 +1813,7 @@
 
   <section class="hero">
     <div class="hero-meta">Mars · Tolyk odobril, pepo zacenil. Mne pohyi.</div>
-    <h1 class="hero-title">Скупка частей пустотелых<br><span class="dim">&amp; жемчуга</span></h1>
+    <h1 class="hero-title">Скупка пустотелых<br><span class="dim">&amp; жемчуга</span></h1>
     <p class="hero-sub">Введи количество — увидишь сколько получишь гильзами.</p>
   </section>
 
@@ -1971,6 +2003,26 @@
     </div>
   </div>
 
+  <div class="view admin-only" id="view-blog" style="display:none">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Dev blog</h2>
+        <span class="card-meta" id="blog-count">—</span>
+      </div>
+
+      <form class="blog-compose chief-only" id="blog-form" style="display:none">
+        <div class="blog-compose-title">Новая запись</div>
+        <label class="modal-label" for="blog-title">Заголовок</label>
+        <input id="blog-title" type="text" maxlength="100" placeholder="Например: Обновление калькулятора 1.2" required>
+        <label class="modal-label" for="blog-body">Что изменилось</label>
+        <textarea id="blog-body" maxlength="5000" placeholder="Расскажи об обновлении…" required></textarea>
+        <div class="actions"><button class="btn primary" type="submit">Опубликовать</button></div>
+      </form>
+
+      <div class="blog-list" id="blog-list"><div class="empty">Загрузка…</div></div>
+    </div>
+  </div>
+
   <div class="view chief-only" id="view-admins" style="display:none">
     <div class="card">
       <div class="card-header">
@@ -2006,7 +2058,8 @@ const CONFIG = {
     branch: 'main',
     pathLog:    'log.json',
     pathAdmins: 'admins.json',
-    pathAudit:  'audit.json'
+    pathAudit:  'audit.json',
+    pathBlog:   'dev-blog.json'
   },
 
   bootstrapAdmins: [
@@ -2087,6 +2140,8 @@ let history = [];
 let historySha = null;
 let audit = [];
 let auditSha = null;
+let blogPosts = [];
+let blogSha = null;
 
 function getCurrentUser() {
   try {
@@ -2363,6 +2418,38 @@ async function saveAudit() {
   }
 }
 
+async function loadBlog() {
+  try {
+    const { data, sha } = await ghLoad(CONFIG.github.pathBlog);
+    blogPosts = Array.isArray(data) ? data : [];
+    blogSha = sha;
+  } catch(e) {
+    console.error('loadBlog err:', e);
+    try {
+      const raw = localStorage.getItem('dev-blog-backup');
+      if (raw) blogPosts = JSON.parse(raw);
+    } catch(_) {}
+  }
+}
+
+async function saveBlog() {
+  try { localStorage.setItem('dev-blog-backup', JSON.stringify(blogPosts)); } catch(_) {}
+  try {
+    const { sha } = await ghSave(CONFIG.github.pathBlog, blogPosts, blogSha, 'Update dev blog');
+    blogSha = sha;
+    return true;
+  } catch(e) {
+    if (e.conflict) {
+      await loadBlog();
+      renderBlog();
+      showToast('Блог изменился другим пользователем. Обновлено.', true);
+      return false;
+    }
+    showToast(`Не удалось опубликовать: ${e.message}`, true);
+    return false;
+  }
+}
+
 async function recordAudit(action, details = {}) {
   const user = getCurrentUser();
   const entry = {
@@ -2477,6 +2564,7 @@ function switchView(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === `view-${name}`));
   if (name === 'salary') renderSalary();
   if (name === 'audit') renderAudit();
+  if (name === 'blog') renderBlog();
   if (name === 'admins') renderAdmins();
 }
 document.querySelectorAll('.nav-tab').forEach(t => {
@@ -3339,7 +3427,8 @@ function auditActionLabel(action) {
     admin_deleted: 'Админ удалён',
     admin_password_changed: 'Пароль изменён',
     sticker_changed: 'Стикер изменён',
-    profile_bg_changed: 'Фон профиля изменён'
+    profile_bg_changed: 'Фон профиля изменён',
+    blog_posted: 'Запись опубликована'
   };
   return labels[action] || action;
 }
@@ -3357,6 +3446,7 @@ function auditDetailsText(details = {}) {
   if (details.count !== undefined) bits.push(`записей: ${details.count}`);
   if (details.sticker !== undefined) bits.push(details.sticker ? 'стикер выбран' : 'стикер убран');
   if (details.type) bits.push(details.type === 'image' ? 'картинка' : 'градиент');
+  if (details.title) bits.push(`запись: ${details.title}`);
   return bits.join(' · ') || '—';
 }
 
@@ -3379,6 +3469,43 @@ function renderAudit() {
     </div>
   `).join('');
 }
+
+function renderBlog() {
+  const list = $('blog-list');
+  if (!list) return;
+  const posts = blogPosts.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+  $('blog-count').textContent = posts.length ? `${posts.length} ${posts.length === 1 ? 'запись' : posts.length < 5 ? 'записи' : 'записей'}` : '—';
+  if (!posts.length) {
+    list.innerHTML = `<div class="empty">Пока нет обновлений</div>`;
+    return;
+  }
+  list.innerHTML = posts.map(post => `
+    <article class="blog-post">
+      <div class="blog-post-meta">${formatDate(post.date)} · ${escapeHTML(post.author || 'Команда разработки')}</div>
+      <h3 class="blog-post-title">${escapeHTML(post.title)}</h3>
+      <div class="blog-post-body">${escapeHTML(post.body).replace(/\n/g, '<br>')}</div>
+    </article>
+  `).join('');
+}
+
+$('blog-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const user = getCurrentUser();
+  if (!user || user.role !== 'chief') { showToast('Нет прав на публикацию', true); return; }
+  const title = $('blog-title').value.trim();
+  const body = $('blog-body').value.trim();
+  if (!title || !body) return;
+
+  const post = { id: Date.now(), date: new Date().toISOString(), title, body, author: user.name, authorLogin: user.login };
+  blogPosts.unshift(post);
+  renderBlog();
+  const ok = await saveBlog();
+  if (!ok) { blogPosts = blogPosts.filter(item => item.id !== post.id); renderBlog(); return; }
+
+  $('blog-form').reset();
+  showToast('Запись опубликована');
+  await recordAudit('blog_posted', { title });
+});
 
 $('seller-filter-select').addEventListener('change', (e) => { filterSeller = e.target.value; renderHistory(); });
 $('buyer-filter-select').addEventListener('change',  (e) => { filterBuyer  = e.target.value; renderHistory(); });
@@ -3749,10 +3876,12 @@ function showToast(msg, isError = false) {
 async function initAdminApp() {
   await loadHistory();
   await loadAudit();
+  await loadBlog();
   updateAll();
   renderHistory();
   renderSalary();
   renderAudit();
+  renderBlog();
 }
 
 async function boot() {
